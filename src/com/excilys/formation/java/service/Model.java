@@ -1,6 +1,7 @@
 package com.excilys.formation.java.service;
 
 public class Model {
+	
 	private ComputerService computerService = new ComputerService();
 	private CompanyService companyService = new CompanyService();
 	

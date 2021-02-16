@@ -2,6 +2,10 @@ package com.excilys.formation.java.view;
 
 import com.excilys.formation.java.service.Model;
 import com.excilys.formation.java.controller.Controller;
+import com.excilys.formation.java.model.Company;
+import com.excilys.formation.java.model.Computer;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class View {
@@ -38,6 +42,31 @@ public class View {
 		}
 		
 		System.out.println("Bye");
+	}
+	
+	
+	public void displayListComputers(List<Computer> listComputers) {
+		
+	}
+	
+	public void displayListCompanies(List<Company> listCompanies) {
+		
+	}
+	
+	public void displayOneComputerDetails(Computer computer) {
+		
+	}
+	
+	public void displayResultComputerCreation() {
+		
+	}
+	
+	public void displayResultComputerUpdate() {
+		
+	}
+	
+	public void displayResultComputerDeletion() {
+		
 	}
 	
 }
