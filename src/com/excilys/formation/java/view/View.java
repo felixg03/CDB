@@ -24,11 +24,12 @@ public class View {
 	}
 	
 	public void displayCli() {
-		
+		System.out.println("Hi");
 		boolean loop = true;
 		int userInput = 0;
 		
 		while(loop) {
+			System.out.println("What do you want to do ?");
 			System.out.println("1 - List computers");
 			System.out.println("2 - List companies");
 			System.out.println("3 - Show one computer details");
@@ -50,7 +51,20 @@ public class View {
 	}
 	
 	public void displayListCompanies(List<Company> listCompanies) {
-		
+		System.out.println("--------------------------------------");
+		System.out.println();
+		System.out.println("RESULT");
+		System.out.println("List of companies:");
+		System.out.println();
+		for (Company company : listCompanies) {
+			System.out.println(company.getId() 
+							   + " | " 
+							   + company.getName()
+							   );
+		}
+		System.out.println();
+		System.out.println("--------------------------------------");
+		System.out.println();
 	}
 	
 	public void displayOneComputerDetails(Computer computer) {

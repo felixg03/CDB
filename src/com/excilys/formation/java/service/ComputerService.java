@@ -3,8 +3,11 @@ package com.excilys.formation.java.service;
 import java.util.List;
 
 import com.excilys.formation.java.model.Computer;
+import com.excilys.formation.java.database.DAOComputer;
 
 public class ComputerService {
+	
+	private DAOComputer daoComputer = DAOComputer.getInstance();
 	
 	public List<Computer> getListComputers() {
 		List<Computer> listComputers = null; // temporary

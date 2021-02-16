@@ -7,6 +7,9 @@ public final class DBConnection {
 	
 	private static DBConnection instance;
 	private Connection connection;
+	private final String databaseURL = "jdbc:mysql://localhost/computer-database-db";
+	private final String databaseAdmin = "admincdb";
+	private final String databasePassword = "qwerty1234";
 	
 	public static DBConnection getInstance() {
 		if (instance == null) {
@@ -15,17 +18,30 @@ public final class DBConnection {
 		return instance;
 	}
 	
-	public void initializeConnection() {
+	public Connection getConnection() {
+		return connection;
+	}
+	
+	public void openConnection() {
 		try {
 			connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost/computer-database-db"
-				  , "admincdb"
-				  , "qwerty1234"
+					databaseURL
+				  , databaseAdmin
+				  , databasePassword
 				);
 		}
 		catch(SQLException sqlEx) { // Handle better
 			sqlEx.printStackTrace();
 		}	
+	}
+	
+	public void closeConnection() {
+		try {
+			connection.close();
+		}
+		catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
 	}
 	
 }
