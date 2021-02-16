@@ -7,4 +7,17 @@ public class View {
 	
 	private Model model;
 	private Controller controller;
+	
+	public View(Model model) {
+		super();
+		this.model = model;
+	}
+
+	public void setController(Controller controller) {
+		this.controller = controller;
+	}
+	
+	public void display_cli() {
+		
+	}
 }
