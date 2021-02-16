@@ -13,7 +13,7 @@ public class Main {
 		
 		view.setController(controller);
 		
-		view.display_cli();
+		view.displayCli();
 	}
 
 }
