@@ -1,6 +1,6 @@
 package com.excilys.formation.java.view;
 
-import com.excilys.formation.java.model.Model;
+import com.excilys.formation.java.service.Model;
 import com.excilys.formation.java.controller.Controller;
 import java.util.Scanner;
 
