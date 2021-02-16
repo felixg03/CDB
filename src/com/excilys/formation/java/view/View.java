@@ -57,15 +57,18 @@ public class View {
 		
 	}
 	
-	public void displayResultComputerCreation() {
+	public void displayResultComputerCreation(Computer computer) {
 		
 	}
 	
-	public void displayResultComputerUpdate() {
+	public void displayResultComputerUpdate(Computer computer) {
 		
 	}
 	
-	public void displayResultComputerDeletion() {
+	/* String passed in argument instead of Computer because in 
+	 * this scenario the computer has been deleted 
+	 * */
+	public void displayResultComputerDeletion(String result) {
 		
 	}
 	

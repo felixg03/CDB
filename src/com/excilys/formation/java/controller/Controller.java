@@ -18,26 +18,54 @@ public class Controller {
 		
 		switch (input) {
 		
-		case 1:
+		case 1: view
+				.displayListComputers(
+						model
+						.getComputerService()
+						.getListComputers()
+				);
 			break;
 			
-		case 2:
+		case 2: view
+				.displayListCompanies(
+						model
+					    .getCompanyService()
+						.getListCompanies()
+				);
 			break;	
 		
-		case 3:
+		case 3: view
+				.displayOneComputerDetails(
+						model
+						.getComputerService()
+						.getOneComputerDetails()
+				);
 			break;	
 		
-		case 4:
+		case 4: view
+				.displayResultComputerCreation(
+						model
+						.getComputerService()
+						.getResultComputerCreation()
+				);
 			break;	
 		
-		case 5:
+		case 5: view.displayResultComputerUpdate(
+						model
+						.getComputerService()
+						.getResultComputerUpdate()
+				);
 			break;	
 		
-		case 6:
+		case 6: view.displayResultComputerDeletion(
+						model
+						.getComputerService()
+						.getResultComputerDeletion()
+				);
 			break;	
 		
-		case 7:
-			return false;
+		case 7: return false;
+		
 		}
 		
 		return true; // default

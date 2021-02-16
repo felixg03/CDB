@@ -18,15 +18,20 @@ public class ComputerService {
 		return computer;
 	}
 	
-	public String getResultComputerCreation() {
-		return null; // temporary
+	public Computer getResultComputerCreation() {
+		Computer computer = null; // temporary
+		return computer;
 	}
 	
-	public String getResultComputerUpdate() {
-		return null; // temporary
+	public Computer getResultComputerUpdate() {
+		Computer computer = null; // temporary
+		return computer;
 	}
 	
 	public String getResultComputerDeletion() {
-		return null; // temporary
+		return ""; // temporary
+		/* We can't return a Computer here, because
+		 * it would have deleted
+		 * */
 	}
 }
