@@ -18,6 +18,7 @@ public class Controller {
 		
 		switch (input) {
 		
+		
 		case 1: view
 				.displayListComputers(
 						model
@@ -25,6 +26,7 @@ public class Controller {
 						.getListComputers()
 				);
 			break;
+			
 			
 		case 2: view
 				.displayListCompanies(
@@ -35,16 +37,17 @@ public class Controller {
 			break;	
 		
 		
-		case 3: long computerId = view.getComputerId();
+		case 3: long computerIdToShowDetails = view.getComputerId(input);
 			
 				view
 				.displayOneComputerDetails(
 						model
 						.getComputerService()
-						.getOneComputerDetails(computerId)
+						.getOneComputerDetails(computerIdToShowDetails)
 				);
 			break;	
 		
+			
 		case 4: view
 				.displayResultComputerCreation(
 						model
@@ -53,6 +56,7 @@ public class Controller {
 				);
 			break;	
 		
+			
 		case 5: view.displayResultComputerUpdate(
 						model
 						.getComputerService()
@@ -60,10 +64,13 @@ public class Controller {
 				);
 			break;	
 		
-		case 6: view.displayResultComputerDeletion(
+			
+		case 6: long computerIdToDelete = view.getComputerId(input);
+		
+				view.displayResultComputerDeletion(
 						model
 						.getComputerService()
-						.getResultComputerDeletion()
+						.getResultComputerDeletion(computerIdToDelete)
 				);
 			break;	
 		

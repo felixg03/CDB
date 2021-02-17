@@ -127,9 +127,6 @@ public final class DAOComputer {
 			 }
 		}
 		catch (SQLException sqlException) {
-			System.out.println();
-			System.out.println("DAOComputer.requestOneComputerDetails(): exception");
-			System.out.println();
 			sqlException.printStackTrace();
 		}
 		finally {
@@ -138,4 +135,30 @@ public final class DAOComputer {
 		return new Computer(0, "ERROR: Didn't work", null, null, 0); // Not very clean but dunno what else to do
 	}
 	
+	
+	
+	public String requestComputerDeletion(long computerId) {
+		databaseConnection.openConnection();
+		Connection connection = databaseConnection.getConnection();
+		try {
+		    PreparedStatement query = connection.prepareStatement(
+										"DELETE FROM computer WHERE id = ?" 
+									  );
+		    query.setLong(1, computerId);
+			query.executeUpdate();
+			
+			return new String("Deletion success"); 
+		}
+		catch (SQLException sqlException) {
+			System.out.println();
+			System.out.println("DAOComputer.requestComputerDeletion(): exception");
+			System.out.println();
+			sqlException.printStackTrace();
+		}
+		finally {
+			databaseConnection.closeConnection();
+		}
+		
+		return new String("Deletion fail");
+	}
 }

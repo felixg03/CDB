@@ -27,10 +27,7 @@ public class ComputerService {
 		return computer;
 	}
 	
-	public String getResultComputerDeletion() {
-		return ""; // temporary
-		/* We can't return a Computer here, because
-		 * it would have deleted
-		 * */
+	public String getResultComputerDeletion(long computerId) {
+		return daoComputer.requestComputerDeletion(computerId);
 	}
 }

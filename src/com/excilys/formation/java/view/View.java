@@ -122,15 +122,31 @@ public class View {
 	 * this scenario the computer has been deleted 
 	 * */
 	public void displayResultComputerDeletion(String result) {
-		
-	}
-	
-	public long getComputerId() {
+		System.out.println();
+		System.out.println("RESULT");
+		System.out.println();
+		System.out.println(result);
+		System.out.println();
 		System.out.println("--------------------------------------");
 		System.out.println();
-		System.out.println("- You chose show one computer details -");
-		System.out.println();
-		System.out.println("Enter the id of the computer that you wish to see the details:");
-		return scanner.nextInt();
+	}
+	
+	public long getComputerId(int userInput) {
+		if (userInput == 3) {
+			System.out.println("--------------------------------------");
+			System.out.println();
+			System.out.println("- You chose show one computer details -");
+			System.out.println();
+			System.out.println("Enter the id of the computer that you wish to see the details:");
+			return scanner.nextInt();
+		}
+		else { //if (userInput == 6) {
+			System.out.println("--------------------------------------");
+			System.out.println();
+			System.out.println("- You chose to delete one computer -");
+			System.out.println();
+			System.out.println("Enter the id of the computer that you wish to delete:");
+			return scanner.nextInt();
+		}
 	}
 }
