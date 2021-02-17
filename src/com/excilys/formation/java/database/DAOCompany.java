@@ -56,6 +56,6 @@ public final class DAOCompany {
 		finally {
 			databaseConnection.closeConnection();
 		}
-		return null;
+		return null;  // Not very clean but dunno what else to do
 	}
 }

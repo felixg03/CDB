@@ -56,9 +56,14 @@ public class Computer {
 		this.company_id = company_id;
 	}
 	
-	
-	
-	
+	public Computer(long id, String name, LocalDate introduced, LocalDate discontinued, long company_id) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.company_id = company_id;
+	}
 	
 	
 }

@@ -47,7 +47,26 @@ public class View {
 	
 	
 	public void displayListComputers(List<Computer> listComputers) {
-		
+		System.out.println("--------------------------------------");
+		System.out.println();
+		System.out.println("RESULT");
+		System.out.println("List of computers:");
+		System.out.println();
+		for (Computer computer : listComputers) {
+			System.out.println(computer.getId() 
+							   + " | " 
+							   + computer.getName()
+							   + " | " 
+							   + computer.getIntroduced()
+							   + " | " 
+							   + computer.getDiscontinued()
+							   + " | " 
+							   + computer.getCompany_id()
+							   );
+		}
+		System.out.println();
+		System.out.println("--------------------------------------");
+		System.out.println();
 	}
 	
 	public void displayListCompanies(List<Company> listCompanies) {

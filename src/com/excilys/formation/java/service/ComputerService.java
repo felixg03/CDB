@@ -10,9 +10,7 @@ public class ComputerService {
 	private DAOComputer daoComputer = DAOComputer.getInstance();
 	
 	public List<Computer> getListComputers() {
-		List<Computer> listComputers = null; // temporary
-		// call to DAODatabase etc.
-		return listComputers;
+		return daoComputer.requestListComputer();
 	}
 	
 	public Computer getOneComputerDetails() {
