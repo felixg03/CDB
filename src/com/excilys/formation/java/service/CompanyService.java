@@ -12,7 +12,7 @@ public class CompanyService {
 	private DAOCompany daoCompany = DAOCompany.getInstance();
 	
 	
-	public List<Company> getListCompanies() {
-		return daoCompany.requestListCompanies();
+	public List<Company> getListCompanies(int offset) {
+		return daoCompany.requestListCompanies(offset);
 	}
 }

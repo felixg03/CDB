@@ -9,8 +9,8 @@ public class ComputerService {
 	
 	private DAOComputer daoComputer = DAOComputer.getInstance();
 	
-	public List<Computer> getListComputers() {
-		return daoComputer.requestListComputer();
+	public List<Computer> getListComputers(int offset) {
+		return daoComputer.requestListComputer(offset);
 	}
 	
 	public Computer getOneComputerDetails(long computerId) {

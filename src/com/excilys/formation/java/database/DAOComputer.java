@@ -31,12 +31,15 @@ public final class DAOComputer {
 		return resultSet;
 	}
 
-	public List<Computer> requestListComputer() {
+	public List<Computer> requestListComputer(int offset) {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
 		try {
-			PreparedStatement query = connection.prepareStatement("SELECT * FROM computer");
-
+			PreparedStatement query = connection
+									.prepareStatement(
+										"SELECT * FROM computer ORDER BY id LIMIT 10 OFFSET ?"
+									);
+			query.setInt(1, offset);
 			this.resultSet = query.executeQuery();
 
 			List<Computer> listComputers = new ArrayList<Computer>();

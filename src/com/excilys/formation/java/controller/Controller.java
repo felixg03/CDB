@@ -17,24 +17,40 @@ public class Controller {
 	
 	public boolean action(int input) {
 		
+		int next, offset = 0;
 		switch (input) {
 		
 		// DISPLAY LIST COMPUTERS
-		case 1: view
-				.displayListComputers(
-						model
-						.getComputerService()
-						.getListComputers()
-				);
+		case 1: do {
+					next = view
+						  .displayListComputers(
+								  model
+								  .getComputerService()
+								  .getListComputers(offset)
+					);
+					
+
+					if (next == 0 && offset >= 10) offset -= 10;
+					else if (next == 1) offset += 10;
+					
+				} while (next == 0 || next == 1);
+				
 			break;
 			
 		// DISPLAY LIST COMPANIES
-		case 2: view
-				.displayListCompanies(
-						model
-					    .getCompanyService()
-						.getListCompanies()
-				);
+		case 2: do {
+					next = view
+						  .displayListCompanies(
+								model
+							    .getCompanyService()
+								.getListCompanies(offset)
+						   );
+					
+					if (next == 0 && offset >= 10) offset -= 10;
+					else if (next == 1) offset += 10;
+					
+				} while (next == 0 || next == 1);
+				
 			break;	
 			
 		

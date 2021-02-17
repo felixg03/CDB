@@ -27,14 +27,15 @@ public final class DAOCompany {
 	}
 	
 	
-	public List<Company> requestListCompanies() {
+	public List<Company> requestListCompanies(int offset) {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
 		try {
 			PreparedStatement query = connection.prepareStatement(
-										"SELECT * FROM company"
+										"SELECT * FROM company ORDER BY id LIMIT 10 OFFSET ?"
 										);
-
+			query.setInt(1, offset);
+			
 			this.resultSet = query.executeQuery();
 			
 			

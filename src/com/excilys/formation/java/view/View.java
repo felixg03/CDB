@@ -49,7 +49,7 @@ public class View {
 	}
 	
 	
-	public void displayListComputers(List<Computer> listComputers) {
+	public int displayListComputers(List<Computer> listComputers) {
 		System.out.println("--------------------------------------");
 		System.out.println();
 		System.out.println("RESULT");
@@ -69,12 +69,15 @@ public class View {
 		}
 		System.out.println();
 		System.out.println("--------------------------------------");
-		System.out.println();
+		System.out.println("Precedent page --> type 0");
+		System.out.println("Next page --> type 1");
+		System.out.println("Back to menu --> type 2");
+		return this.scanner.nextInt();
 	}
 	
 	
 	
-	public void displayListCompanies(List<Company> listCompanies) {
+	public int displayListCompanies(List<Company> listCompanies) {
 		System.out.println("--------------------------------------");
 		System.out.println();
 		System.out.println("RESULT");
@@ -88,7 +91,10 @@ public class View {
 		}
 		System.out.println();
 		System.out.println("--------------------------------------");
-		System.out.println();
+		System.out.println("Precedent page --> type 0");
+		System.out.println("Next page --> type 1");
+		System.out.println("Back to menu --> type 2");
+		return this.scanner.nextInt();
 	}
 	
 	
