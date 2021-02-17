@@ -6,6 +6,8 @@ import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -62,7 +64,7 @@ public class View {
 							   + " | " 
 							   + computer.getDiscontinued()
 							   + " | " 
-							   + computer.getCompany_id()
+							   + computer.getCompanyId()
 							   );
 		}
 		System.out.println();
@@ -103,19 +105,25 @@ public class View {
 				   + " | " 
 				   + computer.getDiscontinued()
 				   + " | " 
-				   + computer.getCompany_id()
+				   + computer.getCompanyId()
 				   );
 		System.out.println();
 		System.out.println("--------------------------------------");
 		System.out.println();
 	}
 	
-	public void displayResultComputerCreation(Computer computer) {
+	public void displayResultComputerCreation(String result) {
 		
 	}
 	
-	public void displayResultComputerUpdate(Computer computer) {
-		
+	public void displayResultComputerUpdate(String result) {
+		System.out.println();
+		System.out.println("RESULT");
+		System.out.println();
+		System.out.println(result);
+		System.out.println();
+		System.out.println("--------------------------------------");
+		System.out.println();
 	}
 	
 	/* String passed in argument instead of Computer because in 
@@ -138,15 +146,82 @@ public class View {
 			System.out.println("- You chose show one computer details -");
 			System.out.println();
 			System.out.println("Enter the id of the computer that you wish to see the details:");
-			return scanner.nextInt();
+			return this.scanner.nextInt();
 		}
-		else { //if (userInput == 6) {
+		else { // if (userInput == 6) {
 			System.out.println("--------------------------------------");
 			System.out.println();
 			System.out.println("- You chose to delete one computer -");
 			System.out.println();
 			System.out.println("Enter the id of the computer that you wish to delete:");
-			return scanner.nextInt();
+			return this.scanner.nextInt();
 		}
+	}
+
+	public Computer getComputerInfoToUpdate() {
+		long idOfComputerToUpdate;
+		String newName = null;
+		LocalDate newIntroducedDate = null;
+		LocalDate newDiscontinuedDate = null;
+		long newCompanyId = 0;
+		
+		System.out.println("--------------------------------------");
+		System.out.println();
+		System.out.println("- You chose to update one computer's information -");
+		System.out.println();
+		System.out.println("Enter the id of the computer that you wish to update:");
+		idOfComputerToUpdate = this.scanner.nextInt();
+		
+		System.out.println();
+		System.out.println("Do you wish to update the computer name ? (1 = yes, 0 = no)");
+		if (this.scanner.nextInt() == 1) {
+			System.out.println("Enter the new computer name:");
+			newName = this.scanner.next();
+		}
+		
+		System.out.println();
+		System.out.println("Do you wish to update the introduced date ? (1 = yes, 0 = no)");
+		if (this.scanner.nextInt() == 1) {
+			int year;
+			int month;
+			int day;
+			System.out.println();
+			System.out.println("Enter the YEAR of the new introduced date:");
+			year = this.scanner.nextInt();
+			System.out.println("Enter the NUMBER OF THE MONTH of the new introduced date:");
+			month = this.scanner.nextInt();
+			System.out.println("Enter the DAY of the new introduced date:");
+			day = this.scanner.nextInt();
+			
+			newIntroducedDate = LocalDate.of(year, month, day);
+		}
+		
+		System.out.println();
+		System.out.println("Do you wish to update the discontinued date ? (1 = yes, 0 = no)");
+		if (this.scanner.nextInt() == 1) {
+			int year;
+			int month;
+			int day;
+			System.out.println();
+			System.out.println("Enter the YEAR of the new discontinued date:");
+			year = this.scanner.nextInt();
+			System.out.println("Enter the NUMBER OF THE MONTH of the new discontinued date:");
+			month = this.scanner.nextInt();
+			System.out.println("Enter the DAY of the new discontinued date:");
+			day = this.scanner.nextInt();
+			
+			newDiscontinuedDate = LocalDate.of(year, month, day);
+		}
+		
+		System.out.println();
+		System.out.println("Do you wish to update the company id ? (1 = yes, 0 = no)");
+		if (this.scanner.nextInt() == 1) {
+			System.out.println("Enter the new company id");
+			newCompanyId = this.scanner.nextInt();
+		}
+		
+		return new Computer(idOfComputerToUpdate, newName, newIntroducedDate, 
+				 			newDiscontinuedDate, newCompanyId
+				 			);
 	}
 }

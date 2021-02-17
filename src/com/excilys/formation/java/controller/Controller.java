@@ -1,5 +1,6 @@
 package com.excilys.formation.java.controller;
 
+import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.service.Model;
 import com.excilys.formation.java.view.View;
 
@@ -18,7 +19,7 @@ public class Controller {
 		
 		switch (input) {
 		
-		
+		// DISPLAY LIST COMPUTERS
 		case 1: view
 				.displayListComputers(
 						model
@@ -27,7 +28,7 @@ public class Controller {
 				);
 			break;
 			
-			
+		// DISPLAY LIST COMPANIES
 		case 2: view
 				.displayListCompanies(
 						model
@@ -35,8 +36,9 @@ public class Controller {
 						.getListCompanies()
 				);
 			break;	
+			
 		
-		
+		// DISPLAY ONE COMPUTER DETAILS
 		case 3: long computerIdToShowDetails = view.getComputerId(input);
 			
 				view
@@ -47,7 +49,7 @@ public class Controller {
 				);
 			break;	
 		
-			
+		// CREATE COMPUTER
 		case 4: view
 				.displayResultComputerCreation(
 						model
@@ -56,15 +58,20 @@ public class Controller {
 				);
 			break;	
 		
-			
-		case 5: view.displayResultComputerUpdate(
+		
+		// UPDATE COMPUTER
+		case 5: Computer computerToUpdate = view
+											.getComputerInfoToUpdate();
+				
+				view.displayResultComputerUpdate(
 						model
 						.getComputerService()
-						.getResultComputerUpdate()
+						.getResultComputerUpdate(computerToUpdate)
 				);
 			break;	
 		
-			
+		
+		// DELETE COMPUTER
 		case 6: long computerIdToDelete = view.getComputerId(input);
 		
 				view.displayResultComputerDeletion(
@@ -74,6 +81,8 @@ public class Controller {
 				);
 			break;	
 		
+			
+		// EXIT APPLICATION
 		case 7: return false;
 		
 		}

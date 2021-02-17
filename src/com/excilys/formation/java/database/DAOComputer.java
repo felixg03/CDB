@@ -4,6 +4,7 @@ import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,7 +32,6 @@ public final class DAOComputer {
 	
 	
 	public List<Computer> requestListComputer() {
-		
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
 		try {
@@ -88,10 +88,10 @@ public final class DAOComputer {
 	
 	
 	public Computer requestOneComputerDetails(long computerId) {
-		
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
-		try {
+		try 
+		{
 			 PreparedStatement query = connection.prepareStatement(
 										"SELECT * FROM computer WHERE id = ?" 
 										);
@@ -136,18 +136,98 @@ public final class DAOComputer {
 	}
 	
 	
-	
-	public String requestComputerDeletion(long computerId) {
+	public String requestComputerUpdate(Computer computerToUpdate) {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
-		try {
-		    PreparedStatement query = connection.prepareStatement(
-										"DELETE FROM computer WHERE id = ?" 
+		
+		String request = "UPDATE computer SET ";
+		
+		int argumentNumber = 0;
+		
+		String name = computerToUpdate.getName();
+		LocalDate introduced = computerToUpdate.getIntroduced();
+		LocalDate discontinued = computerToUpdate.getDiscontinued();
+		long companyId = computerToUpdate.getCompanyId();
+		
+		boolean hasName = false;
+		boolean hasIntroducedDate = false;
+		boolean hasDiscontinuedDate = false;
+		boolean hasCompanyId = false;
+		
+		boolean firstArgument = true;
+		
+		if (name != null) {
+			if (firstArgument) {
+				request += "name = ?";
+				firstArgument = false;
+			}
+			else {
+				request += ", name = ?";
+			}
+			hasName = true;
+		}
+		if (introduced != null) {
+			if (firstArgument) {
+				request += "introduced = ?";
+				firstArgument = false;
+			}
+			else {
+				request += ", introduced = ?";
+			}
+			hasIntroducedDate = true;
+		}
+		if (discontinued != null) {
+			if (firstArgument) {
+				request += "discontinued = ?";
+				firstArgument = false;
+			}
+			else {
+				request += ", discontinued = ?";
+			}
+			hasDiscontinuedDate = true;
+		}
+		if (companyId != 0) {
+			if (firstArgument) {
+				request += "company_id = ?";
+				firstArgument = false;
+			}
+			else {
+				request += ", company_id = ?";
+			}
+			hasCompanyId = true;
+		}
+		
+		request += " WHERE id = ?";
+		
+		try 
+		{
+		    PreparedStatement query = connection
+		    						 .prepareStatement(
+										request
 									  );
-		    query.setLong(1, computerId);
+		    if (hasName) {
+		    	argumentNumber++;
+		    	query.setString(argumentNumber, name);
+		    }
+		    if (hasIntroducedDate) {
+		    	argumentNumber++;
+		    	query.setDate(argumentNumber, Date.valueOf(introduced));
+		    }
+		    if (hasDiscontinuedDate) {
+		    	argumentNumber++;
+		    	query.setDate(argumentNumber, Date.valueOf(discontinued));
+		    }
+		    if (hasCompanyId) {
+		    	argumentNumber++;
+		    	query.setLong(argumentNumber, companyId);
+		    }
+		    
+		    argumentNumber++;
+		    query.setLong(argumentNumber, computerToUpdate.getId());
+		    
 			query.executeUpdate();
 			
-			return new String("Deletion success"); 
+			return "UPDATE SUCCESS";
 		}
 		catch (SQLException sqlException) {
 			System.out.println();
@@ -159,6 +239,31 @@ public final class DAOComputer {
 			databaseConnection.closeConnection();
 		}
 		
-		return new String("Deletion fail");
+		return "UPDATE FAILURE";
+		
+	}
+	
+	
+	public String requestComputerDeletion(long computerId) {
+		databaseConnection.openConnection();
+		Connection connection = databaseConnection.getConnection();
+		try 
+		{
+		    PreparedStatement query = connection.prepareStatement(
+										"DELETE FROM computer WHERE id = ?" 
+									  );
+		    query.setLong(1, computerId);
+			query.executeUpdate();
+			
+			return "DELETION SUCCESS"; 
+		}
+		catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
+		finally {
+			databaseConnection.closeConnection();
+		}
+		
+		return "DELETION FAILURE";
 	}
 }

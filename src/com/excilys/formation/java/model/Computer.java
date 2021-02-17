@@ -10,7 +10,7 @@ public class Computer {
 	private String name;
 	private LocalDate introduced = null;
 	private LocalDate discontinued = null;
-	private long company_id;
+	private long companyId;
 	
 	// GETTERS AND SETTERS
 	public static int getCounter() {
@@ -49,20 +49,20 @@ public class Computer {
 			throw new IllegalArgumentException();
 		}
 	}
-	public long getCompany_id() {
-		return company_id;
+	public long getCompanyId() {
+		return companyId;
 	}
-	public void setCompany_id(long company_id) {
-		this.company_id = company_id;
+	public void setCompanyId(long companyId) {
+		this.companyId = companyId;
 	}
 	
-	public Computer(long id, String name, LocalDate introduced, LocalDate discontinued, long company_id) {
+	public Computer(long id, String name, LocalDate introduced, LocalDate discontinued, long companyId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.company_id = company_id;
+		this.companyId = companyId;
 	}
 	
 	

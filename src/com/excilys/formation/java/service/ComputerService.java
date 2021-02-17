@@ -17,14 +17,12 @@ public class ComputerService {
 		return daoComputer.requestOneComputerDetails(computerId);
 	}
 	
-	public Computer getResultComputerCreation() {
-		Computer computer = null; // temporary
-		return computer;
+	public String getResultComputerCreation() {
+		return "";
 	}
 	
-	public Computer getResultComputerUpdate() {
-		Computer computer = null; // temporary
-		return computer;
+	public String getResultComputerUpdate(Computer computerToUpdate) {
+		return daoComputer.requestComputerUpdate(computerToUpdate);
 	}
 	
 	public String getResultComputerDeletion(long computerId) {
