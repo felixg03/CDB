@@ -113,7 +113,13 @@ public class View {
 	}
 	
 	public void displayResultComputerCreation(String result) {
-		
+		System.out.println();
+		System.out.println("RESULT");
+		System.out.println();
+		System.out.println(result);
+		System.out.println();
+		System.out.println("--------------------------------------");
+		System.out.println();
 	}
 	
 	public void displayResultComputerUpdate(String result) {
@@ -220,8 +226,73 @@ public class View {
 			newCompanyId = this.scanner.nextInt();
 		}
 		
-		return new Computer(idOfComputerToUpdate, newName, newIntroducedDate, 
-				 			newDiscontinuedDate, newCompanyId
+		return new Computer(idOfComputerToUpdate,
+							newName, 
+							newIntroducedDate, 
+				 			newDiscontinuedDate, 
+				 			newCompanyId
 				 			);
+	}
+	
+	
+	
+	public Computer getComputerToCreate() {
+		String name = null;
+		LocalDate introduced = null;
+		LocalDate discontinued = null;
+		long companyId = 0;
+		
+		System.out.println("--------------------------------------");
+		System.out.println();
+		System.out.println("- You chose to create a new computer -");
+		System.out.println();
+		System.out.println("Enter the name:");
+		name = this.scanner.next();
+		
+		System.out.println();
+		System.out.println("Do you wish to add an introduced date ? (1 = yes, 0 = no)");
+		if (this.scanner.nextInt() == 1) {
+			int year;
+			int month;
+			int day;
+			System.out.println();
+			System.out.println("Enter the YEAR:");
+			year = this.scanner.nextInt();
+			System.out.println("Enter the NUMBER OF THE MONTH:");
+			month = this.scanner.nextInt();
+			System.out.println("Enter the DAY:");
+			day = this.scanner.nextInt();
+			
+			introduced = LocalDate.of(year, month, day);
+		}
+		
+		System.out.println();
+		System.out.println("Do you wish to add a discontinued date ? (1 = yes, 0 = no)");
+		if (this.scanner.nextInt() == 1) {
+			int year;
+			int month;
+			int day;
+			System.out.println();
+			System.out.println("Enter the YEAR:");
+			year = this.scanner.nextInt();
+			System.out.println("Enter the NUMBER OF THE MONTH:");
+			month = this.scanner.nextInt();
+			System.out.println("Enter the DAY:");
+			day = this.scanner.nextInt();
+			
+			discontinued = LocalDate.of(year, month, day);
+		}
+		
+		System.out.println();
+		System.out.println("Enter the company id:");
+		companyId = this.scanner.nextInt();
+		
+		
+		return new Computer(0, 
+							name, 
+							introduced, 
+							discontinued, 
+							companyId
+							);
 	}
 }

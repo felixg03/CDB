@@ -17,8 +17,8 @@ public class ComputerService {
 		return daoComputer.requestOneComputerDetails(computerId);
 	}
 	
-	public String getResultComputerCreation() {
-		return "";
+	public String getResultComputerCreation(Computer computerToCreate) {
+		return daoComputer.requestComputerCreation(computerToCreate);
 	}
 	
 	public String getResultComputerUpdate(Computer computerToUpdate) {

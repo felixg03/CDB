@@ -50,11 +50,14 @@ public class Controller {
 			break;	
 		
 		// CREATE COMPUTER
-		case 4: view
+		case 4: Computer computerToCreate = view
+										   .getComputerToCreate();
+			
+				view
 				.displayResultComputerCreation(
 						model
 						.getComputerService()
-						.getResultComputerCreation()
+						.getResultComputerCreation(computerToCreate)
 				);
 			break;	
 		

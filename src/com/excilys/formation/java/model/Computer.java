@@ -6,11 +6,11 @@ public class Computer {
 	
 	private static int counter;
 	
-	private long id;
-	private String name;
+	private long id = 0;
+	private String name = null;
 	private LocalDate introduced = null;
 	private LocalDate discontinued = null;
-	private long companyId;
+	private long companyId = 0;
 	
 	// GETTERS AND SETTERS
 	public static int getCounter() {
