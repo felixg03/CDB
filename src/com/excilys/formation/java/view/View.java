@@ -5,6 +5,7 @@ import com.excilys.formation.java.controller.Controller;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -69,6 +70,8 @@ public class View {
 		System.out.println();
 	}
 	
+	
+	
 	public void displayListCompanies(List<Company> listCompanies) {
 		System.out.println("--------------------------------------");
 		System.out.println();
@@ -86,8 +89,25 @@ public class View {
 		System.out.println();
 	}
 	
+	
+	
 	public void displayOneComputerDetails(Computer computer) {
-		
+		System.out.println();
+		System.out.println("RESULT");
+		System.out.println();
+		System.out.println(computer.getId() 
+				   + " | " 
+				   + computer.getName()
+				   + " | " 
+				   + computer.getIntroduced()
+				   + " | " 
+				   + computer.getDiscontinued()
+				   + " | " 
+				   + computer.getCompany_id()
+				   );
+		System.out.println();
+		System.out.println("--------------------------------------");
+		System.out.println();
 	}
 	
 	public void displayResultComputerCreation(Computer computer) {
@@ -105,4 +125,12 @@ public class View {
 		
 	}
 	
+	public long getComputerId() {
+		System.out.println("--------------------------------------");
+		System.out.println();
+		System.out.println("- You chose show one computer details -");
+		System.out.println();
+		System.out.println("Enter the id of the computer that you wish to see the details:");
+		return scanner.nextInt();
+	}
 }

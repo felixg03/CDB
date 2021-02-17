@@ -34,11 +34,14 @@ public class Controller {
 				);
 			break;	
 		
-		case 3: view
+		
+		case 3: long computerId = view.getComputerId();
+			
+				view
 				.displayOneComputerDetails(
 						model
 						.getComputerService()
-						.getOneComputerDetails()
+						.getOneComputerDetails(computerId)
 				);
 			break;	
 		

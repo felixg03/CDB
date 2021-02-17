@@ -13,10 +13,8 @@ public class ComputerService {
 		return daoComputer.requestListComputer();
 	}
 	
-	public Computer getOneComputerDetails() {
-		Computer computer = null; //temporary
-		// call to DAODAtabase etc.
-		return computer;
+	public Computer getOneComputerDetails(long computerId) {
+		return daoComputer.requestOneComputerDetails(computerId);
 	}
 	
 	public Computer getResultComputerCreation() {

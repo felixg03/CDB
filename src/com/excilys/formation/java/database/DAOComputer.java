@@ -84,4 +84,58 @@ public final class DAOComputer {
 		return null; // Not very clean but dunno what else to do
 	}
 	
+	
+	
+	
+	public Computer requestOneComputerDetails(long computerId) {
+		
+		databaseConnection.openConnection();
+		Connection connection = databaseConnection.getConnection();
+		try {
+			 PreparedStatement query = connection.prepareStatement(
+										"SELECT * FROM computer WHERE id = ?" 
+										);
+			 query.setLong(1, computerId);
+			 this.resultSet = query.executeQuery();
+			
+			 if (this.resultSet.next()) {
+				 long id = this.resultSet.getLong(1);
+				 String name = this.resultSet.getString(2);
+				 LocalDate introduced;
+				 LocalDate discontinued;
+				 long companyId = this.resultSet.getLong(5);
+				 
+				 if (this.resultSet.getDate(3) != null) {
+					 introduced = this.resultSet
+					 							.getDate(3)
+					 							.toLocalDate();
+				 }
+				 else {
+					 introduced = null;
+				 }
+				 
+				 if (this.resultSet.getDate(4) != null) {
+					 discontinued = this.resultSet
+					 							.getDate(4)
+					 							.toLocalDate();
+				 }
+				 else {
+					 discontinued = null;
+				 }
+				 
+				 return new Computer(id, name, introduced, discontinued, companyId);
+			 }
+		}
+		catch (SQLException sqlException) {
+			System.out.println();
+			System.out.println("DAOComputer.requestOneComputerDetails(): exception");
+			System.out.println();
+			sqlException.printStackTrace();
+		}
+		finally {
+			databaseConnection.closeConnection();
+		}
+		return new Computer(0, "ERROR: Didn't work", null, null, 0); // Not very clean but dunno what else to do
+	}
+	
 }
