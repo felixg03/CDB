@@ -1,4 +1,4 @@
-package com.excilys.formation.java.model;
+package com.excilys.cdb.model;
 
 import java.security.Timestamp;
 

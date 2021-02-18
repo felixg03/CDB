@@ -1,9 +1,9 @@
-package com.excilys.formation.java.service;
+package com.excilys.cdb.service;
 
 import java.util.List;
 
-import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.database.DAOComputer;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.database.DAOComputer;
 
 public class ComputerService {
 	

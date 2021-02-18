@@ -1,7 +1,7 @@
-package com.excilys.formation.java.database;
+package com.excilys.cdb.database;
 
-import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.Computer;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
 
 import java.sql.Connection;
 import java.sql.Types;

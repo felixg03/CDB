@@ -1,8 +1,8 @@
-package com.excilys.formation.java.main;
+package com.excilys.cdb.main;
 
-import com.excilys.formation.java.service.Model;
-import com.excilys.formation.java.controller.Controller;
-import com.excilys.formation.java.view.View;
+import com.excilys.cdb.service.Model;
+import com.excilys.cdb.controller.Controller;
+import com.excilys.cdb.view.View;
 
 public class Main {
 

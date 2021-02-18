@@ -1,4 +1,4 @@
-package com.excilys.formation.java.database;
+package com.excilys.cdb.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,7 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
-import com.excilys.formation.java.model.Company;
+
+import com.excilys.cdb.model.Company;
 
 // Follows singleton pattern
 public final class DAOCompany {

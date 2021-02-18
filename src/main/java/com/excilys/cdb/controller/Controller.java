@@ -1,8 +1,8 @@
-package com.excilys.formation.java.controller;
+package com.excilys.cdb.controller;
 
-import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.service.Model;
-import com.excilys.formation.java.view.View;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.service.Model;
+import com.excilys.cdb.view.View;
 
 public class Controller {
 	

@@ -1,11 +1,11 @@
-package com.excilys.formation.java.service;
+package com.excilys.cdb.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.database.DAOCompany;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.database.DAOCompany;
 
 public class CompanyService {
 	

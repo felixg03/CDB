@@ -1,4 +1,4 @@
-package com.excilys.formation.java.database;
+package com.excilys.cdb.database;
 
 import java.sql.*;
 

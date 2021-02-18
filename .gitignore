@@ -39,3 +39,4 @@ Thumbs.db
 
 # NOTE: Don't know if it's a "meaningful" .gitignore yet,
 # I just copied this on the Internet
+/target/

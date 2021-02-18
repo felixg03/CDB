@@ -1,4 +1,4 @@
-package com.excilys.formation.java.service;
+package com.excilys.cdb.service;
 
 public class Model {
 	

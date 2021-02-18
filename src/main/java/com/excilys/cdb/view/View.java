@@ -1,9 +1,9 @@
-package com.excilys.formation.java.view;
+package com.excilys.cdb.view;
 
-import com.excilys.formation.java.service.Model;
-import com.excilys.formation.java.controller.Controller;
-import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.Computer;
+import com.excilys.cdb.service.Model;
+import com.excilys.cdb.controller.Controller;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
 
 import java.time.LocalDate;
 import java.time.Month;
