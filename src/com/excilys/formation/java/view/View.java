@@ -48,34 +48,9 @@ public class View {
 		System.out.println("Bye");
 	}
 	
-	
 	public int displayListComputers(List<Computer> listComputers) {
-		System.out.println("--------------------------------------");
-		System.out.println();
-		System.out.println("RESULT");
-		System.out.println("List of computers:");
-		System.out.println();
-		for (Computer computer : listComputers) {
-			System.out.println(computer.getId() 
-							   + " | " 
-							   + computer.getName()
-							   + " | " 
-							   + computer.getIntroduced()
-							   + " | " 
-							   + computer.getDiscontinued()
-							   + " | " 
-							   + computer.getCompanyId()
-							   );
-		}
-		System.out.println();
-		System.out.println("--------------------------------------");
-		System.out.println("Precedent page --> type 0");
-		System.out.println("Next page --> type 1");
-		System.out.println("Back to menu --> type 2");
-		return this.scanner.nextInt();
+		return this.displayObject(listComputers);
 	}
-	
-	
 	
 	public int displayListCompanies(List<Company> listCompanies) {
 		System.out.println("--------------------------------------");
@@ -84,10 +59,7 @@ public class View {
 		System.out.println("List of companies:");
 		System.out.println();
 		for (Company company : listCompanies) {
-			System.out.println(company.getId() 
-							   + " | " 
-							   + company.getName()
-							   );
+			System.out.println(company);
 		}
 		System.out.println();
 		System.out.println("--------------------------------------");
@@ -97,22 +69,11 @@ public class View {
 		return this.scanner.nextInt();
 	}
 	
-	
-	
 	public void displayOneComputerDetails(Computer computer) {
 		System.out.println();
 		System.out.println("RESULT");
 		System.out.println();
-		System.out.println(computer.getId() 
-				   + " | " 
-				   + computer.getName()
-				   + " | " 
-				   + computer.getIntroduced()
-				   + " | " 
-				   + computer.getDiscontinued()
-				   + " | " 
-				   + computer.getCompanyId()
-				   );
+		System.out.println(computer);
 		System.out.println();
 		System.out.println("--------------------------------------");
 		System.out.println();
@@ -138,9 +99,6 @@ public class View {
 		System.out.println();
 	}
 	
-	/* String passed in argument instead of Computer because in 
-	 * this scenario the computer has been deleted 
-	 * */
 	public void displayResultComputerDeletion(String result) {
 		System.out.println();
 		System.out.println("RESULT");
@@ -240,8 +198,6 @@ public class View {
 				 			);
 	}
 	
-	
-	
 	public Computer getComputerToCreate() {
 		String name = null;
 		LocalDate introduced = null;
@@ -300,5 +256,19 @@ public class View {
 							discontinued, 
 							companyId
 							);
+	}
+
+	public int displayObject(Object thingToDisplay) {
+		System.out.println("--------------------------------------");
+		System.out.println();
+		System.out.println("RESULT");
+		System.out.println();
+		System.out.println(thingToDisplay);
+		System.out.println();
+		System.out.println("--------------------------------------");
+		System.out.println("Precedent page --> type 0");
+		System.out.println("Next page --> type 1");
+		System.out.println("Back to menu --> type 2");
+		return this.scanner.nextInt();
 	}
 }

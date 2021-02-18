@@ -19,11 +19,9 @@ public class Computer {
 	public static void setCounter(int counter) {
 		Computer.counter = counter;
 	}
-	
 	public long getId() {
 		return id;
 	}
-	
 	public String getName() {
 		return name;
 	}
@@ -65,5 +63,17 @@ public class Computer {
 		this.companyId = companyId;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return new String(this.id
+					   + " | " 
+					   + this.name
+					   + " | " 
+					   + this.introduced
+					   + " | " 
+					   + this.discontinued
+					   + " | " 
+					   + this.companyId
+					   );
+	}
 }

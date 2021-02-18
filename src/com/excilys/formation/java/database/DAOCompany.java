@@ -12,28 +12,30 @@ import com.excilys.formation.java.model.Company;
 public final class DAOCompany {
 	
 	private static DAOCompany instance;
-	private DBConnection databaseConnection = DBConnection.getInstance();
+	private DBConnection databaseConnection = DBConnection
+											.getInstance();
 	private ResultSet resultSet;
+	private static final String queryListCompanies = 
+    "SELECT id, name FROM company ORDER BY id LIMIT 10 OFFSET ?"; 
 	
-	public static DAOCompany getInstance() {
+ 	public static DAOCompany getInstance() {
 		if (instance == null) {
 			instance = new DAOCompany();
 		}
 		return instance;
 	}
-	
 	public ResultSet getResultSet() {
 		return resultSet;
 	}
-	
 	
 	public List<Company> requestListCompanies(int offset) {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
 		try {
-			PreparedStatement query = connection.prepareStatement(
-										"SELECT * FROM company ORDER BY id LIMIT 10 OFFSET ?"
-										);
+			PreparedStatement query = connection
+									 .prepareStatement(
+										queryListCompanies
+									 );
 			query.setInt(1, offset);
 			
 			this.resultSet = query.executeQuery();
@@ -57,6 +59,7 @@ public final class DAOCompany {
 		finally {
 			databaseConnection.closeConnection();
 		}
-		return null;  // Not very clean but dunno what else to do
+		
+		return null;
 	}
 }

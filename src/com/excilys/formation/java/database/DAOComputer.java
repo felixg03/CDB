@@ -19,14 +19,23 @@ public final class DAOComputer {
 	private static DAOComputer instance;
 	private DBConnection databaseConnection = DBConnection.getInstance();
 	private ResultSet resultSet;
-
+	private final static String queryListComputers = 
+	"SELECT id, name, introduced, discontinued, company_id FROM computer ORDER BY id LIMIT 10 OFFSET ?";
+	private final static String queryOneComputerDetails = 
+	"SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?";
+	private final static String queryComputerCreation = 
+	"INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
+	private final static String queryComputerDeletion = 
+	"DELETE FROM computer WHERE id = ?";
+	
+	
+	
 	public static DAOComputer getInstance() {
 		if (instance == null) {
 			instance = new DAOComputer();
 		}
 		return instance;
 	}
-
 	public ResultSet getResultSet() {
 		return resultSet;
 	}
@@ -37,7 +46,7 @@ public final class DAOComputer {
 		try {
 			PreparedStatement query = connection
 									.prepareStatement(
-										"SELECT * FROM computer ORDER BY id LIMIT 10 OFFSET ?"
+										queryListComputers
 									);
 			query.setInt(1, offset);
 			this.resultSet = query.executeQuery();
@@ -73,14 +82,17 @@ public final class DAOComputer {
 		} finally {
 			databaseConnection.closeConnection();
 		}
-		return null; // Not very clean but dunno what else to do
+		return null; 
 	}
 
 	public Computer requestOneComputerDetails(long computerId) {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
 		try {
-			PreparedStatement query = connection.prepareStatement("SELECT * FROM computer WHERE id = ?");
+			PreparedStatement query = connection
+									 .prepareStatement(
+											 queryOneComputerDetails
+									 );
 			query.setLong(1, computerId);
 			this.resultSet = query.executeQuery();
 
@@ -110,54 +122,44 @@ public final class DAOComputer {
 		} finally {
 			databaseConnection.closeConnection();
 		}
-		return new Computer(0, "ERROR: Didn't work", null, null, 0); // Not very clean but dunno what else to do
+		return new Computer(0, "ERROR: Didn't work", null, null, 0); 
 	}
 
 	public String requestComputerCreation(Computer computerToCreate) {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
 
-		String requestMaxId = "SELECT MAX(id) FROM computer";
-		String requestCreation = "INSERT INTO computer VALUES (?, ?, ?, ?, ?)";
-		
-		long id = computerToCreate.getId();
-
 		try {
 			// Getting max id in table computer
-			PreparedStatement query = connection.prepareStatement(requestMaxId);
-			this.resultSet = query.executeQuery();
-			if (this.resultSet.next()) {
-				id = resultSet.getLong(1) + 1;
-			}
-			
-			// Creating computer
-			query = connection.prepareStatement(requestCreation);
-			query.setLong(1, id);
+			PreparedStatement query = connection
+									 .prepareStatement(
+											 queryComputerCreation
+									 );
 			
 			if (computerToCreate.getName() == null) {
-				query.setNull(2, Types.VARCHAR);
+				query.setNull(1, Types.VARCHAR);
 			}
 			else {
-				query.setString(2, computerToCreate.getName());
+				query.setString(1, computerToCreate.getName());
 			}
 			
 			
 			if (computerToCreate.getIntroduced() == null) {
-				query.setNull(3, Types.DATE);
+				query.setNull(2, Types.DATE);
 			}
 			else {
-				query.setDate(3, Date.valueOf(computerToCreate.getIntroduced()));
+				query.setDate(2, Date.valueOf(computerToCreate.getIntroduced()));
 			}
 			
 			
 			if (computerToCreate.getDiscontinued() == null) {
-				query.setNull(4, Types.DATE);
+				query.setNull(3, Types.DATE);
 			}
 			else {
-				query.setDate(4, Date.valueOf(computerToCreate.getDiscontinued()));
+				query.setDate(3, Date.valueOf(computerToCreate.getDiscontinued()));
 			}
 			
-			query.setLong(5, computerToCreate.getCompanyId());
+			query.setLong(4, computerToCreate.getCompanyId());
 			query.executeUpdate();
 
 			return "CREATION SUCCESS";
@@ -172,7 +174,7 @@ public final class DAOComputer {
 
 		return "CREATION FAILURE";
 	}
-
+	
 	public String requestComputerUpdate(Computer computerToUpdate) {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
@@ -258,9 +260,6 @@ public final class DAOComputer {
 
 			return "UPDATE SUCCESS";
 		} catch (SQLException sqlException) {
-			System.out.println();
-			System.out.println("DAOComputer.requestComputerDeletion(): exception");
-			System.out.println();
 			sqlException.printStackTrace();
 		} finally {
 			databaseConnection.closeConnection();
@@ -274,7 +273,10 @@ public final class DAOComputer {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
 		try {
-			PreparedStatement query = connection.prepareStatement("DELETE FROM computer WHERE id = ?");
+			PreparedStatement query = connection
+								     .prepareStatement(
+								    		 queryComputerDeletion
+								     );
 			query.setLong(1, computerId);
 			query.executeUpdate();
 

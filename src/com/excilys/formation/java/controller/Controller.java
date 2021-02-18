@@ -64,6 +64,7 @@ public class Controller {
 						.getOneComputerDetails(computerIdToShowDetails)
 				);
 			break;	
+			
 		
 		// CREATE COMPUTER
 		case 4: Computer computerToCreate = view

@@ -20,11 +20,19 @@ public class Company {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
 	public Company(long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
+
+	@Override
+	public String toString() {
+		return new String(this.id
+					   + " | " 
+					   + this.name
+					   );
+	}
+	
 }
