@@ -96,7 +96,7 @@ public final class DAOComputer {
 		
 		return computer; 
 	}
-	public String requestComputerCreation(Computer computerToCreate) {
+	public void requestComputerCreation(Computer computerToCreate) {
 		
 		databaseConnection.openConnection();
 
@@ -108,9 +108,6 @@ public final class DAOComputer {
 					  	);
 			this.setPreparedStatementForComputerCreation(computerToCreate);
 			this.query.executeUpdate();
-
-			return "CREATION SUCCESS";
-			
 		} 
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
@@ -118,10 +115,8 @@ public final class DAOComputer {
 		finally {
 			databaseConnection.closeConnection();
 		}
-
-		return "CREATION FAILURE";
 	}
-	public String requestComputerUpdate(Computer computerToUpdate) {
+	public void requestComputerUpdate(Computer computerToUpdate) {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
 
@@ -203,18 +198,15 @@ public final class DAOComputer {
 			this.query.setLong(argumentNumber, computerToUpdate.getId());
 
 			this.query.executeUpdate();
-
-			return "UPDATE SUCCESS";
-		} catch (SQLException sqlException) {
+		} 
+		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		} finally {
+		} 
+		finally {
 			databaseConnection.closeConnection();
 		}
-
-		return "UPDATE FAILURE";
-
 	}
-	public String requestComputerDeletion(long computerId) {
+	public void requestComputerDeletion(long computerId) {
 		
 		databaseConnection.openConnection();
 		
@@ -226,8 +218,6 @@ public final class DAOComputer {
 					  	);
 			query.setLong(1, computerId);
 			query.executeUpdate();
-
-			return "DELETION SUCCESS";
 		} 
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
@@ -235,8 +225,6 @@ public final class DAOComputer {
 		finally {
 			databaseConnection.closeConnection();
 		}
-
-		return "DELETION FAILURE";
 	}
 	
 	// TOOLS

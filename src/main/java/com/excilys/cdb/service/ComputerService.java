@@ -17,15 +17,15 @@ public class ComputerService {
 		return daoComputer.requestOneComputerDetails(computerId);
 	}
 	
-	public String getResultComputerCreation(Computer computerToCreate) {
-		return daoComputer.requestComputerCreation(computerToCreate);
+	public void getResultComputerCreation(Computer computerToCreate) {
+		daoComputer.requestComputerCreation(computerToCreate);
 	}
 	
-	public String getResultComputerUpdate(Computer computerToUpdate) {
-		return daoComputer.requestComputerUpdate(computerToUpdate);
+	public void getResultComputerUpdate(Computer computerToUpdate) {
+		daoComputer.requestComputerUpdate(computerToUpdate);
 	}
 	
-	public String getResultComputerDeletion(long computerId) {
-		return daoComputer.requestComputerDeletion(computerId);
+	public void getResultComputerDeletion(long computerId) {
+		daoComputer.requestComputerDeletion(computerId);
 	}
 }

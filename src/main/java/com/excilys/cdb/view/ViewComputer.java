@@ -38,31 +38,31 @@ public class ViewComputer {
 		System.out.println();
 	}
 	
-	public void displayResultComputerCreation(String result) {
+	public void displayResultComputerCreation() {
 		System.out.println();
 		System.out.println("RESULT");
 		System.out.println();
-		System.out.println(result);
+		System.out.println("END CREATION");
 		System.out.println();
 		System.out.println("--------------------------------------");
 		System.out.println();
 	}
 
-	public void displayResultComputerUpdate(String result) {
+	public void displayResultComputerUpdate() {
 		System.out.println();
 		System.out.println("RESULT");
 		System.out.println();
-		System.out.println(result);
+		System.out.println("END UPDATE");
 		System.out.println();
 		System.out.println("--------------------------------------");
 		System.out.println();
 	}
 
-	public void displayResultComputerDeletion(String result) {
+	public void displayResultComputerDeletion() {
 		System.out.println();
 		System.out.println("RESULT");
 		System.out.println();
-		System.out.println(result);
+		System.out.println("END DELETION");
 		System.out.println();
 		System.out.println("--------------------------------------");
 		System.out.println();

@@ -75,38 +75,34 @@ public class Controller {
 		// CREATE COMPUTER
 		case 4: Computer computerToCreate = viewComputer
 										   .getComputerToCreate();
-			
-				viewComputer
-				.displayResultComputerCreation(
-						model
-						.getComputerService()
-						.getResultComputerCreation(computerToCreate)
-				);
+				model.getComputerService()
+					 .getResultComputerCreation(computerToCreate);
+				
+				viewComputer.displayResultComputerCreation();
+				
 			break;	
 		
 		
 		// UPDATE COMPUTER
 		case 5: Computer computerToUpdate = viewComputer
 											.getComputerInfoToUpdate();
+				model.getComputerService()
+					 .getResultComputerUpdate(computerToUpdate);
 				
-				viewComputer
-				.displayResultComputerUpdate(
-						model
-						.getComputerService()
-						.getResultComputerUpdate(computerToUpdate)
-				);
+				viewComputer.displayResultComputerUpdate();
+				
 			break;	
 		
 		
 		// DELETE COMPUTER
-		case 6: long computerIdToDelete = viewComputer.getComputerId(input);
-		
-				viewComputer
-				.displayResultComputerDeletion(
-						model
-						.getComputerService()
-						.getResultComputerDeletion(computerIdToDelete)
-				);
+		case 6: long computerIdToDelete = viewComputer
+										 .getComputerId(input);
+				
+				model.getComputerService()
+					 .getResultComputerDeletion(computerIdToDelete);
+				
+				viewComputer.displayResultComputerDeletion();
+				
 			break;	
 		
 			
