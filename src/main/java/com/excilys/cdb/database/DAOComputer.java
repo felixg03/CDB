@@ -2,6 +2,7 @@ package com.excilys.cdb.database;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.mysql.cj.xdevapi.Type;
 
 import java.sql.Connection;
 import java.sql.Types;
@@ -15,21 +16,25 @@ import java.util.List;
 
 // Follows singleton pattern
 public final class DAOComputer {
-
+	
+	// GENERAL ATTRIBUTES
 	private static DAOComputer instance;
 	private DBConnection databaseConnection = DBConnection.getInstance();
+	private Connection connection;
 	private ResultSet resultSet;
-	private final static String queryListComputers = 
+	private PreparedStatement query;
+	
+	// STRING QUERIES
+	private final static String QUERY_LIST_COMPUTER = 
 	"SELECT id, name, introduced, discontinued, company_id FROM computer ORDER BY id LIMIT 10 OFFSET ?";
-	private final static String queryOneComputerDetails = 
+	private final static String QUERY_ONE_COMPUTER_DETAILS = 
 	"SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?";
-	private final static String queryComputerCreation = 
+	private final static String QUERY_COMPUTER_CREATION = 
 	"INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-	private final static String queryComputerDeletion = 
+	private final static String QUERY_COMPUTER_DELETION = 
 	"DELETE FROM computer WHERE id = ?";
 	
-	
-	
+	// GETTERS
 	public static DAOComputer getInstance() {
 		if (instance == null) {
 			instance = new DAOComputer();
@@ -40,127 +45,69 @@ public final class DAOComputer {
 		return resultSet;
 	}
 
+	// GENERAL METHODS READ/WRITE DATABASE
 	public List<Computer> requestListComputer(int offset) {
+		
 		databaseConnection.openConnection();
-		Connection connection = databaseConnection.getConnection();
+		List<Computer> listComputers = new ArrayList<Computer>();
+		
 		try {
-			PreparedStatement query = connection
-									.prepareStatement(
-										queryListComputers
-									);
-			query.setInt(1, offset);
-			this.resultSet = query.executeQuery();
-
-			List<Computer> listComputers = new ArrayList<Computer>();
-
-			while (this.resultSet.next()) {
-				long id = this.resultSet.getLong(1);
-				String name = this.resultSet.getString(2);
-				LocalDate introduced;
-				LocalDate discontinued;
-				long companyId = this.resultSet.getLong(5);
-
-				if (this.resultSet.getDate(3) != null) {
-					introduced = this.resultSet.getDate(3).toLocalDate();
-				} else {
-					introduced = null;
-				}
-
-				if (this.resultSet.getDate(4) != null) {
-					discontinued = this.resultSet.getDate(4).toLocalDate();
-				} else {
-					discontinued = null;
-				}
-
-				Computer computer = new Computer(id, name, introduced, discontinued, companyId);
-				listComputers.add(computer);
-			}
-
-			return listComputers;
-		} catch (SQLException sqlException) {
+			this.connection = databaseConnection.getConnection();
+			this.query = connection
+					  	.prepareStatement(
+							  QUERY_LIST_COMPUTER
+					  	);
+			
+			this.query.setInt(1, offset);
+			this.resultSet = this.query.executeQuery();
+			listComputers = this.getListComputerFromResultSet(resultSet);
+		} 
+		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		} finally {
+		}
+		finally {
 			databaseConnection.closeConnection();
 		}
-		return null; 
+		
+		return listComputers;
 	}
-
 	public Computer requestOneComputerDetails(long computerId) {
+		
 		databaseConnection.openConnection();
-		Connection connection = databaseConnection.getConnection();
+		Computer computer = null;
+		
 		try {
-			PreparedStatement query = connection
-									 .prepareStatement(
-											 queryOneComputerDetails
-									 );
-			query.setLong(1, computerId);
+			this.connection = databaseConnection.getConnection();
+			this.query = connection
+					  	.prepareStatement(
+					  		QUERY_ONE_COMPUTER_DETAILS
+					  	);
+			this.query.setLong(1, computerId);
 			this.resultSet = query.executeQuery();
-
-			if (this.resultSet.next()) {
-				long id = this.resultSet.getLong(1);
-				String name = this.resultSet.getString(2);
-				LocalDate introduced;
-				LocalDate discontinued;
-				long companyId = this.resultSet.getLong(5);
-
-				if (this.resultSet.getDate(3) != null) {
-					introduced = this.resultSet.getDate(3).toLocalDate();
-				} else {
-					introduced = null;
-				}
-
-				if (this.resultSet.getDate(4) != null) {
-					discontinued = this.resultSet.getDate(4).toLocalDate();
-				} else {
-					discontinued = null;
-				}
-
-				return new Computer(id, name, introduced, discontinued, companyId);
-			}
-		} catch (SQLException sqlException) {
+			computer = this.getComputerFromResultSet(this.resultSet);
+			
+		} 
+		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		} finally {
+		} 
+		finally {
 			databaseConnection.closeConnection();
 		}
-		return new Computer(0, "ERROR: Didn't work", null, null, 0); 
+		
+		return computer; 
 	}
-
 	public String requestComputerCreation(Computer computerToCreate) {
+		
 		databaseConnection.openConnection();
-		Connection connection = databaseConnection.getConnection();
 
 		try {
-			// Getting max id in table computer
-			PreparedStatement query = connection
-									 .prepareStatement(
-											 queryComputerCreation
-									 );
-			
-			if (computerToCreate.getName() == null) {
-				query.setNull(1, Types.VARCHAR);
-			}
-			else {
-				query.setString(1, computerToCreate.getName());
-			}
-			
-			
-			if (computerToCreate.getIntroduced() == null) {
-				query.setNull(2, Types.DATE);
-			}
-			else {
-				query.setDate(2, Date.valueOf(computerToCreate.getIntroduced()));
-			}
-			
-			
-			if (computerToCreate.getDiscontinued() == null) {
-				query.setNull(3, Types.DATE);
-			}
-			else {
-				query.setDate(3, Date.valueOf(computerToCreate.getDiscontinued()));
-			}
-			
-			query.setLong(4, computerToCreate.getCompanyId());
-			query.executeUpdate();
+			this.connection = databaseConnection.getConnection();
+			this.query = connection
+					  	.prepareStatement(
+					  		 QUERY_COMPUTER_CREATION
+					  	);
+			this.setPreparedStatementForComputerCreation(computerToCreate);
+			this.query.executeUpdate();
 
 			return "CREATION SUCCESS";
 			
@@ -174,7 +121,6 @@ public final class DAOComputer {
 
 		return "CREATION FAILURE";
 	}
-	
 	public String requestComputerUpdate(Computer computerToUpdate) {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
@@ -235,28 +181,28 @@ public final class DAOComputer {
 		request += " WHERE id = ?";
 
 		try {
-			PreparedStatement query = connection.prepareStatement(request);
+			this.query = connection.prepareStatement(request);
 			if (hasName) {
 				argumentNumber++;
-				query.setString(argumentNumber, name);
+				this.query.setString(argumentNumber, name);
 			}
 			if (hasIntroducedDate) {
 				argumentNumber++;
-				query.setDate(argumentNumber, Date.valueOf(introduced));
+				this.query.setDate(argumentNumber, Date.valueOf(introduced));
 			}
 			if (hasDiscontinuedDate) {
 				argumentNumber++;
-				query.setDate(argumentNumber, Date.valueOf(discontinued));
+				this.query.setDate(argumentNumber, Date.valueOf(discontinued));
 			}
 			if (hasCompanyId) {
 				argumentNumber++;
-				query.setLong(argumentNumber, companyId);
+				this.query.setLong(argumentNumber, companyId);
 			}
 
 			argumentNumber++;
-			query.setLong(argumentNumber, computerToUpdate.getId());
+			this.query.setLong(argumentNumber, computerToUpdate.getId());
 
-			query.executeUpdate();
+			this.query.executeUpdate();
 
 			return "UPDATE SUCCESS";
 		} catch (SQLException sqlException) {
@@ -268,25 +214,106 @@ public final class DAOComputer {
 		return "UPDATE FAILURE";
 
 	}
-
 	public String requestComputerDeletion(long computerId) {
+		
 		databaseConnection.openConnection();
-		Connection connection = databaseConnection.getConnection();
+		
 		try {
-			PreparedStatement query = connection
-								     .prepareStatement(
-								    		 queryComputerDeletion
-								     );
+			this.connection = databaseConnection.getConnection();
+			this.query = connection
+					  	.prepareStatement(
+					  		 QUERY_COMPUTER_DELETION
+					  	);
 			query.setLong(1, computerId);
 			query.executeUpdate();
 
 			return "DELETION SUCCESS";
-		} catch (SQLException sqlException) {
+		} 
+		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		} finally {
+		}
+		finally {
 			databaseConnection.closeConnection();
 		}
 
 		return "DELETION FAILURE";
+	}
+	
+	// TOOLS
+	private List<Computer> getListComputerFromResultSet(ResultSet resultSetArg) throws SQLException {
+		List<Computer> listComputersToReturn = new ArrayList<Computer>();
+		
+		while (resultSetArg.next()) {
+			long id = resultSetArg.getLong(1);
+			String name = resultSetArg.getString(2);
+			LocalDate introduced = this.castDateToLocalDate(resultSetArg.getDate(3));
+			LocalDate discontinued = this.castDateToLocalDate(resultSetArg.getDate(4));
+			long companyId = resultSetArg.getLong(5);
+			
+			Computer computer = new Computer(id, name, introduced, discontinued, companyId);
+			listComputersToReturn.add(computer);
+		}
+
+		return listComputersToReturn;
+	}
+	private Computer getComputerFromResultSet(ResultSet resultSetArg) throws SQLException {
+		
+		long id = 0;
+		String name = null;
+		LocalDate introduced = null;
+		LocalDate discontinued = null;
+		long companyId = 0;
+		
+		if (resultSetArg.next()) {
+			id = resultSetArg.getLong(1);
+			name = resultSetArg.getString(2);
+			introduced = this.castDateToLocalDate(resultSetArg.getDate(3));
+			discontinued = this.castDateToLocalDate(resultSetArg.getDate(4));
+			companyId = resultSetArg.getLong(5);
+		}
+		
+		return new Computer(id, name, introduced, discontinued, companyId);
+	}
+	private LocalDate castDateToLocalDate(Date date) {
+		if (date != null) {
+			return date.toLocalDate();
+		}
+		else {
+			return null;
+		}
+	}
+	private void setPreparedStatementForComputerCreation(Computer computer) throws SQLException {
+		this.setPreparedStatementParameter(
+				computer.getName()
+			  , Types.VARCHAR
+			  , 1
+				);
+		this.setPreparedStatementParameter(
+			    computer.getIntroduced()
+			  , Types.DATE
+			  , 2
+				);
+		this.setPreparedStatementParameter(
+				computer.getDiscontinued()
+			  , Types.DATE
+			  , 3
+				);
+		
+		this.query.setLong(4, computer.getCompanyId());
+	}
+	private void setPreparedStatementParameter (Object parameter
+											  , int objectType
+											  , int position)  throws SQLException {
+		if (parameter == null) {
+			this.query.setNull(position, objectType);
+		}
+		else {
+			if (objectType == Types.VARCHAR) {
+				this.query.setString(position, (String) parameter);
+			}
+			else if (objectType == Types.DATE) {
+				this.query.setDate(position, Date.valueOf((LocalDate) parameter));
+			}
+		}
 	}
 }

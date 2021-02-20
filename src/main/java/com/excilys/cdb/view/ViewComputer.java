@@ -1,65 +1,24 @@
 package com.excilys.cdb.view;
 
-import com.excilys.cdb.service.Model;
-import com.excilys.cdb.controller.Controller;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
-
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class View {
+import com.excilys.cdb.model.Computer;
+
+public class ViewComputer {
 	
-	private Model model;
-	private Controller controller;
 	private Scanner scanner = new Scanner(System.in);
 	
-	public View(Model model) {
-		super();
-		this.model = model;
-	}
-
-	public void setController(Controller controller) {
-		this.controller = controller;
-	}
-	
-	public void displayCli() {
-		System.out.println("Hi");
-		boolean loop = true;
-		int userInput = 0;
-		
-		while(loop) {
-			System.out.println("What do you want to do ?");
-			System.out.println("1 - List computers");
-			System.out.println("2 - List companies");
-			System.out.println("3 - Show one computer details");
-			System.out.println("4 - Create a computer");
-			System.out.println("5 - Update a computer");
-			System.out.println("6 - Delete a computer");
-			System.out.println("7 - Exit application");
-			
-			userInput = scanner.nextInt();
-			loop = controller.action(userInput);
-		}
-		
-		System.out.println("Bye");
-	}
 	
 	public int displayListComputers(List<Computer> listComputers) {
-		return this.displayObject(listComputers);
-	}
-	
-	public int displayListCompanies(List<Company> listCompanies) {
 		System.out.println("--------------------------------------");
 		System.out.println();
 		System.out.println("RESULT");
 		System.out.println("List of companies:");
 		System.out.println();
-		for (Company company : listCompanies) {
-			System.out.println(company);
+		for (Computer computer : listComputers) {
+			System.out.println(computer);
 		}
 		System.out.println();
 		System.out.println("--------------------------------------");
@@ -88,7 +47,7 @@ public class View {
 		System.out.println("--------------------------------------");
 		System.out.println();
 	}
-	
+
 	public void displayResultComputerUpdate(String result) {
 		System.out.println();
 		System.out.println("RESULT");
@@ -98,7 +57,7 @@ public class View {
 		System.out.println("--------------------------------------");
 		System.out.println();
 	}
-	
+
 	public void displayResultComputerDeletion(String result) {
 		System.out.println();
 		System.out.println("RESULT");
@@ -108,7 +67,7 @@ public class View {
 		System.out.println("--------------------------------------");
 		System.out.println();
 	}
-	
+
 	public long getComputerId(int userInput) {
 		if (userInput == 3) {
 			System.out.println("--------------------------------------");
@@ -197,7 +156,7 @@ public class View {
 				 			newCompanyId
 				 			);
 	}
-	
+
 	public Computer getComputerToCreate() {
 		String name = null;
 		LocalDate introduced = null;
@@ -256,19 +215,5 @@ public class View {
 							discontinued, 
 							companyId
 							);
-	}
-
-	public int displayObject(Object thingToDisplay) {
-		System.out.println("--------------------------------------");
-		System.out.println();
-		System.out.println("RESULT");
-		System.out.println();
-		System.out.println(thingToDisplay);
-		System.out.println();
-		System.out.println("--------------------------------------");
-		System.out.println("Precedent page --> type 0");
-		System.out.println("Next page --> type 1");
-		System.out.println("Back to menu --> type 2");
-		return this.scanner.nextInt();
 	}
 }

@@ -16,7 +16,7 @@ public final class DAOCompany {
 	private DBConnection databaseConnection = DBConnection
 											.getInstance();
 	private ResultSet resultSet;
-	private static final String queryListCompanies = 
+	private static final String QUERY_LIST_COMPANIES = 
     "SELECT id, name FROM company ORDER BY id LIMIT 10 OFFSET ?"; 
 	
  	public static DAOCompany getInstance() {
@@ -31,36 +31,41 @@ public final class DAOCompany {
 	
 	public List<Company> requestListCompanies(int offset) {
 		databaseConnection.openConnection();
-		Connection connection = databaseConnection.getConnection();
-		try {
-			PreparedStatement query = connection
-									 .prepareStatement(
-										queryListCompanies
-									 );
+		List<Company> listCompanies = new ArrayList<Company>();
+		
+		try (Connection connection = databaseConnection.getConnection();
+			 PreparedStatement query = connection
+						 			   .prepareStatement(
+						 					  QUERY_LIST_COMPANIES
+						 			   );
+			)
+		{
+			
 			query.setInt(1, offset);
-			
 			this.resultSet = query.executeQuery();
-			
-			
-			List<Company> listCompanies = new ArrayList<Company>();
-			
-			while(this.resultSet.next()) {
-				 long id = this.resultSet.getLong(1);
-				 String name = this.resultSet.getString(2);
-				 
-				 Company company = new Company(id, name);
-				 listCompanies.add(company);
-			}
-			
-			 return listCompanies;
+			listCompanies = this
+							.getListCompaniesFromResultSet(
+									this.resultSet
+							);
 		}
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		}
-		finally {
-			databaseConnection.closeConnection();
+		
+		return listCompanies;
+	}
+	
+	public List<Company> getListCompaniesFromResultSet(ResultSet resultSetArgument) throws SQLException {
+		List<Company> listCompaniesToReturn = new ArrayList<Company>();
+		
+		while(resultSetArgument.next()) {
+			 long id = resultSetArgument.getLong(1);
+			 String name = resultSetArgument.getString(2);
+			 
+			 Company company = new Company(id, name);
+			 listCompaniesToReturn.add(company);
 		}
 		
-		return null;
+		return listCompaniesToReturn;
 	}
 }

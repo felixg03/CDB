@@ -2,17 +2,23 @@ package com.excilys.cdb.controller;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.Model;
-import com.excilys.cdb.view.View;
+import com.excilys.cdb.view.ViewPrincipal;
+import com.excilys.cdb.view.ViewComputer;
+import com.excilys.cdb.view.ViewCompany;
 
 public class Controller {
 	
 	private Model model;
-	private View view;
+	private ViewPrincipal viewPrincipal;
+	private ViewComputer viewComputer;
+	private ViewCompany viewCompany;
 	
-	public Controller(Model model, View view) {
+	public Controller(Model model, ViewPrincipal viewPrincipal) {
 		super();
 		this.model = model;
-		this.view = view;
+		this.viewPrincipal = viewPrincipal;
+		this.viewComputer = this.viewPrincipal.getViewComputer();
+		this.viewCompany = this.viewPrincipal.getViewCompany();
 	}
 	
 	public boolean action(int input) {
@@ -22,7 +28,7 @@ public class Controller {
 		
 		// DISPLAY LIST COMPUTERS
 		case 1: do {
-					next = view
+					next = viewComputer
 						  .displayListComputers(
 								  model
 								  .getComputerService()
@@ -39,7 +45,7 @@ public class Controller {
 			
 		// DISPLAY LIST COMPANIES
 		case 2: do {
-					next = view
+					next = viewCompany
 						  .displayListCompanies(
 								model
 							    .getCompanyService()
@@ -55,9 +61,9 @@ public class Controller {
 			
 		
 		// DISPLAY ONE COMPUTER DETAILS
-		case 3: long computerIdToShowDetails = view.getComputerId(input);
+		case 3: long computerIdToShowDetails = viewComputer.getComputerId(input);
 			
-				view
+				viewComputer
 				.displayOneComputerDetails(
 						model
 						.getComputerService()
@@ -67,10 +73,10 @@ public class Controller {
 			
 		
 		// CREATE COMPUTER
-		case 4: Computer computerToCreate = view
+		case 4: Computer computerToCreate = viewComputer
 										   .getComputerToCreate();
 			
-				view
+				viewComputer
 				.displayResultComputerCreation(
 						model
 						.getComputerService()
@@ -80,10 +86,11 @@ public class Controller {
 		
 		
 		// UPDATE COMPUTER
-		case 5: Computer computerToUpdate = view
+		case 5: Computer computerToUpdate = viewComputer
 											.getComputerInfoToUpdate();
 				
-				view.displayResultComputerUpdate(
+				viewComputer
+				.displayResultComputerUpdate(
 						model
 						.getComputerService()
 						.getResultComputerUpdate(computerToUpdate)
@@ -92,9 +99,10 @@ public class Controller {
 		
 		
 		// DELETE COMPUTER
-		case 6: long computerIdToDelete = view.getComputerId(input);
+		case 6: long computerIdToDelete = viewComputer.getComputerId(input);
 		
-				view.displayResultComputerDeletion(
+				viewComputer
+				.displayResultComputerDeletion(
 						model
 						.getComputerService()
 						.getResultComputerDeletion(computerIdToDelete)
