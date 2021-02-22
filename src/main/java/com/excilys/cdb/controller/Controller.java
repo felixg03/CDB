@@ -1,5 +1,6 @@
 package com.excilys.cdb.controller;
 
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.Model;
 import com.excilys.cdb.view.ViewPrincipal;
@@ -21,7 +22,7 @@ public class Controller {
 		this.viewCompany = this.viewPrincipal.getViewCompany();
 	}
 	
-	public boolean action(int input) {
+	public boolean action(int input) throws NumberFormatException, InvalidComputerIdException {
 		
 		int next, offset = 0;
 		switch (input) {
@@ -61,14 +62,25 @@ public class Controller {
 			
 		
 		// DISPLAY ONE COMPUTER DETAILS
-		case 3: long computerIdToShowDetails = viewComputer.getComputerId(input);
-			
-				viewComputer
-				.displayOneComputerDetails(
-						model
-						.getComputerService()
-						.getOneComputerDetails(computerIdToShowDetails)
-				);
+		case 3: try {
+					long computerIdToShowDetails = viewComputer.getComputerId(input); // throws NumberFormatException
+					
+					viewComputer						// throws InvalidComputerIdException
+					.displayOneComputerDetails(
+							model
+							.getComputerService()
+							.getOneComputerDetails(computerIdToShowDetails)
+					);
+				}
+				catch (Exception e) {
+					if (e.getClass() == NumberFormatException.class) {
+						throw (NumberFormatException) e;
+					}
+					else if (e.getClass() == InvalidComputerIdException.class) {
+						throw (InvalidComputerIdException) e;
+					}
+				}
+				
 			break;	
 			
 		

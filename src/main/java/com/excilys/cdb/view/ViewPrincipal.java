@@ -2,6 +2,7 @@ package com.excilys.cdb.view;
 
 import com.excilys.cdb.service.Model;
 import com.excilys.cdb.controller.Controller;
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.customExceptions.OutOfRangeUserInputException;
 import com.excilys.cdb.logger.LoggerManager;
 
@@ -16,8 +17,6 @@ public class ViewPrincipal {
 	private Scanner scanner = new Scanner(System.in);
 	private final int LOWER_BOUND_INPUT = 1;
 	private final int UPPER_BOUND_INPUT = 7;
-	
-	private final LoggerManager logger = LoggerManager.getInstance();
 	
 	public ViewPrincipal(Model model) {
 		super();
@@ -51,15 +50,22 @@ public class ViewPrincipal {
 			
 			try {
 				String userInput = scanner.nextLine();
-				int userInputInteger = Integer.valueOf(userInput);
+				int userInputInteger = Integer.valueOf(userInput); // throws NumberFormatException
 				if (userInputInteger < LOWER_BOUND_INPUT 
 				 || userInputInteger > UPPER_BOUND_INPUT) {
 					throw new OutOfRangeUserInputException(userInputInteger);
 				}
+				
 				loop = controller.action(userInputInteger);
 			}
-			catch (Exception e) {
-				this.logger.logInLogFile(e);
+			catch (NumberFormatException nbFormatEx) {
+				LoggerManager.logInLogFile(nbFormatEx);
+			}
+			catch (OutOfRangeUserInputException outOfRangeUserInputEx) {
+				LoggerManager.logInLogFile(outOfRangeUserInputEx);
+			}
+			catch (InvalidComputerIdException invCompIdEx) {
+				LoggerManager.logInLogFile(invCompIdEx);
 			}
 		}
 		

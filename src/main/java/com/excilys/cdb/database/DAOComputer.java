@@ -1,8 +1,8 @@
 package com.excilys.cdb.database;
 
-import com.excilys.cdb.model.Company;
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.model.Computer;
-import com.mysql.cj.xdevapi.Type;
+import com.excilys.cdb.logger.LoggerManager;
 
 import java.sql.Connection;
 import java.sql.Types;
@@ -12,7 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 // Follows singleton pattern
 public final class DAOComputer {
@@ -33,6 +35,9 @@ public final class DAOComputer {
 	"INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 	private final static String QUERY_COMPUTER_DELETION = 
 	"DELETE FROM computer WHERE id = ?";
+	
+	private final static String QUERY_GET_ALL_COMPUTER_ID = 
+	"SELECT id FROM computer";
 	
 	// GETTERS
 	public static DAOComputer getInstance() {
@@ -71,13 +76,16 @@ public final class DAOComputer {
 		
 		return listComputers;
 	}
-	public Computer requestOneComputerDetails(long computerId) {
+	public Computer requestOneComputerDetails(long computerId) throws InvalidComputerIdException {
 		
 		databaseConnection.openConnection();
 		Computer computer = null;
 		
 		try {
 			this.connection = databaseConnection.getConnection();
+			
+			this.checkComputerId(computerId);
+			
 			this.query = connection
 					  	.prepareStatement(
 					  		QUERY_ONE_COMPUTER_DETAILS
@@ -86,7 +94,7 @@ public final class DAOComputer {
 			this.resultSet = query.executeQuery();
 			computer = this.getComputerFromResultSet(this.resultSet);
 			
-		} 
+		}
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		} 
@@ -303,5 +311,27 @@ public final class DAOComputer {
 				this.query.setDate(position, Date.valueOf((LocalDate) parameter));
 			}
 		}
+	}
+	
+	private void checkComputerId(long id) throws InvalidComputerIdException, SQLException {
+		this.query = connection
+			  		.prepareStatement(
+			  			 QUERY_GET_ALL_COMPUTER_ID
+				  	);
+		
+		this.resultSet = this.query.executeQuery();
+		Set<Long> setOfComputerId = getSetOfIntegerFromResultSet(this.resultSet);
+		
+		if (!setOfComputerId.contains(id)) {
+			throw new InvalidComputerIdException(id);
+		}
+	}
+	
+	private Set<Long> getSetOfIntegerFromResultSet(ResultSet resultSetArg) throws SQLException {
+		Set<Long> setOfInteger = new HashSet<Long>();
+		while(resultSetArg.next()) {
+			setOfInteger.add(resultSetArg.getLong(1));
+		}
+		return setOfInteger;
 	}
 }

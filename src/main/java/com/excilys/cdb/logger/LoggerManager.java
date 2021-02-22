@@ -1,32 +1,34 @@
 package com.excilys.cdb.logger;
 
 import ch.qos.logback.classic.Logger;
+
+import java.sql.SQLException;
+
 import org.slf4j.LoggerFactory;
+
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.customExceptions.OutOfRangeUserInputException;
 
 public final class LoggerManager {
 	
-	private static LoggerManager instance;
-	
-	private final Logger viewLoggerFile =
+	private static final Logger viewLoggerFile =
 	(Logger) LoggerFactory.getLogger("com.excilys.cdb.logger.fileLogger");
-	private final Logger viewLoggerConsole =
-	(Logger) LoggerFactory.getLogger("STDOUT");
+	/*private static final Logger viewLoggerConsole =
+	(Logger) LoggerFactory.getLogger("STDOUT"); */
+
+	/*public static void logInLogFile(SQLException sqlException) {
+		viewLoggerFile.error("Out of range input: Integer must be between 1 and 7", sqlException);
+	}*/
 	
-	
-	public static LoggerManager getInstance() {
-		if (instance == null) {
-			instance = new LoggerManager();
-		}
-		return instance;
+	public static void logInLogFile(OutOfRangeUserInputException outOfRangeUserInputEx) {
+		viewLoggerFile.error("Out of range input: Integer must be between 1 and 7", outOfRangeUserInputEx);
 	}
 	
-	public void logInLogFile(Exception e) {
-		if (e.getClass() == NumberFormatException.class) {
-			viewLoggerFile.error("Invalid char input: Must be an INTEGER (between 1 and 7)", e);
-		}
-		else if (e.getClass() == OutOfRangeUserInputException.class) {
-			viewLoggerFile.error("Out of range input: Integer must be between 1 and 7", e);
-		}
+	public static void logInLogFile(NumberFormatException nbFormatEx) {
+		viewLoggerFile.error("Invalid input: Must be an integer", nbFormatEx);
+	}
+	
+	public static void logInLogFile(InvalidComputerIdException invCompIdEx) {
+		viewLoggerFile.error("Invalid computer id input: The id doesn't exist in database", invCompIdEx);
 	}
 }

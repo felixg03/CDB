@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.logger.LoggerManager;
 
 public class ViewComputer {
 	
@@ -68,14 +69,13 @@ public class ViewComputer {
 		System.out.println();
 	}
 
-	public long getComputerId(int userInput) {
+	public long getComputerId(int userInput) throws NumberFormatException {
 		if (userInput == 3) {
 			System.out.println("--------------------------------------");
 			System.out.println();
 			System.out.println("- You chose show one computer details -");
 			System.out.println();
 			System.out.println("Enter the id of the computer that you wish to see the details:");
-			return this.scanner.nextInt();
 		}
 		else { // if (userInput == 6) {
 			System.out.println("--------------------------------------");
@@ -83,8 +83,19 @@ public class ViewComputer {
 			System.out.println("- You chose to delete one computer -");
 			System.out.println();
 			System.out.println("Enter the id of the computer that you wish to delete:");
-			return this.scanner.nextInt();
 		}
+		
+		String userInputToReturn = this.scanner.nextLine();
+		long longToReturn = 0;
+		
+		try {
+			longToReturn = Long.valueOf(userInputToReturn);
+		}
+		catch (NumberFormatException e) {
+			throw e;
+		}
+		
+		return longToReturn;
 	}
 
 	public Computer getComputerInfoToUpdate() {

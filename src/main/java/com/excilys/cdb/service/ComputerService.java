@@ -3,6 +3,7 @@ package com.excilys.cdb.service;
 import java.util.List;
 
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.database.DAOComputer;
 
 public class ComputerService {
@@ -13,7 +14,7 @@ public class ComputerService {
 		return daoComputer.requestListComputer(offset);
 	}
 	
-	public Computer getOneComputerDetails(long computerId) {
+	public Computer getOneComputerDetails(long computerId) throws InvalidComputerIdException {
 		return daoComputer.requestOneComputerDetails(computerId);
 	}
 	
