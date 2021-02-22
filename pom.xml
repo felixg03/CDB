@@ -24,5 +24,41 @@
     	  <artifactId>mysql-connector-java</artifactId>
     	  <version>8.0.23</version>
       	</dependency>
+      	
+      	<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core 
+		
+		DON'T KNOW WHICH MOCKITO I SHOULD IMPORT
+		
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-core</artifactId>
+		    <version>3.7.7</version>
+		    <scope>test</scope>
+		</dependency>
+		-->
+		
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-all</artifactId>
+		    <version>1.10.19</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>1.7.30</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+		<dependency>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>1.2.17</version>
+		</dependency>
+		
+      	
       </dependencies>
     </project>
