@@ -3,7 +3,7 @@ package com.excilys.cdb.service;
 import java.util.List;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import com.excilys.cdb.customException.InvalidComputerIdException;
 import com.excilys.cdb.database.DAOComputer;
 
 public class ComputerService {
@@ -26,7 +26,7 @@ public class ComputerService {
 		daoComputer.requestComputerUpdate(computerToUpdate);
 	}
 	
-	public void getResultComputerDeletion(long computerId) {
+	public void getResultComputerDeletion(long computerId) throws InvalidComputerIdException {
 		daoComputer.requestComputerDeletion(computerId);
 	}
 }

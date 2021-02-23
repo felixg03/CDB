@@ -1,11 +1,11 @@
 package com.excilys.cdb.view;
 
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.logger.LoggerManager;
 
 public class ViewComputer {
 	
@@ -23,10 +23,21 @@ public class ViewComputer {
 		}
 		System.out.println();
 		System.out.println("--------------------------------------");
-		System.out.println("Precedent page --> type 0");
-		System.out.println("Next page --> type 1");
-		System.out.println("Back to menu --> type 2");
-		return this.scanner.nextInt();
+		System.out.println("Precedent page --> type 1");
+		System.out.println("Next page --> type 2");
+		System.out.println("Back to menu --> type anything else");
+		
+		String userInputToReturn = this.scanner.nextLine();
+		int intToReturn;
+		
+		try {
+			intToReturn = Integer.valueOf(userInputToReturn);
+		}
+		catch (NumberFormatException e) {
+			intToReturn = 0; // default value
+		}
+		
+		return intToReturn;
 	}
 	
 	public void displayOneComputerDetails(Computer computer) {
@@ -98,7 +109,7 @@ public class ViewComputer {
 		return longToReturn;
 	}
 
-	public Computer getComputerInfoToUpdate() {
+	public Computer getComputerInfoToUpdate() throws InputMismatchException {
 		long idOfComputerToUpdate;
 		String newName = null;
 		LocalDate newIntroducedDate = null;
@@ -122,35 +133,13 @@ public class ViewComputer {
 		System.out.println();
 		System.out.println("Do you wish to update the introduced date ? (1 = yes, 0 = no)");
 		if (this.scanner.nextInt() == 1) {
-			int year;
-			int month;
-			int day;
-			System.out.println();
-			System.out.println("Enter the YEAR of the new introduced date:");
-			year = this.scanner.nextInt();
-			System.out.println("Enter the NUMBER OF THE MONTH of the new introduced date:");
-			month = this.scanner.nextInt();
-			System.out.println("Enter the DAY of the new introduced date:");
-			day = this.scanner.nextInt();
-			
-			newIntroducedDate = LocalDate.of(year, month, day);
+			newIntroducedDate = this.getLocalDateFromUser();
 		}
 		
 		System.out.println();
 		System.out.println("Do you wish to update the discontinued date ? (1 = yes, 0 = no)");
 		if (this.scanner.nextInt() == 1) {
-			int year;
-			int month;
-			int day;
-			System.out.println();
-			System.out.println("Enter the YEAR of the new discontinued date:");
-			year = this.scanner.nextInt();
-			System.out.println("Enter the NUMBER OF THE MONTH of the new discontinued date:");
-			month = this.scanner.nextInt();
-			System.out.println("Enter the DAY of the new discontinued date:");
-			day = this.scanner.nextInt();
-			
-			newDiscontinuedDate = LocalDate.of(year, month, day);
+			newDiscontinuedDate = this.getLocalDateFromUser();
 		}
 		
 		System.out.println();
@@ -168,7 +157,7 @@ public class ViewComputer {
 				 			);
 	}
 
-	public Computer getComputerToCreate() {
+	public Computer getComputerToCreate() throws InputMismatchException {
 		String name = null;
 		LocalDate introduced = null;
 		LocalDate discontinued = null;
@@ -183,36 +172,15 @@ public class ViewComputer {
 		
 		System.out.println();
 		System.out.println("Do you wish to add an introduced date ? (1 = yes, 0 = no)");
+		
 		if (this.scanner.nextInt() == 1) {
-			int year;
-			int month;
-			int day;
-			System.out.println();
-			System.out.println("Enter the YEAR:");
-			year = this.scanner.nextInt();
-			System.out.println("Enter the NUMBER OF THE MONTH:");
-			month = this.scanner.nextInt();
-			System.out.println("Enter the DAY:");
-			day = this.scanner.nextInt();
-			
-			introduced = LocalDate.of(year, month, day);
+			introduced = this.getLocalDateFromUser();
 		}
 		
 		System.out.println();
 		System.out.println("Do you wish to add a discontinued date ? (1 = yes, 0 = no)");
 		if (this.scanner.nextInt() == 1) {
-			int year;
-			int month;
-			int day;
-			System.out.println();
-			System.out.println("Enter the YEAR:");
-			year = this.scanner.nextInt();
-			System.out.println("Enter the NUMBER OF THE MONTH:");
-			month = this.scanner.nextInt();
-			System.out.println("Enter the DAY:");
-			day = this.scanner.nextInt();
-			
-			discontinued = LocalDate.of(year, month, day);
+			discontinued = this.getLocalDateFromUser();
 		}
 		
 		System.out.println();
@@ -226,5 +194,25 @@ public class ViewComputer {
 							discontinued, 
 							companyId
 							);
+	}
+	
+	private LocalDate getLocalDateFromUser() throws InputMismatchException {
+		int year;
+		int month;
+		int day;
+		System.out.println();
+		try {
+			System.out.println("Enter the YEAR:");
+			year = this.scanner.nextInt();
+			System.out.println("Enter the NUMBER OF THE MONTH:");
+			month = this.scanner.nextInt();
+			System.out.println("Enter the DAY:");
+			day = this.scanner.nextInt();
+		}
+		catch (InputMismatchException inputMismatchEx) {
+			throw inputMismatchEx;
+		}
+		
+		return LocalDate.of(year, month, day);
 	}
 }

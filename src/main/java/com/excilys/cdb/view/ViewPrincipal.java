@@ -2,10 +2,11 @@ package com.excilys.cdb.view;
 
 import com.excilys.cdb.service.Model;
 import com.excilys.cdb.controller.Controller;
-import com.excilys.cdb.customExceptions.InvalidComputerIdException;
-import com.excilys.cdb.customExceptions.OutOfRangeUserInputException;
+import com.excilys.cdb.customException.InvalidComputerIdException;
+import com.excilys.cdb.customException.OutOfRangeUserInputException;
 import com.excilys.cdb.logger.LoggerManager;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ViewPrincipal {
@@ -66,6 +67,9 @@ public class ViewPrincipal {
 			}
 			catch (InvalidComputerIdException invCompIdEx) {
 				LoggerManager.logInLogFile(invCompIdEx);
+			}
+			catch (InputMismatchException inputMismatchEx) {
+				LoggerManager.logInLogFile(inputMismatchEx);
 			}
 		}
 		

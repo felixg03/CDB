@@ -1,7 +1,7 @@
 package com.excilys.cdb.database;
 
-import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.customException.InvalidComputerIdException;
 import com.excilys.cdb.logger.LoggerManager;
 
 import java.sql.Connection;
@@ -214,12 +214,15 @@ public final class DAOComputer {
 			databaseConnection.closeConnection();
 		}
 	}
-	public void requestComputerDeletion(long computerId) {
+	public void requestComputerDeletion(long computerId) throws InvalidComputerIdException {
 		
 		databaseConnection.openConnection();
 		
 		try {
 			this.connection = databaseConnection.getConnection();
+			
+			this.checkComputerId(computerId);
+			
 			this.query = connection
 					  	.prepareStatement(
 					  		 QUERY_COMPUTER_DELETION

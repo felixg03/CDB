@@ -1,4 +1,4 @@
-package com.excilys.cdb.customExceptions;
+package com.excilys.cdb.customException;
 
 public class OutOfRangeUserInputException extends Exception {
 	

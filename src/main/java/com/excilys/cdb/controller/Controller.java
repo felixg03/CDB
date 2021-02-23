@@ -1,6 +1,8 @@
 package com.excilys.cdb.controller;
 
-import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import java.util.InputMismatchException;
+
+import com.excilys.cdb.customException.InvalidComputerIdException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.Model;
 import com.excilys.cdb.view.ViewPrincipal;
@@ -22,7 +24,9 @@ public class Controller {
 		this.viewCompany = this.viewPrincipal.getViewCompany();
 	}
 	
-	public boolean action(int input) throws NumberFormatException, InvalidComputerIdException {
+	public boolean action(int input) throws NumberFormatException
+										  , InvalidComputerIdException
+										  , InputMismatchException {
 		
 		int next, offset = 0;
 		switch (input) {
@@ -37,10 +41,10 @@ public class Controller {
 					);
 					
 
-					if (next == 0 && offset >= 10) offset -= 10;
-					else if (next == 1) offset += 10;
+					if (next == 1 && offset >= 10) offset -= 10;
+					else if (next == 2) offset += 10;
 					
-				} while (next == 0 || next == 1);
+				} while (next == 1 || next == 2);
 				
 			break;
 			
@@ -53,10 +57,10 @@ public class Controller {
 								.getListCompanies(offset)
 						   );
 					
-					if (next == 0 && offset >= 10) offset -= 10;
-					else if (next == 1) offset += 10;
+					if (next == 1 && offset >= 10) offset -= 10;
+					else if (next == 2) offset += 10;
 					
-				} while (next == 0 || next == 1);
+				} while (next == 1 || next == 2);
 				
 			break;	
 			
@@ -85,13 +89,17 @@ public class Controller {
 			
 		
 		// CREATE COMPUTER
-		case 4: Computer computerToCreate = viewComputer
-										   .getComputerToCreate();
-				model.getComputerService()
-					 .getResultComputerCreation(computerToCreate);
-				
-				viewComputer.displayResultComputerCreation();
-				
+		case 4: try {
+					Computer computerToCreate = viewComputer
+							   .getComputerToCreate();
+					model.getComputerService()
+					.getResultComputerCreation(computerToCreate);
+					
+					viewComputer.displayResultComputerCreation();
+				}
+				catch (InputMismatchException inputMismatchEx) {
+					throw inputMismatchEx;
+				}
 			break;	
 		
 		

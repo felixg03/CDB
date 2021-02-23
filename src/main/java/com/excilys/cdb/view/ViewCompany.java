@@ -20,9 +20,20 @@ public class ViewCompany {
 		}
 		System.out.println();
 		System.out.println("--------------------------------------");
-		System.out.println("Precedent page --> type 0");
-		System.out.println("Next page --> type 1");
-		System.out.println("Back to menu --> type 2");
-		return this.scanner.nextInt();
+		System.out.println("Precedent page --> type 1");
+		System.out.println("Next page --> type 2");
+		System.out.println("Back to menu --> type anything else");
+		
+		String userInputToReturn = this.scanner.nextLine();
+		int intToReturn;
+		
+		try {
+			intToReturn = Integer.valueOf(userInputToReturn);
+		}
+		catch (NumberFormatException e) {
+			intToReturn = 0; // default value
+		}
+		
+		return intToReturn;
 	}
 }

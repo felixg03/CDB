@@ -3,11 +3,12 @@ package com.excilys.cdb.logger;
 import ch.qos.logback.classic.Logger;
 
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.customExceptions.InvalidComputerIdException;
-import com.excilys.cdb.customExceptions.OutOfRangeUserInputException;
+import com.excilys.cdb.customException.InvalidComputerIdException;
+import com.excilys.cdb.customException.OutOfRangeUserInputException;
 
 public final class LoggerManager {
 	
@@ -30,5 +31,9 @@ public final class LoggerManager {
 	
 	public static void logInLogFile(InvalidComputerIdException invCompIdEx) {
 		viewLoggerFile.error("Invalid computer id input: The id doesn't exist in database", invCompIdEx);
+	}
+	
+	public static void logInLogFile(InputMismatchException inputMismatchEx) {
+		viewLoggerFile.error("Invalid input", inputMismatchEx);
 	}
 }
