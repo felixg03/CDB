@@ -20,6 +20,7 @@
         <div class="container">
             <h1 id="homeTitle">
                 121 Computers found
+                <b><c:out value="JPP" /></b>
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -31,7 +32,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -244,7 +245,7 @@
                 </a>
             </li>
         </ul>
-
+	 </div>
         <div class="btn-group btn-group-sm pull-right" role="group" >
             <button type="button" class="btn btn-default">10</button>
             <button type="button" class="btn btn-default">50</button>
