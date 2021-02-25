@@ -2,12 +2,12 @@ package com.excilys.cdb.controller;
 
 import java.util.InputMismatchException;
 
-import com.excilys.cdb.customException.InvalidComputerIdException;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.service.Model;
-import com.excilys.cdb.view.ViewPrincipal;
-import com.excilys.cdb.view.ViewComputer;
-import com.excilys.cdb.view.ViewCompany;
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.services.Model;
+import com.excilys.cdb.views.ViewCompany;
+import com.excilys.cdb.views.ViewComputer;
+import com.excilys.cdb.views.ViewPrincipal;
 
 public class Controller {
 	

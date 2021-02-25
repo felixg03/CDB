@@ -1,10 +1,10 @@
-package com.excilys.cdb.view;
+package com.excilys.cdb.views;
 
-import com.excilys.cdb.service.Model;
 import com.excilys.cdb.controller.Controller;
-import com.excilys.cdb.customException.InvalidComputerIdException;
-import com.excilys.cdb.customException.OutOfRangeUserInputException;
-import com.excilys.cdb.logger.LoggerManager;
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import com.excilys.cdb.customExceptions.OutOfRangeUserInputException;
+import com.excilys.cdb.loggers.LoggerManager;
+import com.excilys.cdb.services.Model;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

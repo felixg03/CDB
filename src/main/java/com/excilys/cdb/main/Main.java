@@ -4,9 +4,9 @@ package com.excilys.cdb.main;
 import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 
-import com.excilys.cdb.service.Model;
+import com.excilys.cdb.views.ViewPrincipal;
 import com.excilys.cdb.controller.Controller;
-import com.excilys.cdb.view.ViewPrincipal;
+import com.excilys.cdb.services.Model;
 
 public class Main {
 	

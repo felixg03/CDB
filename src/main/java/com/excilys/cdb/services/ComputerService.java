@@ -1,14 +1,22 @@
-package com.excilys.cdb.service;
+package com.excilys.cdb.services;
 
 import java.util.List;
 
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.customException.InvalidComputerIdException;
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.database.DAOComputer;
+import com.excilys.cdb.models.Computer;
 
-public class ComputerService {
+public final class ComputerService {
 	
+	private static ComputerService instance;
 	private DAOComputer daoComputer = DAOComputer.getInstance();
+	
+	public static ComputerService getInstance() {
+		if (instance == null) {
+			instance = new ComputerService();
+		}
+		return instance;
+	}
 	
 	public List<Computer> getListComputers(int offset) {
 		return daoComputer.requestListComputer(offset);

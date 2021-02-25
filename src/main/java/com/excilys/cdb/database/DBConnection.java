@@ -24,15 +24,16 @@ public final class DBConnection {
 	
 	public void openConnection() {
 		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					databaseURL
 				  , databaseAdmin
 				  , databasePassword
 				);
 		}
-		catch(SQLException sqlEx) { // Handle better
-			sqlEx.printStackTrace();
-		}	
+		catch(SQLException | ClassNotFoundException e) { // Handle better
+			e.printStackTrace();
+		}
 	}
 	
 	public void closeConnection() {

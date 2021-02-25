@@ -22,7 +22,7 @@
   
   <servlet>
     <servlet-name>AddComputerServlet</servlet-name>
-    <servlet-class>com.excilys.cdb.servlet.AddComputerServlet</servlet-class>
+    <servlet-class>com.excilys.cdb.controller.servlets.AddComputerServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>AddComputerServlet</servlet-name>
@@ -32,7 +32,7 @@
   
   <servlet>
     <servlet-name>DashboardServlet</servlet-name>
-    <servlet-class>com.excilys.cdb.servlet.DashboardServlet</servlet-class>
+    <servlet-class>com.excilys.cdb.controller.servlets.DashboardServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DashboardServlet</servlet-name>

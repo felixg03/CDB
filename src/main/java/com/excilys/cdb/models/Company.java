@@ -1,4 +1,4 @@
-package com.excilys.cdb.model;
+package com.excilys.cdb.models;
 
 import java.security.Timestamp;
 

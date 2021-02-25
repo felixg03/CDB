@@ -1,11 +1,11 @@
-package com.excilys.cdb.view;
+package com.excilys.cdb.views;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.models.Computer;
 
 public class ViewComputer {
 	

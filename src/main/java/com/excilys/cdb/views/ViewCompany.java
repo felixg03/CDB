@@ -1,9 +1,9 @@
-package com.excilys.cdb.view;
+package com.excilys.cdb.views;
 
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.cdb.model.Company;
+import com.excilys.cdb.models.Company;
 
 public class ViewCompany {
 	

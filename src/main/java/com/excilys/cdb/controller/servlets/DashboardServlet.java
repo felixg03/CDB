@@ -1,4 +1,4 @@
-package com.excilys.cdb.servlet;
+package com.excilys.cdb.controller.servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

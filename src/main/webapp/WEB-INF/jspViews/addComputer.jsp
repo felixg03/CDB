@@ -14,7 +14,6 @@
             <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
         </div>
     </header>
-
     <section id="main">
         <div class="container">
             <div class="row">
@@ -38,8 +37,11 @@
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyId">
                                     <option value="0">--</option>
+                                    <c:forEach items="${ listDTOCompany }" var="DTOCompany">
+                                    	<option value="${ DTOCompany }"><c:out value="${ DTOCompany.id } - ${ DTOCompany.name }" /></option>
+                                    </c:forEach>
                                 </select>
-                            </div>                  
+                            </div>               
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">

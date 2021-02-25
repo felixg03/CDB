@@ -1,8 +1,8 @@
 package com.excilys.cdb.database;
 
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.customException.InvalidComputerIdException;
-import com.excilys.cdb.logger.LoggerManager;
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import com.excilys.cdb.loggers.LoggerManager;
+import com.excilys.cdb.models.Computer;
 
 import java.sql.Connection;
 import java.sql.Types;

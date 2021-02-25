@@ -1,4 +1,4 @@
-package com.excilys.cdb.logger;
+package com.excilys.cdb.loggers;
 
 import ch.qos.logback.classic.Logger;
 
@@ -7,8 +7,8 @@ import java.util.InputMismatchException;
 
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.customException.InvalidComputerIdException;
-import com.excilys.cdb.customException.OutOfRangeUserInputException;
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import com.excilys.cdb.customExceptions.OutOfRangeUserInputException;
 
 public final class LoggerManager {
 	
