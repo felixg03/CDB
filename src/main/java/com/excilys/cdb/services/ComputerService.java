@@ -22,6 +22,10 @@ public final class ComputerService {
 		return daoComputer.requestListComputer(offset);
 	}
 	
+	public List<Computer> getListComputers() {
+		return daoComputer.requestListComputer();
+	}
+	
 	public Computer getOneComputerDetails(long computerId) throws InvalidComputerIdException {
 		return daoComputer.requestOneComputerDetails(computerId);
 	}

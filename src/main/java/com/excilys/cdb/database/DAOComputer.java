@@ -27,8 +27,10 @@ public final class DAOComputer {
 	private PreparedStatement query;
 	
 	// STRING QUERIES
-	private final static String QUERY_LIST_COMPUTER = 
+	private final static String QUERY_LIST_10_COMPUTERS = 
 	"SELECT id, name, introduced, discontinued, company_id FROM computer ORDER BY id LIMIT 10 OFFSET ?";
+	private final static String QUERY_LIST_COMPUTERS = 
+	"SELECT id, name, introduced, discontinued, company_id FROM computer ORDER BY id";
 	private final static String QUERY_ONE_COMPUTER_DETAILS = 
 	"SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?";
 	private final static String QUERY_COMPUTER_CREATION = 
@@ -60,10 +62,33 @@ public final class DAOComputer {
 			this.connection = databaseConnection.getConnection();
 			this.query = connection
 					  	.prepareStatement(
-							  QUERY_LIST_COMPUTER
+					  			QUERY_LIST_10_COMPUTERS
 					  	);
 			
 			this.query.setInt(1, offset);
+			this.resultSet = this.query.executeQuery();
+			listComputers = this.getListComputerFromResultSet(resultSet);
+		} 
+		catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
+		finally {
+			databaseConnection.closeConnection();
+		}
+		
+		return listComputers;
+	}
+public List<Computer> requestListComputer() {
+		
+		databaseConnection.openConnection();
+		List<Computer> listComputers = new ArrayList<Computer>();
+		
+		try {
+			this.connection = databaseConnection.getConnection();
+			this.query = connection
+					  	.prepareStatement(
+							  QUERY_LIST_COMPUTERS
+					  	);
 			this.resultSet = this.query.executeQuery();
 			listComputers = this.getListComputerFromResultSet(resultSet);
 		} 
