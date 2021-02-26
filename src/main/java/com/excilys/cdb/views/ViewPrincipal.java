@@ -1,6 +1,6 @@
 package com.excilys.cdb.views;
 
-import com.excilys.cdb.controller.Controller;
+import com.excilys.cdb.controller.CliController;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.customExceptions.OutOfRangeUserInputException;
 import com.excilys.cdb.loggers.LoggerManager;
@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class ViewPrincipal {
 	
 	private Model model;
-	private Controller controller;
+	private CliController controller;
 	private ViewComputer viewComputer = new ViewComputer();;
 	private ViewCompany viewCompany = new ViewCompany();;
 	private Scanner scanner = new Scanner(System.in);
@@ -24,7 +24,7 @@ public class ViewPrincipal {
 		this.model = model;
 	}
 
-	public void setController(Controller controller) {
+	public void setController(CliController controller) {
 		this.controller = controller;
 	}
 	public ViewComputer getViewComputer() {

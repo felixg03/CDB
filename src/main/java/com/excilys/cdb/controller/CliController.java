@@ -9,14 +9,14 @@ import com.excilys.cdb.views.ViewCompany;
 import com.excilys.cdb.views.ViewComputer;
 import com.excilys.cdb.views.ViewPrincipal;
 
-public class Controller {
+public class CliController {
 	
 	private Model model;
 	private ViewPrincipal viewPrincipal;
 	private ViewComputer viewComputer;
 	private ViewCompany viewCompany;
 	
-	public Controller(Model model, ViewPrincipal viewPrincipal) {
+	public CliController(Model model, ViewPrincipal viewPrincipal) {
 		super();
 		this.model = model;
 		this.viewPrincipal = viewPrincipal;
@@ -93,7 +93,7 @@ public class Controller {
 					Computer computerToCreate = viewComputer
 							   .getComputerToCreate();
 					model.getComputerService()
-					.getResultComputerCreation(computerToCreate);
+					.callComputerCreationInDaoComputer(computerToCreate);
 					
 					viewComputer.displayResultComputerCreation();
 				}
@@ -104,15 +104,29 @@ public class Controller {
 		
 		
 		// UPDATE COMPUTER
+		/*
+		 * !!!!!!!!!!!!!!!!
+		 * !!!  BROKEN  !!!
+		 * !!!!!!!!!!!!!!!!
+		 */
+		
+		/*
 		case 5: Computer computerToUpdate = viewComputer
 											.getComputerInfoToUpdate();
+				
+				
+				
+				// BROKEN HERE AT LINE BELOW:
+				// Broken because Update function has been commented 
+				// because it has to be refactored
+				
 				model.getComputerService()
 					 .getResultComputerUpdate(computerToUpdate);
-				
+					 
 				viewComputer.displayResultComputerUpdate();
 				
 			break;	
-		
+		*/
 		
 		// DELETE COMPUTER
 		case 6: long computerIdToDelete = viewComputer

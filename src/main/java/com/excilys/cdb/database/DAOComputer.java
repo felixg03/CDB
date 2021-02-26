@@ -1,8 +1,10 @@
 package com.excilys.cdb.database;
 
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
-import com.excilys.cdb.loggers.LoggerManager;
+import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.models.Company.CompanyBuilder;
+import com.excilys.cdb.models.Computer.ComputerBuilder;
 
 import java.sql.Connection;
 import java.sql.Types;
@@ -30,7 +32,8 @@ public final class DAOComputer {
 	private final static String QUERY_LIST_10_COMPUTERS = 
 	"SELECT id, name, introduced, discontinued, company_id FROM computer ORDER BY id LIMIT 10 OFFSET ?";
 	private final static String QUERY_LIST_COMPUTERS = 
-	"SELECT id, name, introduced, discontinued, company_id FROM computer ORDER BY id";
+	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
+  + "FROM computer LEFT JOIN company ON company.id = computer.company_id";
 	private final static String QUERY_ONE_COMPUTER_DETAILS = 
 	"SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?";
 	private final static String QUERY_COMPUTER_CREATION = 
@@ -78,7 +81,7 @@ public final class DAOComputer {
 		
 		return listComputers;
 	}
-public List<Computer> requestListComputer() {
+	public List<Computer> requestListComputer() {
 		
 		databaseConnection.openConnection();
 		List<Computer> listComputers = new ArrayList<Computer>();
@@ -149,7 +152,12 @@ public List<Computer> requestListComputer() {
 			databaseConnection.closeConnection();
 		}
 	}
-	public void requestComputerUpdate(Computer computerToUpdate) {
+	
+	/* !!!!!!!!!!!!!!!!!!!!!!!
+	 * !!!!	  TO REDO	  !!!!
+	 * !!!!!!!!!!!!!!!!!!!!!!!
+	 */
+	/*public void requestComputerUpdate(Computer computerToUpdate) {
 		databaseConnection.openConnection();
 		Connection connection = databaseConnection.getConnection();
 
@@ -160,7 +168,7 @@ public List<Computer> requestListComputer() {
 		String name = computerToUpdate.getName();
 		LocalDate introduced = computerToUpdate.getIntroduced();
 		LocalDate discontinued = computerToUpdate.getDiscontinued();
-		long companyId = computerToUpdate.getCompanyId();
+		Company companyId = computerToUpdate.getCompany();
 
 		boolean hasName = false;
 		boolean hasIntroducedDate = false;
@@ -238,7 +246,7 @@ public List<Computer> requestListComputer() {
 		finally {
 			databaseConnection.closeConnection();
 		}
-	}
+	}*/
 	public void requestComputerDeletion(long computerId) throws InvalidComputerIdException {
 		
 		databaseConnection.openConnection();
@@ -272,9 +280,19 @@ public List<Computer> requestListComputer() {
 			String name = resultSetArg.getString(2);
 			LocalDate introduced = this.castDateToLocalDate(resultSetArg.getDate(3));
 			LocalDate discontinued = this.castDateToLocalDate(resultSetArg.getDate(4));
-			long companyId = resultSetArg.getLong(5);
 			
-			Computer computer = new Computer(id, name, introduced, discontinued, companyId);
+			long companyId = resultSetArg.getLong(5);
+			String companyName = resultSetArg.getString(6);
+			Company company = new CompanyBuilder().setId(companyId)
+												  .setName(companyName)
+												  .build();
+			
+			Computer computer = new ComputerBuilder().setId(id)
+													 .setName(name)
+													 .setIntroduced(introduced)
+													 .setDiscontinued(discontinued)
+													 .setCompany(company)
+													 .build();
 			listComputersToReturn.add(computer);
 		}
 
@@ -287,6 +305,7 @@ public List<Computer> requestListComputer() {
 		LocalDate introduced = null;
 		LocalDate discontinued = null;
 		long companyId = 0;
+		String companyName = null;
 		
 		if (resultSetArg.next()) {
 			id = resultSetArg.getLong(1);
@@ -294,9 +313,17 @@ public List<Computer> requestListComputer() {
 			introduced = this.castDateToLocalDate(resultSetArg.getDate(3));
 			discontinued = this.castDateToLocalDate(resultSetArg.getDate(4));
 			companyId = resultSetArg.getLong(5);
+			companyName = resultSetArg.getString(6);
 		}
-		
-		return new Computer(id, name, introduced, discontinued, companyId);
+		Company company = new CompanyBuilder().setId(companyId)
+											  .setName(companyName)
+											  .build();
+		return new ComputerBuilder().setId(id)
+									.setName(name)
+									.setIntroduced(introduced)
+									.setDiscontinued(discontinued)
+									.setCompany(company)
+									.build();
 	}
 	private LocalDate castDateToLocalDate(Date date) {
 		if (date != null) {
@@ -323,7 +350,7 @@ public List<Computer> requestListComputer() {
 			  , 3
 				);
 		
-		this.query.setLong(4, computer.getCompanyId());
+		this.query.setLong(4, computer.getCompany().getId());
 	}
 	private void setPreparedStatementParameter (Object parameter
 											  , int objectType

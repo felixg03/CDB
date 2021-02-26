@@ -7,8 +7,8 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.cdb.DTOs.DTOCompany;
 import com.excilys.cdb.models.Company;
+import com.excilys.cdb.models.Company.CompanyBuilder;;
 
 // Follows singleton pattern
 public final class DAOCompany {
@@ -101,7 +101,9 @@ public final class DAOCompany {
 			 long id = this.resultSet.getLong(1);
 			 String name = this.resultSet.getString(2);
 			 
-			 Company company = new Company(id, name);
+			 Company company = new CompanyBuilder().setId(id)
+					 							   .setName(name)
+					 							   .build();
 			 listCompaniesToReturn.add(company);
 		}
 		

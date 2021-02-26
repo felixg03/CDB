@@ -1,9 +1,51 @@
 package com.excilys.cdb.models;
 
-import java.security.Timestamp;
-
 public class Company {
 	
+	/* #####################################
+	 * ####       						####
+	 * ####			 BUILDER			####
+	 * ####								####
+	 * #####################################
+	 */
+	public static class CompanyBuilder {
+
+		private long id;
+		private String name;
+
+		public CompanyBuilder() {
+
+		}
+
+		public CompanyBuilder setId(long id) {
+			this.id = id;
+
+			return this;
+		}
+
+		public CompanyBuilder setName(String name) {
+			this.name = name;
+
+			return this;
+		}
+
+		public Company build() {
+			Company company = new Company();
+			company.id = this.id;
+			company.name = this.name;
+			return company;
+		}
+
+	}
+	
+	
+	
+	/* #####################################
+	 * ####       						####
+	 * ####		COMPANY CLASS			####
+	 * ####								####
+	 * #####################################
+	 */
 	private long id;
 	private String name;
 	
@@ -21,11 +63,7 @@ public class Company {
 		this.name = name;
 	}
 
-	public Company(long id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
+	public Company() {}
 
 	@Override
 	public String toString() {

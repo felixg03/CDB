@@ -5,12 +5,16 @@ import java.util.List;
 
 import com.excilys.cdb.DTOs.DTOCompany;
 import com.excilys.cdb.models.Company;
+import com.excilys.cdb.models.Company.CompanyBuilder;;
 
 public class CompanyDTOMapper {
 	
 	
 	public static Company convertDTOCompanyToCompany(DTOCompany dtoCompany) {
-		return new Company(Long.valueOf(dtoCompany.id), dtoCompany.name);
+		return new CompanyBuilder().setId(Long.valueOf(
+											dtoCompany.id))
+								   .setName(dtoCompany.name)
+								   .build();
 	}
 	
 	

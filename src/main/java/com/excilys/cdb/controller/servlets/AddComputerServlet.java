@@ -1,20 +1,13 @@
 package com.excilys.cdb.controller.servlets;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.SimpleAttributeSet;
 
 import com.excilys.cdb.DTOs.DTOCompany;
 import com.excilys.cdb.DTOs.DTOComputerCreation;
@@ -22,7 +15,9 @@ import com.excilys.cdb.DTOs.mappers.CompanyDTOMapper;
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.services.*;
+import com.excilys.cdb.services.CompanyService;
+import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.services.Model;
 
 @WebServlet("/AddComputerServlet")
 public class AddComputerServlet extends HttpServlet {
@@ -56,7 +51,7 @@ public class AddComputerServlet extends HttpServlet {
 									  .convertDTOComputerCreationToComputer(
 											  dtoComputer);
 		
-		computerService.getResultComputerCreation(computerWithNoIdYet);
+		computerService.callComputerCreationInDaoComputer(computerWithNoIdYet);
 		
 		handleRequest(request, response);
 	}
@@ -73,14 +68,11 @@ public class AddComputerServlet extends HttpServlet {
 		List<Company> listCompany = this
 				  				   .companyService
 				  				   .getListCompanies();
-		
 		List<DTOCompany> listDTOCompany = CompanyDTOMapper
 										 .convertListCompanyToListDTOCompany(
 												 listCompany
 										 );
-		
 		request.setAttribute("listDTOCompany", listDTOCompany);
-		
 		
 		this.getServletContext()
 		    .getRequestDispatcher(
@@ -90,11 +82,16 @@ public class AddComputerServlet extends HttpServlet {
 	}
 	
 	
+	
+	
+	
+	
+	
 	private DTOComputerCreation getDTOComputerCreationFromRequest(HttpServletRequest request) {
 		String name = request.getParameter("computerName");
 		String introducedString = request.getParameter("introduced");
 		String discontinuedString = request.getParameter("discontinued");
-		String companyIdString = request.getParameter("companyId");
+		String companyIdString = request.getParameter("company");
 		
 		return new DTOComputerCreation(name
 						  		     , introducedString

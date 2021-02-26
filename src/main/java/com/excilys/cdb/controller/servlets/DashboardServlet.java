@@ -32,23 +32,25 @@ public class DashboardServlet extends HttpServlet {
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		this.handleRequest(request, response);
+	}
+
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		this.handleRequest(request, response);
+	}
+	
+	private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Computer> listComputer = this
-									 .computerService
-									 .getListComputers();
-		
+				 .computerService
+				 .getListComputers();
+
 		List<DTOComputerId> listDTOComputerId = ComputerDTOMapper
-											   .convertListComputerToListDTOComputerId(
-													   listComputer);
+								   .convertListComputerToListDTOComputerId(
+										   listComputer);
 		
 		request.setAttribute("numberOfComputers", listDTOComputerId.size());
 		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/jspViews/dashboard.jsp").forward(request, response);
 	}
-
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-	
 }

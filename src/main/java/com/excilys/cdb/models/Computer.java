@@ -2,23 +2,88 @@ package com.excilys.cdb.models;
 
 import java.time.LocalDate;
 
+import com.excilys.cdb.models.Company.CompanyBuilder;
+
 public class Computer {
 	
-	private static int counter;
 	
-	private long id = 0;
-	private String name = null;
-	private LocalDate introduced = null;
-	private LocalDate discontinued = null;
-	private long companyId = 0;
+	
+	/* #####################################
+	 * ####       						####
+	 * ####			 BUILDER			####
+	 * ####								####
+	 * #####################################
+	 */
+	public static class ComputerBuilder {
+
+		private long id;
+		private String name;
+		private LocalDate introduced;
+		private LocalDate discontinued;
+		private Company company;
+
+		public ComputerBuilder() {
+
+		}
+
+		public ComputerBuilder setId(long id) {
+			this.id = id;
+
+			return this;
+		}
+
+		public ComputerBuilder setName(String name) {
+			this.name = name;
+
+			return this;
+		}
+
+		public ComputerBuilder setIntroduced(LocalDate introduced) {
+			this.introduced = introduced;
+			
+			return this;
+
+		}
+
+		public ComputerBuilder setDiscontinued(LocalDate discontinued) {
+			this.discontinued = discontinued;
+			
+			return this;
+		}
+		
+		public ComputerBuilder setCompany(Company company) {
+			this.company = company;
+
+			return this;
+		}
+
+		public Computer build() {
+			Computer computer = new Computer();
+			computer.id = this.id;
+			computer.company = this.company;
+			computer.name = this.name;
+			computer.introduced = this.introduced;
+			computer.discontinued = this.discontinued;
+			return computer;
+		}
+
+	}
+	
+	
+	
+	/* #####################################
+	 * ####       						####
+	 * ####		COMPUTER CLASS			####
+	 * ####								####
+	 * #####################################
+	 */
+	private long id;
+	private String name;
+	private LocalDate introduced;
+	private LocalDate discontinued;
+	private Company company;
 	
 	// GETTERS AND SETTERS
-	public static int getCounter() {
-		return counter;
-	}
-	public static void setCounter(int counter) {
-		Computer.counter = counter;
-	}
 	public long getId() {
 		return id;
 	}
@@ -47,37 +112,12 @@ public class Computer {
 			throw new IllegalArgumentException();
 		}
 	}
-	public long getCompanyId() {
-		return companyId;
-	}
-	public void setCompanyId(long companyId) {
-		this.companyId = companyId;
-	}
 	
-	public Computer(long id
-			      , String name
-			      , LocalDate introduced
-			      , LocalDate discontinued
-			      , long companyId) {
-		
-		super();
-		this.id = id;
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.companyId = companyId;
+	public Company getCompany() {
+		return company;
 	}
-	
-	public Computer(String name
-				  , LocalDate introduced
-				  , LocalDate discontinued
-				  , long companyId) {
-		
-		super();
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.companyId = companyId;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 	
 	@Override
@@ -90,7 +130,7 @@ public class Computer {
 					   + " | " 
 					   + this.discontinued
 					   + " | " 
-					   + this.companyId
+					   + this.company
 					   );
 	}
 }

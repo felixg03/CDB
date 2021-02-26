@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 
 import com.excilys.cdb.views.ViewPrincipal;
-import com.excilys.cdb.controller.Controller;
+import com.excilys.cdb.controller.CliController;
 import com.excilys.cdb.services.Model;
 
 public class Main {
@@ -16,7 +16,7 @@ public class Main {
 	public static void main(String[] args) {
 		final Model model = new Model();
 		final ViewPrincipal view = new ViewPrincipal(model);
-		final Controller controller = new Controller(model, view);
+		final CliController controller = new CliController(model, view);
 		
 		view.setController(controller);
 		

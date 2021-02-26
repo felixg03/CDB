@@ -34,8 +34,8 @@
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" name="companyId">
+                                <label for="company">Company</label>
+                                <select class="form-control" id="company" name="company">
                                     <c:forEach items="${ listDTOCompany }" var="DTOCompany">
                                     	<option value="${ DTOCompany.id }"><c:out value=" ${ DTOCompany.name }" /></option>
                                     </c:forEach>

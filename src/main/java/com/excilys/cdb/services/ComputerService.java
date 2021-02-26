@@ -30,13 +30,15 @@ public final class ComputerService {
 		return daoComputer.requestOneComputerDetails(computerId);
 	}
 	
-	public void getResultComputerCreation(Computer computerToCreate) {
+	public void callComputerCreationInDaoComputer(Computer computerToCreate) {
 		daoComputer.requestComputerCreation(computerToCreate);
 	}
 	
+	/*
 	public void getResultComputerUpdate(Computer computerToUpdate) {
 		daoComputer.requestComputerUpdate(computerToUpdate);
 	}
+	*/
 	
 	public void getResultComputerDeletion(long computerId) throws InvalidComputerIdException {
 		daoComputer.requestComputerDeletion(computerId);

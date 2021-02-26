@@ -75,6 +75,25 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
+                
+                
+               <!-- <c:forEach items="${ listDTOComputers }" var="DTOcomputer">
+                	<tr>
+                        <td class="editMode">
+                            <input type="checkbox" name="cb" class="cb" value="0">
+                        </td>
+                        <td>
+                            <a href="editComputer.html" onclick=""><c:out value="${ DTOcomputer.name }"/></a>
+                        </td>
+                        <td><c:out value="${ DTOcomputer.introduced }"/></td>
+                        <td><c:out value="${ DTOcomputer.discontinued }"/></td>
+                        <td><c:out value="${ DTOcomputer.company }"/></td>
+                    </tr>
+                </c:forEach>  -->
+                
+                
+                
+                
                     <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">

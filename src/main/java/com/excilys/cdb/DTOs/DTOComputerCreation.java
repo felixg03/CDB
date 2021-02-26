@@ -1,15 +1,11 @@
 package com.excilys.cdb.DTOs;
 
-import java.time.LocalDate;
-
-import com.excilys.cdb.models.Computer;
-
 public class DTOComputerCreation {
 	
-	private final String name;
-	private final String introduced;
-	private final String discontinued;
-	private final String companyId;
+	public final String name;
+	public final String introduced;
+	public final String discontinued;
+	public final String companyId;
 	
 	
 	

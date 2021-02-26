@@ -7,6 +7,13 @@ import java.util.Scanner;
 
 import com.excilys.cdb.models.Computer;
 
+
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * !!!!						!!!!
+ * !!!!    VIEW BROKEN		!!!!
+ * !!!!						!!!!
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
 public class ViewComputer {
 	
 	private Scanner scanner = new Scanner(System.in);
@@ -108,7 +115,12 @@ public class ViewComputer {
 		
 		return longToReturn;
 	}
-
+	
+	/*
+	 * !!!!!!!!!!!!!!!!!!
+	 * !! BROKEN HERE  !!
+	 * !!!!!!!!!!!!!!!!!!
+	 */
 	public Computer getComputerInfoToUpdate() throws InputMismatchException {
 		long idOfComputerToUpdate;
 		String newName = null;
@@ -149,14 +161,23 @@ public class ViewComputer {
 			newCompanyId = this.scanner.nextInt();
 		}
 		
-		return new Computer(idOfComputerToUpdate,
+		
+		// Have to refactor that
+		/*return new Computer(idOfComputerToUpdate,
 							newName, 
 							newIntroducedDate, 
 				 			newDiscontinuedDate, 
 				 			newCompanyId
-				 			);
+				 			); */
+		
+		return null;
 	}
-
+	
+	/*
+	 * !!!!!!!!!!!!!!!!!!
+	 * !! BROKEN HERE  !!
+	 * !!!!!!!!!!!!!!!!!!
+	 */
 	public Computer getComputerToCreate() throws InputMismatchException {
 		String name = null;
 		LocalDate introduced = null;
@@ -187,13 +208,15 @@ public class ViewComputer {
 		System.out.println("Enter the company id:");
 		companyId = this.scanner.nextInt();
 		
-		
-		return new Computer(0, 
+		// Have to refactor that
+		/* return new Computer(0, 
 							name, 
 							introduced, 
 							discontinued, 
 							companyId
-							);
+							); */
+		
+		return null;
 	}
 	
 	private LocalDate getLocalDateFromUser() throws InputMismatchException {
