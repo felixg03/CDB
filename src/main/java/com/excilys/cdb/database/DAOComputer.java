@@ -1,22 +1,22 @@
 package com.excilys.cdb.database;
 
-import com.excilys.cdb.customExceptions.InvalidComputerIdException;
-import com.excilys.cdb.models.Company;
-import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.models.Company.CompanyBuilder;
-import com.excilys.cdb.models.Computer.ComputerBuilder;
-
 import java.sql.Connection;
-import java.sql.Types;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import com.excilys.cdb.models.Company;
+import com.excilys.cdb.models.Company.CompanyBuilder;
+import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.models.Computer.ComputerBuilder;
+import com.excilys.cdb.models.Page;
+
 
 // Follows singleton pattern
 public final class DAOComputer {
@@ -31,6 +31,9 @@ public final class DAOComputer {
 	// STRING QUERIES
 	private final static String QUERY_LIST_10_COMPUTERS = 
 	"SELECT id, name, introduced, discontinued, company_id FROM computer ORDER BY id LIMIT 10 OFFSET ?";
+	private final static String QUERY_PAGE_COMPUTERS = 
+	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name "
+  + "FROM computer LEFT JOIN company ON company.id = computer.company_id LIMIT ? OFFSET ?";
 	private final static String QUERY_LIST_COMPUTERS = 
 	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
   + "FROM computer LEFT JOIN company ON company.id = computer.company_id";
@@ -41,8 +44,10 @@ public final class DAOComputer {
 	private final static String QUERY_COMPUTER_DELETION = 
 	"DELETE FROM computer WHERE id = ?";
 	
-	private final static String QUERY_GET_ALL_COMPUTER_ID = 
-	"SELECT id FROM computer";
+	private final static String QUERY_GET_COMPUTER_ID = 
+	"SELECT id FROM computer WHERE id = ?";
+	private final static String QUERY_GET_NUMBER_OF_COMPUTERS =
+	"SELECT COUNT(*) FROM computer";
 	
 	// GETTERS
 	public static DAOComputer getInstance() {
@@ -56,6 +61,13 @@ public final class DAOComputer {
 	}
 
 	// GENERAL METHODS READ/WRITE DATABASE
+	
+	
+	/*
+	 * ##############################################
+	 * ###  OLD requestListComputer FOR CLI VIEW  ###
+	 * ##############################################
+	 */
 	public List<Computer> requestListComputer(int offset) {
 		
 		databaseConnection.openConnection();
@@ -81,6 +93,8 @@ public final class DAOComputer {
 		
 		return listComputers;
 	}
+	
+	
 	public List<Computer> requestListComputer() {
 		
 		databaseConnection.openConnection();
@@ -104,6 +118,34 @@ public final class DAOComputer {
 		
 		return listComputers;
 	}
+	
+	
+	public Page<Computer> requestPageComputer(Page<Computer> page) {
+		if (page != null) {
+			this.databaseConnection.openConnection();
+			this.connection = this.databaseConnection
+								  .getConnection();
+			
+			try {
+				this.query = this.connection.prepareStatement(
+												QUERY_PAGE_COMPUTERS);
+				this.query.setInt(1, page.getSize());
+				this.query.setInt(2, (page.getNumber() - 1) * page.getSize());
+				this.resultSet = this.query.executeQuery();
+
+				
+				page.setContent(getListComputerFromResultSet(this.resultSet));
+			}
+			catch(SQLException sqlException) {
+				sqlException.printStackTrace();
+			}
+			finally {
+				this.databaseConnection.closeConnection();
+			}
+		}
+		return page;
+	}
+	
 	public Computer requestOneComputerDetails(long computerId) throws InvalidComputerIdException {
 		
 		databaseConnection.openConnection();
@@ -271,6 +313,28 @@ public final class DAOComputer {
 		}
 	}
 	
+	
+	public long requestNumberOfComputer() {
+		long numberOfComputer = -1;
+		this.databaseConnection.openConnection();
+		try {
+			this.connection = databaseConnection.getConnection();
+			this.query = this.connection.prepareStatement(
+											QUERY_GET_NUMBER_OF_COMPUTERS);
+			this.resultSet = this.query.executeQuery();
+			if (resultSet.next()) {
+				numberOfComputer = this.resultSet.getLong(1);
+			}
+		}
+		catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
+		finally {
+			this.databaseConnection.closeConnection();
+		}
+		
+		return numberOfComputer;
+	}
 	// TOOLS
 	private List<Computer> getListComputerFromResultSet(ResultSet resultSetArg) throws SQLException {
 		List<Computer> listComputersToReturn = new ArrayList<Computer>();
@@ -371,22 +435,27 @@ public final class DAOComputer {
 	private void checkComputerId(long id) throws InvalidComputerIdException, SQLException {
 		this.query = connection
 			  		.prepareStatement(
-			  			 QUERY_GET_ALL_COMPUTER_ID
+			  			 QUERY_GET_COMPUTER_ID
 				  	);
-		
+		this.query.setLong(1, id);
 		this.resultSet = this.query.executeQuery();
-		Set<Long> setOfComputerId = getSetOfIntegerFromResultSet(this.resultSet);
+		
+		if (this.resultSet == null) {
+			throw new InvalidComputerIdException(id);
+		}
+		/*Set<Long> setOfComputerId = getSetOfIntegerFromResultSet(this.resultSet);
 		
 		if (!setOfComputerId.contains(id)) {
 			throw new InvalidComputerIdException(id);
-		}
+		}*/
 	}
 	
+	/*
 	private Set<Long> getSetOfIntegerFromResultSet(ResultSet resultSetArg) throws SQLException {
 		Set<Long> setOfInteger = new HashSet<Long>();
 		while(resultSetArg.next()) {
 			setOfInteger.add(resultSetArg.getLong(1));
 		}
 		return setOfInteger;
-	}
+	} */
 }
