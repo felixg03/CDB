@@ -1,11 +1,11 @@
 package com.excilys.cdb.DTOs;
 
-public class DTOComputerCreation {
+public class DTOComputerWithoutId {
 	
 	public final String name;
 	public final String introduced;
 	public final String discontinued;
-	public final String companyId;
+	public final String company;
 	
 	
 	
@@ -27,21 +27,21 @@ public class DTOComputerCreation {
 
 
 
-	public String getCompanyId() {
-		return companyId;
+	public String getCompany() {
+		return company;
 	}
 
 
 
-	public DTOComputerCreation(String name
+	public DTOComputerWithoutId(String name
 							 , String introduced
 							 , String discontinued
-							 , String companyId) {
+							 , String company) {
 		
 		super();
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.companyId = companyId;
+		this.company = company;
 	}
 }

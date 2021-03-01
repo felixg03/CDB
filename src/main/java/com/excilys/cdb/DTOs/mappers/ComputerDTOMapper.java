@@ -2,7 +2,7 @@ package com.excilys.cdb.DTOs.mappers;
 
 import java.time.LocalDate;
 
-import com.excilys.cdb.DTOs.DTOComputerCreation;
+import com.excilys.cdb.DTOs.DTOComputerWithoutId;
 import com.excilys.cdb.DTOs.DTOComputerId;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
@@ -18,38 +18,32 @@ public class ComputerDTOMapper {
 	
 	
 	/*
-	 * ###############################
-	 * ###   DTOComputerCreation   ###
-	 * ###############################
+	 * ################################
+	 * ###   DTOComputerWithoutId   ###
+	 * ################################
 	 */
-	public static DTOComputerCreation convertComputerToDTOComputerCreation(Computer computer) {
+	public static DTOComputerWithoutId convertComputerToDTOComputerWithoutId(Computer computer) {
 		String name = computer.getName();
-		String introduced = computer
-						   .getIntroduced()
-						   .toString();
-		String discontinued = computer
-							 .getDiscontinued()
-							 .toString();
+		String introduced = LocalDateToString(computer
+											 .getIntroduced());
+		String discontinued = LocalDateToString(computer
+				 							   .getDiscontinued());
 		String company = computer.getCompany().toString();
 		
-		return new DTOComputerCreation(name
+		return new DTOComputerWithoutId(name
 									 , introduced
 									 , discontinued
 									 , company);
 	}
 	
-	public static Computer convertDTOComputerCreationToComputer(DTOComputerCreation dtoComputerCreation) {
-		String name = dtoComputerCreation.name;
-		LocalDate introduced = LocalDate.parse(
-									  dtoComputerCreation
-									 .introduced
-									, dateTimeFormatter);
-		LocalDate discontinued = LocalDate.parse(
-									  dtoComputerCreation
-									 .discontinued
-									, dateTimeFormatter);
-		long companyId = Long.valueOf(dtoComputerCreation
-									 .companyId);
+	public static Computer convertDTOComputerWithoutIdToComputer(DTOComputerWithoutId dtoComputerWithoutId) {
+		String name = dtoComputerWithoutId.name;
+		LocalDate introduced = parseStringToLocalDate(dtoComputerWithoutId
+													 .introduced);
+		LocalDate discontinued = parseStringToLocalDate(dtoComputerWithoutId
+				 									   .discontinued);
+		long companyId = Long.valueOf(dtoComputerWithoutId
+									 .company);					// !! COMPANY INTO LONG COMPANY_ID !!
 		Company company = new CompanyBuilder().setId(companyId)
 											  .build();
 		
@@ -58,6 +52,14 @@ public class ComputerDTOMapper {
 									.setDiscontinued(discontinued)
 									.setCompany(company)
 									.build();
+	}
+	
+	public static List<DTOComputerWithoutId> convertListComputerToListDTOComputerWithoutId(List<Computer> listComputer) {
+		List<DTOComputerWithoutId> listDTOCompanyWithoutId = new ArrayList<>();
+		for(Computer computer : listComputer) {
+			listDTOCompanyWithoutId.add(convertComputerToDTOComputerWithoutId(computer));
+		}
+		return listDTOCompanyWithoutId;
 	}
 	
 	
@@ -101,4 +103,27 @@ public class ComputerDTOMapper {
 								   .setName(companyName)
 								   .build();
 	}
+	
+	private static LocalDate parseStringToLocalDate(String localDateString) {
+		if (localDateString == null) {
+			return null;
+		}
+		else if (localDateString == "") {
+			return null;
+		}
+		else {
+			return LocalDate.parse(localDateString
+								 , dateTimeFormatter);
+		}
+	}
+	
+	private static String LocalDateToString(LocalDate localDate) {
+		if (localDate == null) {
+			return null;
+		}
+		else {
+			return localDate.toString();
+		}
+	}
 }
+ 

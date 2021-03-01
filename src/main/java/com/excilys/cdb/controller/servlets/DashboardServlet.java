@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.DTOs.DTOComputerId;
+import com.excilys.cdb.DTOs.DTOComputerWithoutId;
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.CompanyService;
@@ -30,6 +31,8 @@ public class DashboardServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    
+    
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		this.handleRequest(request, response);
@@ -40,16 +43,24 @@ public class DashboardServlet extends HttpServlet {
 		this.handleRequest(request, response);
 	}
 	
+	
+	
+	
+	
 	private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Computer> listComputer = this
-				 .computerService
-				 .getListComputers();
+									 .computerService
+									 .getListComputers();
 
 		List<DTOComputerId> listDTOComputerId = ComputerDTOMapper
-								   .convertListComputerToListDTOComputerId(
-										   listComputer);
+								   			   .convertListComputerToListDTOComputerId(
+								   					   		listComputer);
+		List<DTOComputerWithoutId> listDTOComputerWithoutId = ComputerDTOMapper
+													.convertListComputerToListDTOComputerWithoutId(
+															listComputer);
 		
 		request.setAttribute("numberOfComputers", listDTOComputerId.size());
+		request.setAttribute("listDTOComputer", listDTOComputerWithoutId);
 		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/jspViews/dashboard.jsp").forward(request, response);
 	}

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.customExceptions.OutOfRangeUserInputException;
 
-public final class LoggerManager {
+public class LoggerManager {
 	
 	private static final Logger viewLoggerFile =
 	(Logger) LoggerFactory.getLogger("com.excilys.cdb.logger.fileLogger");

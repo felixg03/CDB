@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.DTOs.DTOCompany;
-import com.excilys.cdb.DTOs.DTOComputerCreation;
+import com.excilys.cdb.DTOs.DTOComputerWithoutId;
 import com.excilys.cdb.DTOs.mappers.CompanyDTOMapper;
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
 import com.excilys.cdb.models.Company;
@@ -45,10 +45,10 @@ public class AddComputerServlet extends HttpServlet {
 			 			, HttpServletResponse response) 
 			 					throws ServletException, IOException {
 		
-		DTOComputerCreation dtoComputer = getDTOComputerCreationFromRequest(request);
+		DTOComputerWithoutId dtoComputer = getDTOComputerCreationFromRequest(request);
 		
 		Computer computerWithNoIdYet = ComputerDTOMapper
-									  .convertDTOComputerCreationToComputer(
+									  .convertDTOComputerWithoutIdToComputer(
 											  dtoComputer);
 		
 		computerService.callComputerCreationInDaoComputer(computerWithNoIdYet);
@@ -87,13 +87,13 @@ public class AddComputerServlet extends HttpServlet {
 	
 	
 	
-	private DTOComputerCreation getDTOComputerCreationFromRequest(HttpServletRequest request) {
+	private DTOComputerWithoutId getDTOComputerCreationFromRequest(HttpServletRequest request) {
 		String name = request.getParameter("computerName");
 		String introducedString = request.getParameter("introduced");
 		String discontinuedString = request.getParameter("discontinued");
 		String companyIdString = request.getParameter("company");
 		
-		return new DTOComputerCreation(name
+		return new DTOComputerWithoutId(name
 						  		     , introducedString
 								     , discontinuedString
 								     , companyIdString);

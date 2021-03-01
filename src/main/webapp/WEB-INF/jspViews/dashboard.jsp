@@ -77,7 +77,7 @@
                 <tbody id="results">
                 
                 
-               <!-- <c:forEach items="${ listDTOComputers }" var="DTOcomputer">
+               <c:forEach items="${ listDTOComputer }" var="DTOcomputer">
                 	<tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
@@ -89,11 +89,9 @@
                         <td><c:out value="${ DTOcomputer.discontinued }"/></td>
                         <td><c:out value="${ DTOcomputer.company }"/></td>
                     </tr>
-                </c:forEach>  -->
+                </c:forEach>
                 
-                
-                
-                
+                <!-- 
                     <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
@@ -237,7 +235,7 @@
                         <td></td>
                         <td>Nintendo</td>
 
-                    </tr>
+                    </tr>  -->
                     
                 </tbody>
             </table>
