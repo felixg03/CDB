@@ -62,7 +62,13 @@ public class ComputerDTOMapper {
 	}
 	
 	
-	
+	/*
+	 * ##################################
+	 * ###							  ###
+	 * ###	  DTOComputerDashboard	  ###							  
+	 * ###							  ###
+	 * ##################################
+	 */
 	public static DTOComputerDashboard convertToDTOComputerDashbord(Computer computer) {
 		String name = computer.getName();
 		String introduced = parseLocalDateToString(computer

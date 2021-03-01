@@ -53,5 +53,7 @@
             </div>
         </div>
     </section>
+    
+    <c:out value="${ inputException }" />
 </body>
 </html>
