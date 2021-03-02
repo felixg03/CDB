@@ -17,9 +17,6 @@ public class LoggerManager {
 	/*private static final Logger viewLoggerConsole =
 	(Logger) LoggerFactory.getLogger("STDOUT"); */
 
-	/*public static void logInLogFile(SQLException sqlException) {
-		viewLoggerFile.error("Out of range input: Integer must be between 1 and 7", sqlException);
-	}*/
 	
 	public static void logInLogFile(OutOfRangeUserInputException outOfRangeUserInputEx) {
 		viewLoggerFile.error("Out of range input: Integer must be between 1 and 7", outOfRangeUserInputEx);

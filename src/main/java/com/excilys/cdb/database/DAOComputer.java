@@ -47,7 +47,7 @@ public final class DAOComputer {
 	private final static String QUERY_GET_COMPUTER_ID = 
 	"SELECT id FROM computer WHERE id = ?";
 	private final static String QUERY_GET_NUMBER_OF_COMPUTERS =
-	"SELECT COUNT(*) FROM computer";
+	"SELECT COUNT(id) FROM computer";
 	
 	// GETTERS
 	public static DAOComputer getInstance() {

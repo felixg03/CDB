@@ -3,34 +3,48 @@
       <modelVersion>4.0.0</modelVersion>
      
       <groupId>com.excilys.cdb</groupId>
-      <artifactId>cdb_id</artifactId>
+      <artifactId>CDB_code</artifactId>
       <version>2.0</version>
       <packaging>war</packaging>
      
       <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <junit.version>4.12</junit.version>
+        <mysql-connector-java.version>8.0.23</mysql-connector-java.version>
+        <mockito-all.version>1.10.19</mockito-all.version>
+        <logback-classic.version>1.2.3</logback-classic.version>
+        <logback-core.version>1.2.3</logback-core.version>
+        <slf4j-api.version>1.7.30</slf4j-api.version>
+        <servlet-api.version>2.5</servlet-api.version>
+        <jstl.version>1.2</jstl.version>
+        <junit-jupiter-api.version>5.8.0-M1</junit-jupiter-api.version>
+        <h2.version>1.4.200</h2.version>
+        <httpunit.version>1.7.3</httpunit.version>
+        
       </properties>
+     
      
       <dependencies>
         <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
-          <version>4.12</version>
+          <version>${junit.version}</version>
           <scope>test</scope>
         </dependency>
         
       	<dependency>
       	  <groupId>mysql</groupId>
     	  <artifactId>mysql-connector-java</artifactId>
-    	  <version>8.0.23</version>
+    	  <version>${mysql-connector-java.version}</version>
       	</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
 		<dependency>
 		    <groupId>org.mockito</groupId>
 		    <artifactId>mockito-all</artifactId>
-		    <version>1.10.19</version>
+		    <version>${mockito-all.version}</version>
 		    <scope>test</scope>
 		</dependency>
 		
@@ -39,35 +53,61 @@
 		<dependency>
 		    <groupId>ch.qos.logback</groupId>
 		    <artifactId>logback-core</artifactId>
-		    <version>1.2.3</version>
+		    <version>${logback-core.version}</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>
-		    <version>1.7.30</version>
+		    <version>${slf4j-api.version}</version>
 		</dependency>
 		
 		<!-- 3.2) Classpath -->
 		<dependency>
 		    <groupId>ch.qos.logback</groupId>
 		    <artifactId>logback-classic</artifactId>
-		    <version>1.2.3</version>
+		    <version>${logback-classic.version}</version>
 		</dependency>
     
 	    <dependency>
 	      <groupId>javax.servlet</groupId>
 	      <artifactId>servlet-api</artifactId>
-	      <version>2.5</version>
+	      <version>${servlet-api.version}</version>
 	    </dependency>  
 	    
 	    <!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
 		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>jstl</artifactId>
-		    <version>1.2</version>
+		    <version>${jstl.version}</version>
 		</dependency> 	
+		
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+		 <dependency>
+		     <groupId>org.junit.jupiter</groupId>
+		     <artifactId>junit-jupiter-api</artifactId>
+		     <version>${junit-jupiter-api.version}</version>
+		     <scope>test</scope>
+		 </dependency>
+		 
+		 <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+		<dependency>
+		    <groupId>com.h2database</groupId>
+		    <artifactId>h2</artifactId>
+		    <version>${h2.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.httpunit/httpunit -->
+		<dependency>
+		    <groupId>org.httpunit</groupId>
+		    <artifactId>httpunit</artifactId>
+		    <version>${httpunit.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		
 	  </dependencies>
+	  
       
       <!--<build>
       	<pluginManagement>
@@ -83,6 +123,6 @@
 		    </plugins>
 		  </pluginManagement>
 		</build>
-  -->
+  		-->
       
     </project>

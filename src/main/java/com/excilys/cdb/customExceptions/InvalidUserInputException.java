@@ -1,6 +1,7 @@
 package com.excilys.cdb.customExceptions;
 
 public final class InvalidUserInputException extends Exception {
+	
 	private final String message;
 	
 	@Override

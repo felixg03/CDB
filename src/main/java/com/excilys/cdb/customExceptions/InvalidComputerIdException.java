@@ -2,7 +2,7 @@ package com.excilys.cdb.customExceptions;
 
 public class InvalidComputerIdException extends Exception {
 	
-	private String message;
+	private final String message;
 	
 	@Override
 	public String getMessage() {
