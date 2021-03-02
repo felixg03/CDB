@@ -6,7 +6,6 @@ import java.sql.*;
 public final class DBConnection {
 	
 	private static DBConnection instance;
-	private Connection connection;
 	private final String databaseURL = "jdbc:mysql://localhost/computer-database-db";
 	private final String databaseAdmin = "admincdb";
 	private final String databasePassword = "qwerty1234";
@@ -18,31 +17,20 @@ public final class DBConnection {
 		return instance;
 	}
 	
-	public Connection getConnection() {
-		return connection;
-	}
-	
-	public void openConnection() {
+	public Connection openAndGetAConnection() {
+		Connection connection = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection(
-					databaseURL
-				  , databaseAdmin
-				  , databasePassword
-				);
+										databaseURL
+									  , databaseAdmin
+									  , databasePassword
+									);
 		}
-		catch(SQLException | ClassNotFoundException e) { // Handle better
+		catch(SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		return connection;
 	}
-	
-	public void closeConnection() {
-		try {
-			connection.close();
-		}
-		catch (SQLException sqlException) {
-			sqlException.printStackTrace();
-		}
-	}
-	
 }

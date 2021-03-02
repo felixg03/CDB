@@ -24,9 +24,6 @@ public final class DAOComputer {
 	// GENERAL ATTRIBUTES
 	private static DAOComputer instance;
 	private DBConnection databaseConnection = DBConnection.getInstance();
-	private Connection connection;
-	private ResultSet resultSet;
-	private PreparedStatement query;
 	
 	// STRING QUERIES
 	private final static String QUERY_LIST_10_COMPUTERS = 
@@ -56,12 +53,7 @@ public final class DAOComputer {
 		}
 		return instance;
 	}
-	public ResultSet getResultSet() {
-		return resultSet;
-	}
 
-	// GENERAL METHODS READ/WRITE DATABASE
-	
 	
 	/*
 	 * ##############################################
@@ -70,77 +62,61 @@ public final class DAOComputer {
 	 */
 	public List<Computer> requestListComputer(int offset) {
 		
-		databaseConnection.openConnection();
 		List<Computer> listComputers = new ArrayList<Computer>();
 		
-		try {
-			this.connection = databaseConnection.getConnection();
-			this.query = connection
-					  	.prepareStatement(
-					  			QUERY_LIST_10_COMPUTERS
-					  	);
-			
-			this.query.setInt(1, offset);
-			this.resultSet = this.query.executeQuery();
+		try (Connection connection = databaseConnection.openAndGetAConnection()) {
+
+			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_LIST_10_COMPUTERS);
+			preparedStatement.setInt(1, offset);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			listComputers = this.getListComputerFromResultSet(resultSet);
 		} 
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		}
-		finally {
-			databaseConnection.closeConnection();
-		}
 		
 		return listComputers;
 	}
+	
+	
+	
 	
 	
 	public List<Computer> requestListComputer() {
 		
-		databaseConnection.openConnection();
 		List<Computer> listComputers = new ArrayList<Computer>();
 		
-		try {
-			this.connection = databaseConnection.getConnection();
-			this.query = connection
-					  	.prepareStatement(
-							  QUERY_LIST_COMPUTERS
-					  	);
-			this.resultSet = this.query.executeQuery();
+		try (Connection connection = databaseConnection.openAndGetAConnection()) {
+
+			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_LIST_COMPUTERS);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			listComputers = this.getListComputerFromResultSet(resultSet);
 		} 
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		}
-		finally {
-			databaseConnection.closeConnection();
 		}
 		
 		return listComputers;
 	}
 	
 	
+	
+	
+	
+	
 	public Page<Computer> requestPageComputer(Page<Computer> page) {
-		if (page != null) {
-			this.databaseConnection.openConnection();
-			this.connection = this.databaseConnection
-								  .getConnection();
-			
-			try {
-				this.query = this.connection.prepareStatement(
-												QUERY_PAGE_COMPUTERS);
-				this.query.setInt(1, page.getSize());
-				this.query.setInt(2, (page.getNumber() - 1) * page.getSize());
-				this.resultSet = this.query.executeQuery();
+		
+		if (page != null) {	
+			try (Connection connection = databaseConnection.openAndGetAConnection()) {
 
-				
-				page.setContent(getListComputerFromResultSet(this.resultSet));
+				PreparedStatement preparedStatement = connection.prepareStatement(QUERY_PAGE_COMPUTERS);
+				preparedStatement.setInt(1, page.getSize());
+				preparedStatement.setInt(2, (page.getNumber() - 1) * page.getSize());
+				ResultSet resultSet = preparedStatement.executeQuery();
+				page.setContent(getListComputerFromResultSet(resultSet));
 			}
 			catch(SQLException sqlException) {
 				sqlException.printStackTrace();
-			}
-			finally {
-				this.databaseConnection.closeConnection();
 			}
 		}
 		return page;
@@ -148,50 +124,35 @@ public final class DAOComputer {
 	
 	public Computer requestOneComputerDetails(long computerId) throws InvalidComputerIdException {
 		
-		databaseConnection.openConnection();
 		Computer computer = null;
 		
-		try {
-			this.connection = databaseConnection.getConnection();
+		try (Connection connection = databaseConnection.openAndGetAConnection()) {
 			
-			this.checkComputerId(computerId);
-			
-			this.query = connection
-					  	.prepareStatement(
-					  		QUERY_ONE_COMPUTER_DETAILS
-					  	);
-			this.query.setLong(1, computerId);
-			this.resultSet = query.executeQuery();
-			computer = this.getComputerFromResultSet(this.resultSet);
-			
+			this.checkComputerId(computerId, connection);
+			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_ONE_COMPUTER_DETAILS);
+			preparedStatement.setLong(1, computerId);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			computer = this.getComputerFromResultSet(resultSet);
 		}
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		} 
-		finally {
-			databaseConnection.closeConnection();
 		}
 		
 		return computer; 
 	}
+	
+	
+	
 	public void requestComputerCreation(Computer computerToCreate) {
 		
-		databaseConnection.openConnection();
+		try (Connection connection = databaseConnection.openAndGetAConnection()) {
 
-		try {
-			this.connection = databaseConnection.getConnection();
-			this.query = connection
-					  	.prepareStatement(
-					  		 QUERY_COMPUTER_CREATION
-					  	);
-			this.setPreparedStatementForComputerCreation(computerToCreate);
-			this.query.executeUpdate();
+			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_COMPUTER_CREATION);
+			preparedStatement = this.setAndReturnPreparedStatementForComputerCreation(computerToCreate, preparedStatement);
+			preparedStatement.executeUpdate();
 		} 
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		} 
-		finally {
-			databaseConnection.closeConnection();
 		}
 	}
 	
@@ -259,28 +220,28 @@ public final class DAOComputer {
 		request += " WHERE id = ?";
 
 		try {
-			this.query = connection.prepareStatement(request);
+			preparedStatement = connection.prepareStatement(request);
 			if (hasName) {
 				argumentNumber++;
-				this.query.setString(argumentNumber, name);
+				preparedStatement.setString(argumentNumber, name);
 			}
 			if (hasIntroducedDate) {
 				argumentNumber++;
-				this.query.setDate(argumentNumber, Date.valueOf(introduced));
+				preparedStatement.setDate(argumentNumber, Date.valueOf(introduced));
 			}
 			if (hasDiscontinuedDate) {
 				argumentNumber++;
-				this.query.setDate(argumentNumber, Date.valueOf(discontinued));
+				preparedStatement.setDate(argumentNumber, Date.valueOf(discontinued));
 			}
 			if (hasCompanyId) {
 				argumentNumber++;
-				this.query.setLong(argumentNumber, companyId);
+				preparedStatement.setLong(argumentNumber, companyId);
 			}
 
 			argumentNumber++;
-			this.query.setLong(argumentNumber, computerToUpdate.getId());
+			preparedStatement.setLong(argumentNumber, computerToUpdate.getId());
 
-			this.query.executeUpdate();
+			preparedStatement.executeUpdate();
 		} 
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
@@ -291,50 +252,39 @@ public final class DAOComputer {
 	}*/
 	public void requestComputerDeletion(long computerId) throws InvalidComputerIdException {
 		
-		databaseConnection.openConnection();
-		
-		try {
-			this.connection = databaseConnection.getConnection();
+		try (Connection connection = databaseConnection.openAndGetAConnection()) {
 			
-			this.checkComputerId(computerId);
-			
-			this.query = connection
-					  	.prepareStatement(
-					  		 QUERY_COMPUTER_DELETION
-					  	);
-			query.setLong(1, computerId);
-			query.executeUpdate();
+			this.checkComputerId(computerId, connection);
+			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_COMPUTER_DELETION);
+			preparedStatement.setLong(1, computerId);
+			preparedStatement.executeUpdate();
 		} 
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		}
-		finally {
-			databaseConnection.closeConnection();
 		}
 	}
 	
 	
 	public long requestNumberOfComputer() {
+		
 		long numberOfComputer = -1;
-		this.databaseConnection.openConnection();
-		try {
-			this.connection = databaseConnection.getConnection();
-			this.query = this.connection.prepareStatement(
-											QUERY_GET_NUMBER_OF_COMPUTERS);
-			this.resultSet = this.query.executeQuery();
+		
+		try (Connection connection = databaseConnection.openAndGetAConnection()) {
+
+			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NUMBER_OF_COMPUTERS);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
-				numberOfComputer = this.resultSet.getLong(1);
+				numberOfComputer = resultSet.getLong(1);
 			}
 		}
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		}
-		finally {
-			this.databaseConnection.closeConnection();
-		}
 		
 		return numberOfComputer;
 	}
+	
+	
 	// TOOLS
 	private List<Computer> getListComputerFromResultSet(ResultSet resultSetArg) throws SQLException {
 		List<Computer> listComputersToReturn = new ArrayList<Computer>();
@@ -397,65 +347,58 @@ public final class DAOComputer {
 			return null;
 		}
 	}
-	private void setPreparedStatementForComputerCreation(Computer computer) throws SQLException {
-		this.setPreparedStatementParameter(
-				computer.getName()
-			  , Types.VARCHAR
-			  , 1
-				);
-		this.setPreparedStatementParameter(
-			    computer.getIntroduced()
-			  , Types.DATE
-			  , 2
-				);
-		this.setPreparedStatementParameter(
-				computer.getDiscontinued()
-			  , Types.DATE
-			  , 3
-				);
+	
+	private PreparedStatement setAndReturnPreparedStatementForComputerCreation(Computer computer, PreparedStatement preparedStatement) throws SQLException {
+		preparedStatement = this.setPreparedStatementParameter(computer.getName()
+															 , Types.VARCHAR
+															 , 1
+															 , preparedStatement);
+		preparedStatement = this.setPreparedStatementParameter(computer.getIntroduced()
+															 , Types.DATE
+															 , 2
+															 , preparedStatement);
+		preparedStatement = this.setPreparedStatementParameter(computer.getDiscontinued()
+															 , Types.DATE
+															 , 3
+															 , preparedStatement);
 		
-		this.query.setLong(4, computer.getCompany().getId());
+		preparedStatement.setLong(4, computer.getCompany().getId());
+		
+		return preparedStatement;
 	}
-	private void setPreparedStatementParameter (Object parameter
-											  , int objectType
-											  , int position)  throws SQLException {
+	
+	
+	
+	private PreparedStatement setPreparedStatementParameter (Object parameter
+														   , int objectType
+														   , int position
+														   , PreparedStatement preparedStatement)  
+																   throws SQLException {
 		if (parameter == null) {
-			this.query.setNull(position, objectType);
+			preparedStatement.setNull(position, objectType);
 		}
 		else {
 			if (objectType == Types.VARCHAR) {
-				this.query.setString(position, (String) parameter);
+				preparedStatement.setString(position, (String) parameter);
 			}
 			else if (objectType == Types.DATE) {
-				this.query.setDate(position, Date.valueOf((LocalDate) parameter));
+				preparedStatement.setDate(position, Date.valueOf((LocalDate) parameter));
 			}
 		}
+		
+		return preparedStatement;
 	}
 	
-	private void checkComputerId(long id) throws InvalidComputerIdException, SQLException {
-		this.query = connection
-			  		.prepareStatement(
-			  			 QUERY_GET_COMPUTER_ID
-				  	);
-		this.query.setLong(1, id);
-		this.resultSet = this.query.executeQuery();
+	private void checkComputerId(long id, Connection connection) throws InvalidComputerIdException, SQLException {
+		PreparedStatement preparedStatement = connection
+									    	 .prepareStatement(
+									  			 QUERY_GET_COMPUTER_ID
+										  	  );
+		preparedStatement.setLong(1, id);
+		ResultSet resultSet = preparedStatement.executeQuery();
 		
-		if (this.resultSet == null) {
+		if (resultSet == null) {
 			throw new InvalidComputerIdException(id);
 		}
-		/*Set<Long> setOfComputerId = getSetOfIntegerFromResultSet(this.resultSet);
-		
-		if (!setOfComputerId.contains(id)) {
-			throw new InvalidComputerIdException(id);
-		}*/
 	}
-	
-	/*
-	private Set<Long> getSetOfIntegerFromResultSet(ResultSet resultSetArg) throws SQLException {
-		Set<Long> setOfInteger = new HashSet<Long>();
-		while(resultSetArg.next()) {
-			setOfInteger.add(resultSetArg.getLong(1));
-		}
-		return setOfInteger;
-	} */
 }

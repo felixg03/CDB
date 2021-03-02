@@ -14,7 +14,8 @@ import java.util.List;
 
 public class ComputerDTOMapper {
 	
-	private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	private static DateTimeFormatter dateTimeFormatter = 
+	DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
 	
 	/*
