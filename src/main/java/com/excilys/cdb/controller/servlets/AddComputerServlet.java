@@ -24,7 +24,7 @@ import com.excilys.cdb.services.Model;
 @WebServlet("/AddComputerServlet")
 public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
+     
 	private final Model model = Model.getInstance();
 	private final CompanyService companyService = model.getCompanyService();
 	private final ComputerService computerService = model.getComputerService();

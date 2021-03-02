@@ -83,7 +83,7 @@
                             <input type="checkbox" name="cb" class="cb" value="0">
                         </td>
                         <td>
-                            <a href="editComputer.html" onclick=""><c:out value="${ DTOcomputer.name }"/></a>
+                            <a href="editComputer?id=${ DTOComputer.id }&name=${ DTOComputer.name}&introduced=${ DTOComputer.introduced}&discontinued=${ DTOComputer.discontinued }&companyId=${ DTOComputer.companyId }&companyName=${ DTOComputer.companyName }" onclick=""><c:out value="${ DTOcomputer.name }"/></a>
                         </td>
                         <td><c:out value="${ DTOcomputer.introduced }"/></td>
                         <td><c:out value="${ DTOcomputer.discontinued }"/></td>

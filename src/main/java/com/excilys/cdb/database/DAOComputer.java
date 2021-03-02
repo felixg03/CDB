@@ -38,6 +38,8 @@ public final class DAOComputer {
 	"SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?";
 	private final static String QUERY_COMPUTER_CREATION = 
 	"INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
+	private final static String QUERY_COMPUTER_EDIT =
+	"UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final static String QUERY_COMPUTER_DELETION = 
 	"DELETE FROM computer WHERE id = ?";
 	
@@ -156,100 +158,21 @@ public final class DAOComputer {
 		}
 	}
 	
-	/* !!!!!!!!!!!!!!!!!!!!!!!
-	 * !!!!	  TO REDO	  !!!!
-	 * !!!!!!!!!!!!!!!!!!!!!!!
-	 */
-	/*public void requestComputerUpdate(Computer computerToUpdate) {
-		databaseConnection.openConnection();
-		Connection connection = databaseConnection.getConnection();
-
-		String request = "UPDATE computer SET ";
-
-		int argumentNumber = 0;
-
-		String name = computerToUpdate.getName();
-		LocalDate introduced = computerToUpdate.getIntroduced();
-		LocalDate discontinued = computerToUpdate.getDiscontinued();
-		Company companyId = computerToUpdate.getCompany();
-
-		boolean hasName = false;
-		boolean hasIntroducedDate = false;
-		boolean hasDiscontinuedDate = false;
-		boolean hasCompanyId = false;
-
-		boolean firstArgument = true;
-
-		if (name != null) {
-			if (firstArgument) {
-				request += "name = ?";
-				firstArgument = false;
-			} else {
-				request += ", name = ?";
-			}
-			hasName = true;
+	
+	public void requestComputerEdit(Computer computerEdited) {
+		try (Connection connection = databaseConnection.openAndGetAConnection()) {
+			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_COMPUTER_EDIT);
+			preparedStatement.setString(1, computerEdited.getName());
+			preparedStatement.setDate(2, this.castToDate(computerEdited.getIntroduced()));
+			preparedStatement.setDate(3, this.castToDate(computerEdited.getDiscontinued()));
+			preparedStatement.setLong(4, computerEdited.getCompany().getId());
+			preparedStatement.setLong(5, computerEdited.getId());
 		}
-		if (introduced != null) {
-			if (firstArgument) {
-				request += "introduced = ?";
-				firstArgument = false;
-			} else {
-				request += ", introduced = ?";
-			}
-			hasIntroducedDate = true;
+		catch (SQLException sqlEx) {
+			sqlEx.printStackTrace();
 		}
-		if (discontinued != null) {
-			if (firstArgument) {
-				request += "discontinued = ?";
-				firstArgument = false;
-			} else {
-				request += ", discontinued = ?";
-			}
-			hasDiscontinuedDate = true;
-		}
-		if (companyId != 0) {
-			if (firstArgument) {
-				request += "company_id = ?";
-				firstArgument = false;
-			} else {
-				request += ", company_id = ?";
-			}
-			hasCompanyId = true;
-		}
-
-		request += " WHERE id = ?";
-
-		try {
-			preparedStatement = connection.prepareStatement(request);
-			if (hasName) {
-				argumentNumber++;
-				preparedStatement.setString(argumentNumber, name);
-			}
-			if (hasIntroducedDate) {
-				argumentNumber++;
-				preparedStatement.setDate(argumentNumber, Date.valueOf(introduced));
-			}
-			if (hasDiscontinuedDate) {
-				argumentNumber++;
-				preparedStatement.setDate(argumentNumber, Date.valueOf(discontinued));
-			}
-			if (hasCompanyId) {
-				argumentNumber++;
-				preparedStatement.setLong(argumentNumber, companyId);
-			}
-
-			argumentNumber++;
-			preparedStatement.setLong(argumentNumber, computerToUpdate.getId());
-
-			preparedStatement.executeUpdate();
-		} 
-		catch (SQLException sqlException) {
-			sqlException.printStackTrace();
-		} 
-		finally {
-			databaseConnection.closeConnection();
-		}
-	}*/
+	}
+	
 	public void requestComputerDeletion(long computerId) throws InvalidComputerIdException {
 		
 		try (Connection connection = databaseConnection.openAndGetAConnection()) {
@@ -292,8 +215,8 @@ public final class DAOComputer {
 		while (resultSetArg.next()) {
 			long id = resultSetArg.getLong(1);
 			String name = resultSetArg.getString(2);
-			LocalDate introduced = this.castDateToLocalDate(resultSetArg.getDate(3));
-			LocalDate discontinued = this.castDateToLocalDate(resultSetArg.getDate(4));
+			LocalDate introduced = this.castToLocalDate(resultSetArg.getDate(3));
+			LocalDate discontinued = this.castToLocalDate(resultSetArg.getDate(4));
 			
 			long companyId = resultSetArg.getLong(5);
 			String companyName = resultSetArg.getString(6);
@@ -324,8 +247,8 @@ public final class DAOComputer {
 		if (resultSetArg.next()) {
 			id = resultSetArg.getLong(1);
 			name = resultSetArg.getString(2);
-			introduced = this.castDateToLocalDate(resultSetArg.getDate(3));
-			discontinued = this.castDateToLocalDate(resultSetArg.getDate(4));
+			introduced = this.castToLocalDate(resultSetArg.getDate(3));
+			discontinued = this.castToLocalDate(resultSetArg.getDate(4));
 			companyId = resultSetArg.getLong(5);
 			companyName = resultSetArg.getString(6);
 		}
@@ -339,9 +262,18 @@ public final class DAOComputer {
 									.setCompany(company)
 									.build();
 	}
-	private LocalDate castDateToLocalDate(Date date) {
+	private LocalDate castToLocalDate(Date date) {
 		if (date != null) {
 			return date.toLocalDate();
+		}
+		else {
+			return null;
+		}
+	}
+	
+	private Date castToDate(LocalDate localDate) {
+		if (localDate != null) {
+			return Date.valueOf(localDate);
 		}
 		else {
 			return null;

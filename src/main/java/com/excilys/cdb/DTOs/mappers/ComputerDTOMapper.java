@@ -32,7 +32,7 @@ public class ComputerDTOMapper {
 		String companyId = String.valueOf(computer.getCompany().getId());
 		
 		return new DTOComputerAddComputer(name
-									 , introduced
+									 , introduced 
 									 , discontinued
 									 , companyId);
 	}
@@ -71,17 +71,21 @@ public class ComputerDTOMapper {
 	 * ##################################
 	 */
 	public static DTOComputerDashboard convertToDTOComputerDashbord(Computer computer) {
+		String id = String.valueOf(computer.getId());
 		String name = computer.getName();
 		String introduced = parseLocalDateToString(computer
 											 .getIntroduced());
 		String discontinued = parseLocalDateToString(computer
 				 							   .getDiscontinued());
+		String companyId = String.valueOf(computer.getCompany().getId());
 		String companyName = computer.getCompany().getName();
 		
-		return new DTOComputerDashboard(name
-									 , introduced
-									 , discontinued
-									 , companyName);
+		return new DTOComputerDashboard(id
+									  , name
+									  , introduced
+									  , discontinued
+									  , companyId
+									  , companyName);
 	}
 	
 	public static List<DTOComputerDashboard> convertToListDTOComputerDashboard(List<Computer> listComputer) {
@@ -93,16 +97,20 @@ public class ComputerDTOMapper {
 	}
 	
 	public static Computer convertToComputer(DTOComputerDashboard dtoComputerDashboard) {
+		long id = Long.valueOf(dtoComputerDashboard.id);
 		String name = dtoComputerDashboard.name;
 		LocalDate introduced = parseStringToLocalDate(dtoComputerDashboard
 													 .introduced);
 		LocalDate discontinued = parseStringToLocalDate(dtoComputerDashboard
 				 									   .discontinued);
+		long companyId = parseStringToLong(dtoComputerDashboard.companyId);
 		String companyName = dtoComputerDashboard.companyName;
-		Company company = new CompanyBuilder().setName(companyName)
+		Company company = new CompanyBuilder().setId(companyId)
+											  .setName(companyName)
 											  .build();
 		
-		return new ComputerBuilder().setName(name)
+		return new ComputerBuilder().setId(id)
+									.setName(name)
 									.setIntroduced(introduced)
 									.setDiscontinued(discontinued)
 									.setCompany(company)
@@ -125,21 +133,6 @@ public class ComputerDTOMapper {
 	 * ##  TOOLS   ##
 	 * ##############
 	 */
-	private static Company getCompanyFromCompanyString(String companyString) {
-		String[] companyAttributes = companyString.split(" | ");
-		System.out.println();
-		for (String s : companyAttributes) {
-			System.out.print(s + " ");
-		}
-		System.out.println();
-		Long companyId = Long.valueOf(companyAttributes[0]);
-		String companyName = companyAttributes[1];
-		
-		return new CompanyBuilder().setId(companyId)
-								   .setName(companyName)
-								   .build();
-	}
-	
 	private static LocalDate parseStringToLocalDate(String localDateString) {
 		if (localDateString == null) {
 			return null;
