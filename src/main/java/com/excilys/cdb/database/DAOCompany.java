@@ -15,10 +15,7 @@ public final class DAOCompany {
 	
 	// GENERAL ATTRIBUTES
 	private static DAOCompany instance;
-	private DBConnection databaseConnection = DBConnection.getInstance();
-	private ResultSet resultSet;
-	private PreparedStatement query;
-	private Connection connection;
+	private DBConnection databaseConnection = DBConnection.getInstance(); 
 	
 	// STRING QUERIES
 	private static final String QUERY_LIST_10_COMPANIES = 
@@ -34,33 +31,24 @@ public final class DAOCompany {
 		}
 		return instance;
 	}
- 	
- 	
-	public ResultSet getResultSet() {
-		return resultSet;
-	}
 	
 	
 	// METHODS
 	public List<Company> requestListCompanies(int offset) {
-		this.databaseConnection.openConnection();
+		
 		List<Company> listCompanies = new ArrayList<Company>();
 		
-		try {
-			this.connection = databaseConnection.getConnection();
-			this.query = connection.prepareStatement(
-										QUERY_LIST_10_COMPANIES
-						 		   );
+		try (Connection connection = databaseConnection.openAndGetAConnection()) {
 			
-			this.query.setInt(1, offset);
-			this.resultSet = this.query.executeQuery();
-			listCompanies = this.getListCompaniesFromResultSet();
+			PreparedStatement preparedStatement = connection.prepareStatement(
+																QUERY_LIST_10_COMPANIES
+						 		   							 );
+			preparedStatement.setInt(1, offset);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			listCompanies = this.getListCompaniesFromResultSet(resultSet);
 		}
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		}
-		finally {
-			this.databaseConnection.closeConnection();
 		}
 		
 		return listCompanies;
@@ -70,22 +58,19 @@ public final class DAOCompany {
 	
 	
 	public List<Company> requestListCompanies() {
-		this.databaseConnection.openConnection();
+		
 		List<Company> listCompanies = new ArrayList<>();
 		
-		try {
-			this.connection = databaseConnection.getConnection();
-			this.query = connection.prepareStatement(
-						 			  QUERY_LIST_COMPANIES
-						 		   );
-			this.resultSet = this.query.executeQuery();
-			listCompanies = this.getListCompaniesFromResultSet();
+		try (Connection connection = databaseConnection.openAndGetAConnection()) {
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(
+												 			  QUERY_LIST_COMPANIES
+												 		    );
+			ResultSet resultSet = preparedStatement.executeQuery();
+			listCompanies = this.getListCompaniesFromResultSet(resultSet);
 		}
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
-		}
-		finally {
-			this.databaseConnection.closeConnection();
 		}
 		
 		return listCompanies;
@@ -94,12 +79,13 @@ public final class DAOCompany {
 	
 	
 	// TOOLS
-	private List<Company> getListCompaniesFromResultSet() throws SQLException {
+	private List<Company> getListCompaniesFromResultSet(ResultSet resultSet) throws SQLException {
+		
 		List<Company> listCompaniesToReturn = new ArrayList<>();
 		
-		while(this.resultSet.next()) {
-			 long id = this.resultSet.getLong(1);
-			 String name = this.resultSet.getString(2);
+		while(resultSet.next()) {
+			 long id = resultSet.getLong(1);
+			 String name = resultSet.getString(2);
 			 
 			 Company company = new CompanyBuilder().setId(id)
 					 							   .setName(name)
