@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.DTOs.DTOCompany;
-import com.excilys.cdb.DTOs.DTOComputerAddComputer;
+import com.excilys.cdb.DTOs.DTOComputerAdd;
 import com.excilys.cdb.DTOs.mappers.CompanyDTOMapper;
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
 import com.excilys.cdb.controller.servlets.validators.AddComputerValidator;
@@ -47,17 +47,16 @@ public class AddComputerServlet extends HttpServlet {
 			 			, HttpServletResponse response) 
 			 					throws ServletException, IOException {
 		try {
-		DTOComputerAddComputer dtoComputer = getDTOComputerCreationFromRequest(request);
+		DTOComputerAdd dtoComputer = getDTOComputerAdd(request);
 		
 		AddComputerValidator addComputerValidator = new AddComputerValidator();
 		addComputerValidator.validate(dtoComputer);
 		
-		Computer computerWithNoIdYet = ComputerDTOMapper
+		Computer computerToAdd = ComputerDTOMapper
 									  .convertToComputer(
 											  dtoComputer);
 		
-		computerService.callComputerCreationInDaoComputer(
-						computerWithNoIdYet);
+		computerService.callComputerCreation(computerToAdd);
 		}
 		catch (InvalidUserInputException invalidUserInputEx) {
 			request.setAttribute("inputException"
@@ -99,16 +98,20 @@ public class AddComputerServlet extends HttpServlet {
 	
 	
 	
-	private DTOComputerAddComputer getDTOComputerCreationFromRequest(HttpServletRequest request) {
+	private DTOComputerAdd getDTOComputerAdd(HttpServletRequest request) {
 		String name = request.getParameter("computerName");
 		String introducedString = request.getParameter("introduced");
 		String discontinuedString = request.getParameter("discontinued");
 		String companyIdString = request.getParameter("companyId");
 		
-		return new DTOComputerAddComputer(name
-						  		     , introducedString
-								     , discontinuedString
-								     , companyIdString);
+		DTOComputerAdd dtoComputerAdd = new DTOComputerAdd();
+		
+		dtoComputerAdd.name = name;
+		dtoComputerAdd.introduced = introducedString;
+		dtoComputerAdd.discontinued = discontinuedString;
+		dtoComputerAdd.companyId = companyIdString;
+		
+		return dtoComputerAdd;
 	}
 
 }

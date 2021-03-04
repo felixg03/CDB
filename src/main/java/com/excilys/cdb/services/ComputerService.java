@@ -10,13 +10,7 @@ import com.excilys.cdb.models.Page;
 
 public final class ComputerService {
 	
-	/*
-	 * ########################
-	 * ###   			 	###
-	 * ###	  ATTRIBUTES    ###
-	 * ###				 	###
-	 * ########################
-	 */
+	
 	private static ComputerService instance;
 	private DAOComputer daoComputer = DAOComputer.getInstance();
 	
@@ -27,14 +21,6 @@ public final class ComputerService {
 		return instance;
 	}
 	
-	
-	/*
-	 * #####################
-	 * ###   			 ###
-	 * ###	  METHODS    ###
-	 * ###				 ###
-	 * #####################
-	 */
 	
 	// For old CLIView
 	public List<Computer> getListComputers(int offset) {
@@ -49,19 +35,21 @@ public final class ComputerService {
 		return daoComputer.requestPageComputer(pageComputer);
 	}
 	
-	public Computer getOneComputerDetails(long computerId) throws InvalidComputerIdException {
-		return daoComputer.requestOneComputerDetails(computerId);
+	public Page<Computer> getPageComputerOrderedByComputerName(Page<Computer> pageComputer) {
+		return daoComputer.requestPageComputerOrderedByComputerName(pageComputer);
 	}
 	
-	public void callComputerCreationInDaoComputer(Computer computerToCreate) {
+	public Computer getOneComputer(long computerId) throws InvalidComputerIdException {
+		return daoComputer.requestOneComputer(computerId);
+	}
+	
+	public void callComputerCreation(Computer computerToCreate) {
 		daoComputer.requestComputerCreation(computerToCreate);
 	}
 	
-	/*
-	public void getResultComputerUpdate(Computer computerToUpdate) {
-		daoComputer.requestComputerUpdate(computerToUpdate);
+	public void callComputerEdition(Computer computerEdited) {
+		daoComputer.requestComputerEdition(computerEdited);
 	}
-	*/
 	
 	public void getResultComputerDeletion(long computerId) throws InvalidComputerIdException {
 		daoComputer.requestComputerDeletion(computerId);

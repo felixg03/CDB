@@ -31,7 +31,10 @@ public class CompanyDTOMapper {
 	
 	
 	public static DTOCompany convertCompanyToDTOCompany(Company company) {
-		return new DTOCompany(String.valueOf(company.getId()), company.getName());
+		DTOCompany dtoCompany = new DTOCompany();
+		dtoCompany.id = String.valueOf(company.getId());
+		dtoCompany.name = company.getName();
+		return dtoCompany;
 	}
 	
 	

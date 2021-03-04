@@ -9,7 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.excilys.cdb.DTOs.DTOComputerAddComputer;
+import com.excilys.cdb.DTOs.DTOComputerAdd;
 import com.excilys.cdb.DTOs.DTOComputerDashboard;
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
 import com.excilys.cdb.models.Computer;
@@ -22,8 +22,8 @@ import com.excilys.cdb.services.Model;
 @WebServlet("/DashboardServlet")
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
 	private final Model model = Model.getInstance();
-	private final CompanyService companyService = model.getCompanyService();
 	private final ComputerService computerService = model.getComputerService();
 	
 	private static final int COMPUTERS_PER_PAGE_DEFAULT_VALUE = 10;
@@ -40,19 +40,30 @@ public class DashboardServlet extends HttpServlet {
     
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.handleRequest(request, response);
+		Page<Computer> pageComputer = this.getPageComputer(request);
+
+		System.out.println("SNUIRFL");
+		this.handleRequest(request, response, pageComputer);
 	}
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.handleRequest(request, response);
+		String buttonClicked = request.getParameter("orderByButton");
+		if (buttonClicked.equals("Order By Computer Name")) {
+			Page<Computer> pageComputerOrderedByComputerName = this.getPageComputerOrderedByComputerName(request);
+			this.handleRequest(request, response, pageComputerOrderedByComputerName);
+			System.out.println("WAZA");
+		}
+		else {
+			doGet(request, response);
+		}
+		
 	}
 	
 	
 	
 	
-	
-	private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private Page<Computer> getPageComputer(HttpServletRequest request) {
 		int nbOfComputersInPage = getNbOfComputersInPage(request);
 		int pageNumber = getPageNumber(request);
 		Page<Computer> pageComputer = this
@@ -61,17 +72,25 @@ public class DashboardServlet extends HttpServlet {
 											 new Page<Computer>(nbOfComputersInPage
 													 		  , pageNumber)
 									 );
-		
-		long numberOfComputer = this
-							  .computerService
-							  .getNumberOfComputer();
-
-		List<DTOComputerDashboard> listDTOComputerDashboard = ComputerDTOMapper
-													.convertToListDTOComputerDashboard(
-															pageComputer.getContent());
-		
-		request.setAttribute("numberOfComputers", numberOfComputer);
-		request.setAttribute("listDTOComputer", listDTOComputerDashboard);
+		return pageComputer;
+	}
+	
+	private Page<Computer> getPageComputerOrderedByComputerName(HttpServletRequest request) {
+		int nbOfComputersInPage = getNbOfComputersInPage(request);
+		int pageNumber = getPageNumber(request);
+		Page<Computer> pageComputerOrderedByComputerName = this
+											 			  .computerService
+											 			  .getPageComputerOrderedByComputerName(
+											 			 	  new Page<Computer>(nbOfComputersInPage
+											 						 		   , pageNumber)
+											 			  );
+		return pageComputerOrderedByComputerName;
+	}
+	
+	
+	private void handleRequest(HttpServletRequest request, HttpServletResponse response, Page<Computer> pageComputer) throws ServletException, IOException {
+		request.setAttribute("nbTotalOfComputer", this.computerService.getNumberOfComputer());
+		request.setAttribute("listDTOComputerDashboard", ComputerDTOMapper.convertToListDTOComputerDashboard(pageComputer.getContent()));
 		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/jspViews/dashboard.jsp").forward(request, response);
 	}

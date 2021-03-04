@@ -73,7 +73,7 @@ public class CliController {
 					.displayOneComputerDetails(
 							model
 							.getComputerService()
-							.getOneComputerDetails(computerIdToShowDetails)
+							.getOneComputer(computerIdToShowDetails)
 					);
 				}
 				catch (Exception e) {
@@ -93,7 +93,7 @@ public class CliController {
 					Computer computerToCreate = viewComputer
 							   .getComputerToCreate();
 					model.getComputerService()
-					.callComputerCreationInDaoComputer(computerToCreate);
+					.callComputerCreation(computerToCreate);
 					
 					viewComputer.displayResultComputerCreation();
 				}

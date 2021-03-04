@@ -19,15 +19,18 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                <c:out value="${ numberOfComputers }" /> Computers found
+                <c:out value="${ nbTotalOfComputer }" /> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="#" method="GET" class="form-inline">
 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
-                        <input type="submit" id="searchsubmit" value="Filter by name"
-                        class="btn btn-primary" />
+                        <input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
+                    </form>
+                    
+                    <form id="orderByForm" action="#" method="POST" class="form-inline" >
+                    	<input type="submit" name="orderByButton" value="Order By Computer Name" class="btn btn-primary"/>
                     </form>
                 </div>
                 <div class="pull-right">
@@ -77,17 +80,19 @@
                 <tbody id="results">
                 
                 
-               <c:forEach items="${ listDTOComputer }" var="DTOcomputer">
+               <c:forEach items="${ listDTOComputerDashboard }" var="dtoComputerDashboard">
                 	<tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
                         </td>
                         <td>
-                            <a href="editComputer?id=${ DTOComputer.id }&name=${ DTOComputer.name}&introduced=${ DTOComputer.introduced}&discontinued=${ DTOComputer.discontinued }&companyId=${ DTOComputer.companyId }&companyName=${ DTOComputer.companyName }" onclick=""><c:out value="${ DTOcomputer.name }"/></a>
+                            <a href="<c:url value="editComputer"><c:param name="id" value="${ dtoComputerDashboard.id }"/></c:url>">
+                            <c:out value="${ dtoComputerDashboard.name }"/>
+                            </a>
                         </td>
-                        <td><c:out value="${ DTOcomputer.introduced }"/></td>
-                        <td><c:out value="${ DTOcomputer.discontinued }"/></td>
-                        <td><c:out value="${ DTOcomputer.companyName }"/></td>
+                        <td><c:out value="${ dtoComputerDashboard.introduced }"/></td>
+                        <td><c:out value="${ dtoComputerDashboard.discontinued }"/></td>
+                        <td><c:out value="${ dtoComputerDashboard.companyName }"/></td>
                     </tr>
                 </c:forEach>
                     
@@ -121,11 +126,11 @@
             <button type="button" class="btn btn-default">50</button>
             <button type="button" class="btn btn-default">100</button>
         </div>
-
+        
     </footer>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/dashboard.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/dashboard.js"></script>
 
 </body>
 </html>

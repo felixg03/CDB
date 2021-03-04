@@ -1,25 +1,30 @@
 package com.excilys.cdb.DTOs;
 
-public class DTOComputerDashboard {
+public class DTOComputerEdit {
+	
 	public String id;
 	public String name;
 	public String introduced;
 	public String discontinued;
+	public String companyId;
 	public String companyName;
 	
 	public String getId() {
-		return this.id;
+		return id;
 	}
-	public String getName() { 
-		return this.name;
+	public String getName() {
+		return name;
 	}
 	public String getIntroduced() {
-		return this.introduced;
+		return introduced;
 	}
 	public String getDiscontinued() {
-		return this.discontinued;
+		return discontinued;
+	}
+	public String getCompanyId() {
+		return companyId;
 	}
 	public String getCompanyName() {
-		return this.companyName;
+		return companyName;
 	}
 }

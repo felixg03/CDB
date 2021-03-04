@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import com.excilys.cdb.DTOs.DTOComputerAddComputer;
+import com.excilys.cdb.DTOs.DTOComputerAdd;
 import com.excilys.cdb.customExceptions.InvalidUserInputException;
 
 public class AddComputerValidator {
@@ -59,7 +59,7 @@ public class AddComputerValidator {
 		}
 	}
 	
-	public void validate(DTOComputerAddComputer dtoComputerAddComputer) 
+	public void validate(DTOComputerAdd dtoComputerAddComputer) 
 										throws InvalidUserInputException {
 		validateComputerName(dtoComputerAddComputer.name);
 		validateComputerDates(dtoComputerAddComputer.introduced

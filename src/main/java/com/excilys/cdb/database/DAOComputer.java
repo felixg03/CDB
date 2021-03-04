@@ -31,14 +31,18 @@ public final class DAOComputer {
 	private final static String QUERY_PAGE_COMPUTERS = 
 	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name "
   + "FROM computer LEFT JOIN company ON company.id = computer.company_id LIMIT ? OFFSET ?";
+	private final static String QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPUTER_NAME = 
+	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name "
+  + "FROM computer LEFT JOIN company ON company.id = computer.company_id ORDER BY computer.name LIMIT ? OFFSET ?";
 	private final static String QUERY_LIST_COMPUTERS = 
 	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
   + "FROM computer LEFT JOIN company ON company.id = computer.company_id";
-	private final static String QUERY_ONE_COMPUTER_DETAILS = 
-	"SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?";
+	private final static String QUERY_ONE_COMPUTER = 
+	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
+  + "FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id = ?";
 	private final static String QUERY_COMPUTER_CREATION = 
 	"INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-	private final static String QUERY_COMPUTER_EDIT =
+	private final static String QUERY_COMPUTER_EDITION =
 	"UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final static String QUERY_COMPUTER_DELETION = 
 	"DELETE FROM computer WHERE id = ?";
@@ -124,14 +128,32 @@ public final class DAOComputer {
 		return page;
 	}
 	
-	public Computer requestOneComputerDetails(long computerId) throws InvalidComputerIdException {
+	public Page<Computer> requestPageComputerOrderedByComputerName(Page<Computer> page) {
+		
+		if (page != null) {	
+			try (Connection connection = databaseConnection.openAndGetAConnection()) {
+
+				PreparedStatement preparedStatement = connection.prepareStatement(QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPUTER_NAME);
+				preparedStatement.setInt(1, page.getSize());
+				preparedStatement.setInt(2, (page.getNumber() - 1) * page.getSize());
+				ResultSet resultSet = preparedStatement.executeQuery();
+				page.setContent(getListComputerFromResultSet(resultSet));
+			}
+			catch(SQLException sqlException) {
+				sqlException.printStackTrace();
+			}
+		}
+		return page;
+	}
+	
+	public Computer requestOneComputer(long computerId) throws InvalidComputerIdException {
 		
 		Computer computer = null;
 		
 		try (Connection connection = databaseConnection.openAndGetAConnection()) {
 			
 			this.checkComputerId(computerId, connection);
-			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_ONE_COMPUTER_DETAILS);
+			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_ONE_COMPUTER);
 			preparedStatement.setLong(1, computerId);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			computer = this.getComputerFromResultSet(resultSet);
@@ -159,14 +181,15 @@ public final class DAOComputer {
 	}
 	
 	
-	public void requestComputerEdit(Computer computerEdited) {
+	public void requestComputerEdition(Computer computerEdited) {
 		try (Connection connection = databaseConnection.openAndGetAConnection()) {
-			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_COMPUTER_EDIT);
+			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_COMPUTER_EDITION);
 			preparedStatement.setString(1, computerEdited.getName());
 			preparedStatement.setDate(2, this.castToDate(computerEdited.getIntroduced()));
 			preparedStatement.setDate(3, this.castToDate(computerEdited.getDiscontinued()));
 			preparedStatement.setLong(4, computerEdited.getCompany().getId());
 			preparedStatement.setLong(5, computerEdited.getId());
+			preparedStatement.executeUpdate();
 		}
 		catch (SQLException sqlEx) {
 			sqlEx.printStackTrace();
