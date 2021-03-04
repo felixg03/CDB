@@ -34,6 +34,15 @@ public final class DAOComputer {
 	private final static String QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPUTER_NAME = 
 	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name "
   + "FROM computer LEFT JOIN company ON company.id = computer.company_id ORDER BY computer.name LIMIT ? OFFSET ?";
+	private final static String QUERY_PAGE_COMPUTERS_ORDERED_BY_INTRODUCED_DATE =
+	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name FROM "
+  + "computer LEFT JOIN company ON company.id = computer.company_id ORDER BY computer.introduced LIMIT ? OFFSET ?";
+	private final static String QUERY_PAGE_COMPUTERS_ORDERED_BY_DISCONTINUED_DATE =
+	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name FROM "
+  + "computer LEFT JOIN company ON company.id = computer.company_id ORDER BY computer.discontinued LIMIT ? OFFSET ?";
+	private final static String QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPANY_NAME =
+	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name FROM "
+  + "computer LEFT JOIN company ON company.id = computer.company_id ORDER BY computer.company_id LIMIT ? OFFSET ?";
 	private final static String QUERY_LIST_COMPUTERS = 
 	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
   + "FROM computer LEFT JOIN company ON company.id = computer.company_id";
@@ -134,6 +143,57 @@ public final class DAOComputer {
 			try (Connection connection = databaseConnection.openAndGetAConnection()) {
 
 				PreparedStatement preparedStatement = connection.prepareStatement(QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPUTER_NAME);
+				preparedStatement.setInt(1, page.getSize());
+				preparedStatement.setInt(2, (page.getNumber() - 1) * page.getSize());
+				ResultSet resultSet = preparedStatement.executeQuery();
+				page.setContent(getListComputerFromResultSet(resultSet));
+			}
+			catch(SQLException sqlException) {
+				sqlException.printStackTrace();
+			}
+		}
+		return page;
+	}
+	
+	public Page<Computer> requestPageComputerOrderedByIntroducedDate(Page<Computer> page) {
+		if (page != null) {	
+			try (Connection connection = databaseConnection.openAndGetAConnection()) {
+
+				PreparedStatement preparedStatement = connection.prepareStatement(QUERY_PAGE_COMPUTERS_ORDERED_BY_INTRODUCED_DATE);
+				preparedStatement.setInt(1, page.getSize());
+				preparedStatement.setInt(2, (page.getNumber() - 1) * page.getSize());
+				ResultSet resultSet = preparedStatement.executeQuery();
+				page.setContent(getListComputerFromResultSet(resultSet));
+			}
+			catch(SQLException sqlException) {
+				sqlException.printStackTrace();
+			}
+		}
+		return page;
+	}
+	
+	public Page<Computer> requestPageComputerOrderedByDiscontinuedDate(Page<Computer> page) {
+		if (page != null) {	
+			try (Connection connection = databaseConnection.openAndGetAConnection()) {
+
+				PreparedStatement preparedStatement = connection.prepareStatement(QUERY_PAGE_COMPUTERS_ORDERED_BY_DISCONTINUED_DATE);
+				preparedStatement.setInt(1, page.getSize());
+				preparedStatement.setInt(2, (page.getNumber() - 1) * page.getSize());
+				ResultSet resultSet = preparedStatement.executeQuery();
+				page.setContent(getListComputerFromResultSet(resultSet));
+			}
+			catch(SQLException sqlException) {
+				sqlException.printStackTrace();
+			}
+		}
+		return page;
+	}
+	
+	public Page<Computer> requestPageComputerOrderedByCompanyName(Page<Computer> page) {
+		if (page != null) {	
+			try (Connection connection = databaseConnection.openAndGetAConnection()) {
+
+				PreparedStatement preparedStatement = connection.prepareStatement(QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPANY_NAME);
 				preparedStatement.setInt(1, page.getSize());
 				preparedStatement.setInt(2, (page.getNumber() - 1) * page.getSize());
 				ResultSet resultSet = preparedStatement.executeQuery();

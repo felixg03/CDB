@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +32,11 @@
                     
                     <form id="orderByForm" action="#" method="POST" class="form-inline" >
                     	<input type="submit" name="orderByButton" value="Order By Computer Name" class="btn btn-primary"/>
+                    	<input type="submit" name="orderByButton" value="Order By Computer Introduced Date" class="btn btn-primary"/>
+                    	<input type="submit" name="orderByButton" value="Order By Computer Discontinued Date" class="btn btn-primary"/>
+                    	<input type="submit" name="orderByButton" value="Order By Company Name" class="btn btn-primary"/>
                     </form>
+                    
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 

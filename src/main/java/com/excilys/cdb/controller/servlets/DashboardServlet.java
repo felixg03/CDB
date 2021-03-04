@@ -41,8 +41,6 @@ public class DashboardServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Page<Computer> pageComputer = this.getPageComputer(request);
-
-		System.out.println("SNUIRFL");
 		this.handleRequest(request, response, pageComputer);
 	}
 
@@ -52,15 +50,24 @@ public class DashboardServlet extends HttpServlet {
 		if (buttonClicked.equals("Order By Computer Name")) {
 			Page<Computer> pageComputerOrderedByComputerName = this.getPageComputerOrderedByComputerName(request);
 			this.handleRequest(request, response, pageComputerOrderedByComputerName);
-			System.out.println("WAZA");
+		}
+		else if (buttonClicked.equals("Order By Computer Introduced Date")) {
+			Page<Computer> pageComputerOrderedByIntroducedDate = this.getPageComputerOrderedByIntroducedDate(request);
+			this.handleRequest(request, response, pageComputerOrderedByIntroducedDate);
+		}
+		else if (buttonClicked.equals("Order By Computer Discontinued Date")) {
+			Page<Computer> pageComputerOrderedByDiscontinuedDate = this.getPageComputerOrderedByDiscontinuedDate(request);
+			this.handleRequest(request, response, pageComputerOrderedByDiscontinuedDate);
+		}
+		else if (buttonClicked.equals("Order By Company Name")) {
+			Page<Computer> pageComputerOrderedByCompanyName = this.getPageComputerOrderedByCompanyName(request);
+			this.handleRequest(request, response, pageComputerOrderedByCompanyName);
 		}
 		else {
 			doGet(request, response);
 		}
 		
 	}
-	
-	
 	
 	
 	private Page<Computer> getPageComputer(HttpServletRequest request) {
@@ -87,6 +94,41 @@ public class DashboardServlet extends HttpServlet {
 		return pageComputerOrderedByComputerName;
 	}
 	
+	private Page<Computer> getPageComputerOrderedByIntroducedDate(HttpServletRequest request) {
+		int nbOfComputersInPage = getNbOfComputersInPage(request);
+		int pageNumber = getPageNumber(request);
+		Page<Computer> pageComputerOrderedByIntroducedDate = this
+												 			.computerService
+												 			.getPageComputerOrderedByIntroducedDate(
+												 			 	new Page<Computer>(nbOfComputersInPage
+												 						 		 , pageNumber)
+												 			);
+		return pageComputerOrderedByIntroducedDate;
+	}
+	
+	private Page<Computer> getPageComputerOrderedByDiscontinuedDate(HttpServletRequest request) {
+		int nbOfComputersInPage = getNbOfComputersInPage(request);
+		int pageNumber = getPageNumber(request);
+		Page<Computer> pageComputerOrderedByIntroducedDate = this
+												 			.computerService
+												 			.getPageComputerOrderedByDiscontinuedDate(
+												 			 	new Page<Computer>(nbOfComputersInPage
+												 						 		 , pageNumber)
+												 			);
+		return pageComputerOrderedByIntroducedDate;
+	}
+	
+	private Page<Computer> getPageComputerOrderedByCompanyName(HttpServletRequest request) {
+		int nbOfComputersInPage = getNbOfComputersInPage(request);
+		int pageNumber = getPageNumber(request);
+		Page<Computer> pageComputer = this
+									 .computerService
+									 .getPageComputerOrderedByCompanyName(
+											 new Page<Computer>(nbOfComputersInPage
+													 		  , pageNumber)
+									 );
+		return pageComputer;
+	}
 	
 	private void handleRequest(HttpServletRequest request, HttpServletResponse response, Page<Computer> pageComputer) throws ServletException, IOException {
 		request.setAttribute("nbTotalOfComputer", this.computerService.getNumberOfComputer());

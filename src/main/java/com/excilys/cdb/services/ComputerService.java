@@ -39,6 +39,18 @@ public final class ComputerService {
 		return daoComputer.requestPageComputerOrderedByComputerName(pageComputer);
 	}
 	
+	public Page<Computer> getPageComputerOrderedByIntroducedDate(Page<Computer> pageComputer) {
+		return daoComputer.requestPageComputerOrderedByIntroducedDate(pageComputer);
+	}
+	
+	public Page<Computer> getPageComputerOrderedByDiscontinuedDate(Page<Computer> pageComputer) {
+		return daoComputer.requestPageComputerOrderedByDiscontinuedDate(pageComputer);
+	}
+	
+	public Page<Computer> getPageComputerOrderedByCompanyName(Page<Computer> pageComputer) {
+		return daoComputer.requestPageComputerOrderedByCompanyName(pageComputer);
+	}
+	
 	public Computer getOneComputer(long computerId) throws InvalidComputerIdException {
 		return daoComputer.requestOneComputer(computerId);
 	}
