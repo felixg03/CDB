@@ -140,8 +140,11 @@ public class CliController {
 			break;	
 		
 			
+		// DELETE COMPANY
+		//case 7: long companyIdToDelete = viewCompany.getCompanyId();
+			
 		// EXIT APPLICATION
-		case 7: return false;
+		case 8: return false;
 		
 		}
 		

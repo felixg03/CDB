@@ -2,8 +2,14 @@ package com.excilys.cdb.database;
 
 import java.sql.*;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 // Follows singleton java pattern
 public final class DBConnection {
+	
+	private static HikariConfig config = new HikariConfig();
+    private static HikariDataSource ds;
 	
 	private static DBConnection instance;
 	private final String databaseURL = "jdbc:mysql://localhost/computer-database-db";
@@ -20,17 +26,34 @@ public final class DBConnection {
 	public Connection openAndGetAConnection() {
 		Connection connection = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection(
-										databaseURL
-									  , databaseAdmin
-									  , databasePassword
-									);
+			config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+			config.setJdbcUrl( databaseURL );
+	        config.setUsername( databaseAdmin );
+	        config.setPassword( databasePassword );
+	        config.addDataSourceProperty( "cachePrepStmts" , "true" );
+	        config.addDataSourceProperty( "prepStmtCacheSize" , "250" );
+	        config.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
+	        ds = new HikariDataSource( config );
+	        
+			
+//			try {
+//				Class.forName("com.mysql.cj.jdbc.Driver");
+//				connection = DriverManager.getConnection(
+//											databaseURL
+//										  , databaseAdmin
+//										  , databasePassword
+//										);
+//			}
+//			catch(SQLException | ClassNotFoundException e) {
+//				e.printStackTrace();
+//			}
+			
+
+			connection = ds.getConnection();
 		}
-		catch(SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
+		catch (SQLException sqlEx) {
+			sqlEx.printStackTrace();
 		}
-		
 		return connection;
 	}
 }
