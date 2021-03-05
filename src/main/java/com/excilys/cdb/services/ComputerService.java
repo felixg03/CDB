@@ -35,6 +35,10 @@ public final class ComputerService {
 		return daoComputer.requestPageComputer(pageComputer);
 	}
 	
+	public Page<Computer> getPageComputerSearched(String searchInput) {
+		return daoComputer.requestPageComputerSearched(searchInput);
+	}
+	
 	public Page<Computer> getPageComputerOrderedByComputerName(Page<Computer> pageComputer) {
 		return daoComputer.requestPageComputerOrderedByComputerName(pageComputer);
 	}
@@ -65,6 +69,10 @@ public final class ComputerService {
 	
 	public void getResultComputerDeletion(long computerId) throws InvalidComputerIdException {
 		daoComputer.requestComputerDeletion(computerId);
+	}
+	
+	public void callListComputerDeletion(List<Long> listComputerId) {
+		daoComputer.requestListComputerDeletion(listComputerId);
 	}
 	
 	public long getNumberOfComputer() {

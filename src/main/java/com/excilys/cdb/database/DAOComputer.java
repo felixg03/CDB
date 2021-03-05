@@ -43,6 +43,9 @@ public final class DAOComputer {
 	private final static String QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPANY_NAME =
 	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name FROM "
   + "computer LEFT JOIN company ON company.id = computer.company_id ORDER BY computer.company_id LIMIT ? OFFSET ?";
+	private final static String QUERY_LIST_COMPUTER_SEARCH =
+	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name FROM "
+  + "computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ?";
 	private final static String QUERY_LIST_COMPUTERS = 
 	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
   + "FROM computer LEFT JOIN company ON company.id = computer.company_id";
@@ -113,9 +116,6 @@ public final class DAOComputer {
 		
 		return listComputers;
 	}
-	
-	
-	
 	
 	
 	
@@ -206,6 +206,25 @@ public final class DAOComputer {
 		return page;
 	}
 	
+	
+	public Page<Computer> requestPageComputerSearched(String searchInput) {
+		Page<Computer> pageComputerSearched = null;
+		try (Connection connection = databaseConnection.openAndGetAConnection()) {
+			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_LIST_COMPUTER_SEARCH);
+			preparedStatement.setString(1, "%" + searchInput + "%");
+			ResultSet resultSet = preparedStatement.executeQuery();
+			List<Computer> listComputerFound = getListComputerFromResultSet(resultSet);
+			int pageNumberOne = 1;
+			pageComputerSearched = new Page<Computer>(listComputerFound.size(), pageNumberOne);
+			pageComputerSearched.setContent(listComputerFound);
+		}
+		catch (SQLException sqlEx) {
+			sqlEx.printStackTrace();
+		}
+		return pageComputerSearched;
+	}
+	
+	
 	public Computer requestOneComputer(long computerId) throws InvalidComputerIdException {
 		
 		Computer computer = null;
@@ -270,6 +289,16 @@ public final class DAOComputer {
 		}
 	}
 	
+	public void requestListComputerDeletion(List<Long> listComputerId) {
+		try {
+			for (long id : listComputerId) {
+				this.requestComputerDeletion(id);
+			}
+		}
+		catch (InvalidComputerIdException invalidComputerIdEx) {
+			invalidComputerIdEx.printStackTrace();
+		}
+	}
 	
 	public long requestNumberOfComputer() {
 		

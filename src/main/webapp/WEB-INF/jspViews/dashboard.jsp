@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST">
+        <form id="deleteForm" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -88,7 +88,7 @@
                <c:forEach items="${ listDTOComputerDashboard }" var="dtoComputerDashboard">
                 	<tr>
                         <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
+                            <input type="checkbox" name="cb" class="cb" value="${ dtoComputerDashboard.id }">
                         </td>
                         <td>
                             <a href="<c:url value="editComputer"><c:param name="id" value="${ dtoComputerDashboard.id }"/></c:url>">
