@@ -130,10 +130,10 @@ public class CliController {
 		
 		// DELETE COMPUTER
 		case 6: long computerIdToDelete = viewComputer
-										 .getComputerId(input);
+										 .getComputerId( input );
 				
 				model.getComputerService()
-					 .getResultComputerDeletion(computerIdToDelete);
+					 .getResultComputerDeletion( computerIdToDelete );
 				
 				viewComputer.displayResultComputerDeletion();
 				
@@ -141,7 +141,8 @@ public class CliController {
 		
 			
 		// DELETE COMPANY
-		//case 7: long companyIdToDelete = viewCompany.getCompanyId();
+		case 7: model.getCompanyService().callCompanyDeletion( viewCompany.getCompanyId() );
+				break;
 			
 		// EXIT APPLICATION
 		case 8: return false;

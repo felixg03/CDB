@@ -30,4 +30,8 @@ public final class CompanyService {
 	public List<Company> getListCompanies() {
 		return daoCompany.requestListCompanies();
 	}
+	
+	public void callCompanyDeletion( long companyId ) {
+		daoCompany.requestCompanyDeletion( companyId );
+	}
 }

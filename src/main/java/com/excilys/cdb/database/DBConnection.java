@@ -26,13 +26,16 @@ public final class DBConnection {
 	public Connection openAndGetAConnection() {
 		Connection connection = null;
 		try {
-			config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+			config.setDriverClassName( "com.mysql.cj.jdbc.Driver" );
 			config.setJdbcUrl( databaseURL );
 	        config.setUsername( databaseAdmin );
 	        config.setPassword( databasePassword );
 	        config.addDataSourceProperty( "cachePrepStmts" , "true" );
 	        config.addDataSourceProperty( "prepStmtCacheSize" , "250" );
 	        config.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
+	        config.setConnectionTimeout( 34000 );
+	        config.setIdleTimeout( 28_740_000 );
+	        config.setMaxLifetime( 28_740_000 );
 	        ds = new HikariDataSource( config );
 	        
 			

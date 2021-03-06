@@ -25,7 +25,7 @@ public class ViewCompany {
 		System.out.println("Back to menu --> type anything else");
 		
 		String userInputToReturn = this.scanner.nextLine();
-		int intToReturn;
+		int intToReturn = -1;
 		
 		try {
 			intToReturn = Integer.valueOf(userInputToReturn);
@@ -35,5 +35,21 @@ public class ViewCompany {
 		}
 		
 		return intToReturn;
+	}
+	
+	public long getCompanyId() {
+		System.out.println("--------------------------------------");
+		System.out.println();
+		System.out.println("Enter the id of the company you wish to delete");
+		System.out.println();
+		String userInput = this.scanner.nextLine();
+		long companyId = -1;
+		try {
+			companyId = Long.valueOf( userInput );
+		}
+		catch ( NumberFormatException nbFormatEx ) {
+			nbFormatEx.printStackTrace();
+		}
+		return companyId;
 	}
 }
