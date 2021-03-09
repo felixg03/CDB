@@ -1,15 +1,14 @@
 package com.excilys.cdb.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.database.DAOComputer;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Page;
 
+
 public final class ComputerService {
-	
 	
 	private static ComputerService instance;
 	private DAOComputer daoComputer = DAOComputer.getInstance();
@@ -20,7 +19,6 @@ public final class ComputerService {
 		}
 		return instance;
 	}
-	
 	
 	// For old CLIView
 	public List<Computer> getListComputers(int offset) {

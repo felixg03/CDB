@@ -23,9 +23,7 @@ public final class DBConnection {
 		return instance;
 	}
 	
-	public Connection openAndGetAConnection() {
-		Connection connection = null;
-		try {
+	private DBConnection() {
 			config.setDriverClassName( "com.mysql.cj.jdbc.Driver" );
 			config.setJdbcUrl( databaseURL );
 	        config.setUsername( databaseAdmin );
@@ -37,26 +35,10 @@ public final class DBConnection {
 	        config.setIdleTimeout( 28_740_000 );
 	        config.setMaxLifetime( 28_740_000 );
 	        ds = new HikariDataSource( config );
-	        
-			
-//			try {
-//				Class.forName("com.mysql.cj.jdbc.Driver");
-//				connection = DriverManager.getConnection(
-//											databaseURL
-//										  , databaseAdmin
-//										  , databasePassword
-//										);
-//			}
-//			catch(SQLException | ClassNotFoundException e) {
-//				e.printStackTrace();
-//			}
-			
-
-			connection = ds.getConnection();
-		}
-		catch (SQLException sqlEx) {
-			sqlEx.printStackTrace();
-		}
-		return connection;
+	}
+	
+	public Connection openAndGetAConnection() throws SQLException {
+		return ds.getConnection();
+		
 	}
 }

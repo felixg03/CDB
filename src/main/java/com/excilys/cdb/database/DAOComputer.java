@@ -71,7 +71,7 @@ public final class DAOComputer {
 		}
 		return instance;
 	}
-
+	
 	
 	/*
 	 * ##############################################
@@ -83,7 +83,7 @@ public final class DAOComputer {
 		List<Computer> listComputers = new ArrayList<Computer>();
 		
 		try (Connection connection = databaseConnection.openAndGetAConnection();
-			 PreparedStatement preparedStatement = connection.prepareStatement(QUERY_LIST_10_COMPUTERS);) {
+			 PreparedStatement preparedStatement = connection.prepareStatement(QUERY_LIST_10_COMPUTERS) ) {
 
 			preparedStatement.setInt(1, offset);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {

@@ -16,7 +16,7 @@ import java.util.List;
 public class ComputerDTOMapper {
 	
 	private static DateTimeFormatter dateTimeFormatter = 
-	DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
 	
 	
 	
@@ -27,13 +27,13 @@ public class ComputerDTOMapper {
 	 * ###					  ###
 	 * ##########################
 	 */
-	public static DTOComputerAdd convertToDTOComputerAddComputer(Computer computer) {
+	public static DTOComputerAdd convertToDTOComputerAddComputer( Computer computer ) {
 		String name = computer.getName();
-		String introduced = parseLocalDateToString(computer
-											 .getIntroduced());
-		String discontinued = parseLocalDateToString(computer
-				 							   .getDiscontinued());
-		String companyId = String.valueOf(computer.getCompany().getId());
+		String introduced = parseLocalDateToString( computer
+											       .getIntroduced() );
+		String discontinued = parseLocalDateToString( computer
+				 							         .getDiscontinued() );
+		String companyId = String.valueOf( computer.getCompany().getId() );
 		
 		DTOComputerAdd dtoComputerAdd = new DTOComputerAdd();
 		
@@ -47,25 +47,25 @@ public class ComputerDTOMapper {
 	
 	public static Computer convertToComputer(DTOComputerAdd dtoComputerAddEdit) {
 		String name = dtoComputerAddEdit.name;
-		LocalDate introduced = parseStringToLocalDate(dtoComputerAddEdit
-													 .introduced);
-		LocalDate discontinued = parseStringToLocalDate(dtoComputerAddEdit
-				 									   .discontinued);
-		long companyId = parseStringToLong(dtoComputerAddEdit.companyId);
-		Company company = new CompanyBuilder().setId(companyId)
+		LocalDate introduced = parseStringToLocalDate( dtoComputerAddEdit
+													  .introduced );
+		LocalDate discontinued = parseStringToLocalDate( dtoComputerAddEdit
+				 									    .discontinued );
+		long companyId = parseStringToLong( dtoComputerAddEdit.companyId );
+		Company company = new CompanyBuilder().setId( companyId )
 											  .build();
 		
-		return new ComputerBuilder().setName(name)
-									.setIntroduced(introduced)
-									.setDiscontinued(discontinued)
-									.setCompany(company)
+		return new ComputerBuilder().setName( name )
+									.setIntroduced( introduced )
+									.setDiscontinued( discontinued )
+									.setCompany( company )
 									.build();
 	}
 	
-	public static List<DTOComputerAdd> convertToListDTOComputerAdd(List<Computer> listComputer) {
+	public static List<DTOComputerAdd> convertToListDTOComputerAdd( List<Computer> listComputer ) {
 		List<DTOComputerAdd> listDTOComputerAddComputer = new ArrayList<>();
-		for(Computer computer : listComputer) {
-			listDTOComputerAddComputer.add(convertToDTOComputerAddComputer(computer));
+		for ( Computer computer : listComputer ) {
+			listDTOComputerAddComputer.add( convertToDTOComputerAddComputer( computer ) );
 		}
 		return listDTOComputerAddComputer;
 	}
@@ -89,13 +89,13 @@ public class ComputerDTOMapper {
 	 * ##################################
 	 */
 	
-	public static DTOComputerDashboard convertToDTOComputerDashbord(Computer computer) {
-		String id = String.valueOf(computer.getId());
+	public static DTOComputerDashboard convertToDTOComputerDashbord( Computer computer ) {
+		String id = String.valueOf( computer.getId() );
 		String name = computer.getName();
-		String introduced = parseLocalDateToString(computer
-											 .getIntroduced());
-		String discontinued = parseLocalDateToString(computer
-				 							   .getDiscontinued());
+		String introduced = parseLocalDateToString( computer
+											       .getIntroduced() );
+		String discontinued = parseLocalDateToString( computer
+				 							         .getDiscontinued() );
 		String companyName = computer.getCompany().getName();
 		
 		
@@ -111,34 +111,34 @@ public class ComputerDTOMapper {
 	}
 	
 	
-	public static Computer convertToComputer(DTOComputerDashboard dtoComputerDashboard) {
+	public static Computer convertToComputer( DTOComputerDashboard dtoComputerDashboard ) {
 		
-		long id = Long.valueOf(dtoComputerDashboard.id);
+		long id = Long.valueOf( dtoComputerDashboard.id );
 		String name = dtoComputerDashboard.name;
-		LocalDate introduced = parseStringToLocalDate(dtoComputerDashboard
-													 .introduced);
-		LocalDate discontinued = parseStringToLocalDate(dtoComputerDashboard
-				 									   .discontinued);
+		LocalDate introduced = parseStringToLocalDate( dtoComputerDashboard
+													  .introduced );
+		LocalDate discontinued = parseStringToLocalDate( dtoComputerDashboard
+				 									    .discontinued );
 		String companyName = dtoComputerDashboard.companyName;
 		
 		
 		
-		Company company = new CompanyBuilder().setName(companyName)
+		Company company = new CompanyBuilder().setName( companyName )
 											  .build();
 		
-		return new ComputerBuilder().setId(id)
-									.setName(name)
-									.setIntroduced(introduced)
-									.setDiscontinued(discontinued)
-									.setCompany(company)
+		return new ComputerBuilder().setId( id )
+									.setName( name )
+									.setIntroduced( introduced )
+									.setDiscontinued( discontinued )
+									.setCompany( company )
 									.build();
 	}
 
 	
-	public static List<DTOComputerDashboard> convertToListDTOComputerDashboard(List<Computer> listComputer) {
+	public static List<DTOComputerDashboard> convertToListDTOComputerDashboard( List<Computer> listComputer ) {
 		List<DTOComputerDashboard> listDTOComputerDashboard = new ArrayList<>();
-		for(Computer computer : listComputer) {
-			listDTOComputerDashboard.add(convertToDTOComputerDashbord(computer));
+		for ( Computer computer : listComputer ) {
+			listDTOComputerDashboard.add( convertToDTOComputerDashbord( computer ) );
 		}
 		return listDTOComputerDashboard;
 	}
@@ -166,14 +166,14 @@ public class ComputerDTOMapper {
 	 */
 	
 	
-	public static DTOComputerEdit convertToDTOComputerEdit(Computer computer) {
-		String id = String.valueOf(computer.getId());
+	public static DTOComputerEdit convertToDTOComputerEdit( Computer computer ) {
+		String id = String.valueOf( computer.getId() );
 		String name = computer.getName();
-		String introduced = parseLocalDateToString(computer
-											 .getIntroduced());
-		String discontinued = parseLocalDateToString(computer
-				 							   .getDiscontinued());
-		String companyId = String.valueOf(computer.getCompany().getId());
+		String introduced = parseLocalDateToString( computer
+											       .getIntroduced() );
+		String discontinued = parseLocalDateToString( computer
+				 							         .getDiscontinued() );
+		String companyId = String.valueOf( computer.getCompany().getId() );
 		
 		DTOComputerEdit dtoComputerEdit = new DTOComputerEdit();
 		
@@ -187,33 +187,33 @@ public class ComputerDTOMapper {
 	}
 	
 	
-	public static Computer convertToComputer(DTOComputerEdit dtoComputerEdit) {
+	public static Computer convertToComputer( DTOComputerEdit dtoComputerEdit ) {
 		
-		long id = Long.valueOf(dtoComputerEdit.id);
+		long id = Long.valueOf( dtoComputerEdit.id );
 		String name = dtoComputerEdit.name;
-		LocalDate introduced = parseStringToLocalDate(dtoComputerEdit
-													 .introduced);
-		LocalDate discontinued = parseStringToLocalDate(dtoComputerEdit
-				 									   .discontinued);
-		long companyId = Long.valueOf(dtoComputerEdit.companyId);
+		LocalDate introduced = parseStringToLocalDate( dtoComputerEdit
+													  .introduced );
+		LocalDate discontinued = parseStringToLocalDate( dtoComputerEdit
+				 									    .discontinued );
+		long companyId = Long.valueOf( dtoComputerEdit.companyId );
 		
-		Company company = new CompanyBuilder().setId(companyId)
+		Company company = new CompanyBuilder().setId( companyId )
 											  .build();
 		
-		return new ComputerBuilder().setId(id)
-									.setName(name)
-									.setIntroduced(introduced)
-									.setDiscontinued(discontinued)
-									.setCompany(company)
+		return new ComputerBuilder().setId( id )
+									.setName( name )
+									.setIntroduced( introduced )
+									.setDiscontinued( discontinued )
+									.setCompany( company )
 									.build();
 	}
 	
 	
 
-	public static List<DTOComputerEdit> convertToListDTOComputerEdit(List<Computer> listComputer) {
+	public static List<DTOComputerEdit> convertToListDTOComputerEdit( List<Computer> listComputer ) {
 		List<DTOComputerEdit> listDTOComputerEdit = new ArrayList<>();
-		for(Computer computer : listComputer) {
-			listDTOComputerEdit.add(convertToDTOComputerEdit(computer));
+		for ( Computer computer : listComputer ) {
+			listDTOComputerEdit.add( convertToDTOComputerEdit( computer ) );
 		}
 		return listDTOComputerEdit;
 	}
@@ -229,32 +229,32 @@ public class ComputerDTOMapper {
 	*/
 	
 	
-	public static List<Computer> convertToListComputer(List<Object> listDTOObjects) {
+	public static List<Computer> convertToListComputer ( List<Object> listDTOObjects ) {
 		List<Computer> listComputer = new ArrayList<>();
 		String stringObjectClassName = listDTOObjects.get(0).getClass().getSimpleName();
 		
 		
 		switch (stringObjectClassName) {
 		
-		case ("DTOComputerAdd"):
-			for(Object dtoObject : listDTOObjects) {
-				listComputer.add(convertToComputer((DTOComputerAdd) dtoObject));
+		case ( "DTOComputerAdd" ):
+			for ( Object dtoObject : listDTOObjects ) {
+				listComputer.add( convertToComputer( (DTOComputerAdd) dtoObject ) );
 			}
 		
 			break;
 		
 			
-		case ("DTOComputerDashboard"):
-			for(Object dtoObject : listDTOObjects) {
-				listComputer.add(convertToComputer((DTOComputerDashboard) dtoObject));
+		case ( "DTOComputerDashboard" ):
+			for ( Object dtoObject : listDTOObjects ) {
+				listComputer.add( convertToComputer( (DTOComputerDashboard) dtoObject ) );
 			}
 		
 			break;
 			
 			
-		case ("DTOComputerEdit"):
-			for(Object dtoObject : listDTOObjects) {
-				listComputer.add(convertToComputer((DTOComputerEdit) dtoObject));
+		case ( "DTOComputerEdit" ):
+			for ( Object dtoObject : listDTOObjects ) {
+				listComputer.add( convertToComputer( (DTOComputerEdit) dtoObject ) );
 			}
 		
 			break;

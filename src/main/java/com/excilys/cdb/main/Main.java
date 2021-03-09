@@ -12,7 +12,6 @@ public class Main {
 	
 	private static final Logger logger 
     = (Logger) LoggerFactory.getLogger(Main.class);
-	
 	public static void main(String[] args) {
 		final Model model = new Model();
 		final ViewPrincipal view = new ViewPrincipal(model);

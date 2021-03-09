@@ -61,9 +61,16 @@ public class AddComputerValidator {
 	
 	public void validate(DTOComputerAdd dtoComputerAddComputer) 
 										throws InvalidUserInputException {
-		validateComputerName(dtoComputerAddComputer.name);
-		validateComputerDates(dtoComputerAddComputer.introduced
-							, dtoComputerAddComputer.discontinued);
-		validateCompanyId(dtoComputerAddComputer.companyId);
+		try {
+			if ( dtoComputerAddComputer == null ) throw new NullPointerException();
+			
+			validateComputerName(dtoComputerAddComputer.name);
+			validateComputerDates(dtoComputerAddComputer.introduced
+								, dtoComputerAddComputer.discontinued);
+			validateCompanyId(dtoComputerAddComputer.companyId);
+		}
+		catch ( NullPointerException npe ) {
+			npe.printStackTrace();
+		}
 	}
 }

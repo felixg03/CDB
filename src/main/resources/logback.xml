@@ -3,7 +3,11 @@
 <!-- 4) Basic example and configuration -->
 <!-- Configuration file for logback -->
 <configuration>
-
+	<logger name="com.zaxxer.hikari.pool.PoolBase" level="ERROR"/>
+    <logger name="com.zaxxer.hikari.pool.HikariPool" level="ERROR"/>
+    <logger name="com.zaxxer.hikari.HikariDataSource" level="ERROR"/>
+    <logger name="com.zaxxer.hikari.HikariConfig" level="ERROR"/>
+    
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
       <encoder>
        	<!-- encoders are assigned the type

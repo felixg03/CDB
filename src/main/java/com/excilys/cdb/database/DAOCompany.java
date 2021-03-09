@@ -84,11 +84,16 @@ public final class DAOCompany {
 	
 	public void requestCompanyDeletion( long companyId ) {
 		
-		Connection connection = databaseConnection.openAndGetAConnection();
+		Connection connection = null;
+		PreparedStatement deleteComputersOfACompany = null;
+		PreparedStatement deleteCompany = null;
 		
-		try (PreparedStatement deleteComputersOfACompany = connection.prepareStatement( QUERY_DELETE_COMPUTERS_OF_A_COMPANY );
-			 PreparedStatement deleteCompany = connection.prepareStatement( QUERY_DELETE_COMPANY ) ) {
+		try {
 			
+			connection = databaseConnection.openAndGetAConnection();
+			
+			deleteComputersOfACompany = connection.prepareStatement( QUERY_DELETE_COMPUTERS_OF_A_COMPANY );
+			deleteCompany = connection.prepareStatement( QUERY_DELETE_COMPANY );
 			connection.setAutoCommit(false);
 			
 			deleteComputersOfACompany.setLong( 1, companyId );
@@ -108,6 +113,16 @@ public final class DAOCompany {
 				sqlException.printStackTrace();
 			}
 			
+		}
+		finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException sqlEx) {
+				// TODO Auto-generated catch block
+				sqlEx.printStackTrace();
+			}
 		}
 	}
 	
