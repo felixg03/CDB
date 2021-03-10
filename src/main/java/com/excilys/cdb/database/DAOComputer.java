@@ -10,20 +10,26 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Company.CompanyBuilder;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Computer.ComputerBuilder;
 import com.excilys.cdb.models.Page;
+import com.zaxxer.hikari.HikariDataSource;
 
 
-// Follows singleton pattern
+@Repository
+@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public final class DAOComputer {
 	
-	// GENERAL ATTRIBUTES
-	private static DAOComputer instance;
-	private DBConnection databaseConnection = DBConnection.getInstance();
+	@Autowired
+	private HikariDataSource hikariDataSource;
 	
 	// STRING QUERIES
 	private final static String QUERY_LIST_10_COMPUTERS = 
@@ -64,13 +70,6 @@ public final class DAOComputer {
 	private final static String QUERY_GET_NUMBER_OF_COMPUTERS =
 	"SELECT COUNT(id) FROM computer";
 	
-	// GETTERS
-	public static DAOComputer getInstance() {
-		if (instance == null) {
-			instance = new DAOComputer();
-		}
-		return instance;
-	}
 	
 	
 	/*
@@ -82,7 +81,7 @@ public final class DAOComputer {
 		
 		List<Computer> listComputers = new ArrayList<Computer>();
 		
-		try (Connection connection = databaseConnection.openAndGetAConnection();
+		try (Connection connection = hikariDataSource.getConnection();
 			 PreparedStatement preparedStatement = connection.prepareStatement(QUERY_LIST_10_COMPUTERS) ) {
 
 			preparedStatement.setInt(1, offset);
@@ -105,7 +104,7 @@ public final class DAOComputer {
 		
 		List<Computer> listComputers = new ArrayList<Computer>();
 		
-		try (Connection connection = databaseConnection.openAndGetAConnection();
+		try (Connection connection = hikariDataSource.getConnection();
 			 PreparedStatement preparedStatement = connection.prepareStatement(QUERY_LIST_COMPUTERS);
 			 ResultSet resultSet = preparedStatement.executeQuery()) {
 			
@@ -123,7 +122,7 @@ public final class DAOComputer {
 	public Page<Computer> requestPageComputer( Page<Computer> page ) {
 		
 		if ( page != null ) {	
-			try ( Connection connection = databaseConnection.openAndGetAConnection();
+			try ( Connection connection = hikariDataSource.getConnection();
 				  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_PAGE_COMPUTERS ) ) {
 
 				preparedStatement.setInt( 1, page.getSize() );
@@ -143,7 +142,7 @@ public final class DAOComputer {
 	public Page<Computer> requestPageComputerOrderedByComputerName ( Page<Computer> page ) {
 		
 		if ( page != null ) {	
-			try ( Connection connection = databaseConnection.openAndGetAConnection();
+			try ( Connection connection = hikariDataSource.getConnection();
 				 PreparedStatement preparedStatement = connection.prepareStatement(QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPUTER_NAME) ) {
 
 				preparedStatement.setInt( 1, page.getSize() );
@@ -161,7 +160,7 @@ public final class DAOComputer {
 	
 	public Page<Computer> requestPageComputerOrderedByIntroducedDate ( Page<Computer> page ) {
 		if ( page != null ) {	
-			try ( Connection connection = databaseConnection.openAndGetAConnection();
+			try ( Connection connection = hikariDataSource.getConnection();
 				  PreparedStatement preparedStatement = connection.prepareStatement(QUERY_PAGE_COMPUTERS_ORDERED_BY_INTRODUCED_DATE) ) {
 
 				preparedStatement.setInt( 1, page.getSize() );
@@ -181,7 +180,7 @@ public final class DAOComputer {
 	
 	public Page<Computer> requestPageComputerOrderedByDiscontinuedDate ( Page<Computer> page ) {
 		if ( page != null ) {	
-			try ( Connection connection = databaseConnection.openAndGetAConnection();
+			try ( Connection connection = hikariDataSource.getConnection();
 				  PreparedStatement preparedStatement = connection.prepareStatement(QUERY_PAGE_COMPUTERS_ORDERED_BY_DISCONTINUED_DATE) ) {
 
 				preparedStatement.setInt(1, page.getSize());
@@ -200,7 +199,7 @@ public final class DAOComputer {
 	
 	public Page<Computer> requestPageComputerOrderedByCompanyName ( Page<Computer> page ) {
 		if ( page != null ) {	
-			try ( Connection connection = databaseConnection.openAndGetAConnection();
+			try ( Connection connection = hikariDataSource.getConnection();
 				  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPANY_NAME ) ) {
 
 				preparedStatement.setInt( 1, page.getSize() );
@@ -219,7 +218,7 @@ public final class DAOComputer {
 	
 	public Page<Computer> requestPageComputerSearched ( String searchInput ) {
 		Page<Computer> pageComputerSearched = null;
-		try ( Connection connection = databaseConnection.openAndGetAConnection();
+		try ( Connection connection = hikariDataSource.getConnection();
 			  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_LIST_COMPUTER_SEARCH ) ) {
 			
 			preparedStatement.setString( 1, "%" + searchInput + "%" );
@@ -240,7 +239,7 @@ public final class DAOComputer {
 		
 		Computer computer = null;
 		
-		try ( Connection connection = databaseConnection.openAndGetAConnection() ) {
+		try ( Connection connection = hikariDataSource.getConnection() ) {
 			
 			this.checkComputerId(computerId, connection);
 			PreparedStatement preparedStatement = connection.prepareStatement(QUERY_ONE_COMPUTER);
@@ -261,7 +260,7 @@ public final class DAOComputer {
 	
 	public void requestComputerCreation ( Computer computerToCreate ) {
 		
-		try ( Connection connection = databaseConnection.openAndGetAConnection() ) {
+		try ( Connection connection = hikariDataSource.getConnection() ) {
 
 			PreparedStatement preparedStatement = connection.prepareStatement( QUERY_COMPUTER_CREATION );
 			preparedStatement = this.setAndReturnPreparedStatementForComputerCreation( computerToCreate, preparedStatement );
@@ -274,7 +273,7 @@ public final class DAOComputer {
 	
 	
 	public void requestComputerEdition ( Computer computerEdited ) {
-		try ( Connection connection = databaseConnection.openAndGetAConnection(); 
+		try ( Connection connection = hikariDataSource.getConnection(); 
 			  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_COMPUTER_EDITION ) ) {
 			
 			preparedStatement.setString( 1, computerEdited.getName() );
@@ -291,7 +290,7 @@ public final class DAOComputer {
 	
 	public void requestComputerDeletion ( long computerId ) throws InvalidComputerIdException {
 		
-		try ( Connection connection = databaseConnection.openAndGetAConnection(); ) {
+		try ( Connection connection = hikariDataSource.getConnection(); ) {
 			
 			this.checkComputerId( computerId, connection );
 			PreparedStatement preparedStatement = connection.prepareStatement( QUERY_COMPUTER_DELETION );
@@ -319,7 +318,7 @@ public final class DAOComputer {
 		
 		long numberOfComputer = -1;
 		
-		try ( Connection connection = databaseConnection.openAndGetAConnection();
+		try ( Connection connection = hikariDataSource.getConnection();
 			  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_GET_NUMBER_OF_COMPUTERS );
 			  ResultSet resultSet = preparedStatement.executeQuery() ) {
 

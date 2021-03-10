@@ -3,8 +3,14 @@ package com.excilys.cdb.views;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.models.Company;
 
+@Component
+@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class ViewCompany {
 	
 	private Scanner scanner = new Scanner(System.in);

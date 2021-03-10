@@ -2,6 +2,10 @@ package com.excilys.cdb.customExceptions;
 
 public class InvalidComputerIdException extends Exception {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final String message;
 	
 	@Override

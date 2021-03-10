@@ -1,38 +1,27 @@
 package com.excilys.cdb.views;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.controller.CliController;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.customExceptions.OutOfRangeUserInputException;
 import com.excilys.cdb.loggers.LoggerManager;
-import com.excilys.cdb.services.Model;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
+@Component
+@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class ViewPrincipal {
 	
-	private Model model;
+	@Autowired
 	private CliController controller;
-	private ViewComputer viewComputer = new ViewComputer();;
-	private ViewCompany viewCompany = new ViewCompany();;
 	private Scanner scanner = new Scanner(System.in);
 	private final int LOWER_BOUND_INPUT = 1;
 	private final int UPPER_BOUND_INPUT = 7;
-	
-	public ViewPrincipal(Model model) {
-		super();
-		this.model = model;
-	}
-
-	public void setController(CliController controller) {
-		this.controller = controller;
-	}
-	public ViewComputer getViewComputer() {
-		return viewComputer;
-	}
-	public ViewCompany getViewCompany() {
-		return viewCompany;
-	}
 
 	
 	public void displayCli() {
@@ -61,16 +50,16 @@ public class ViewPrincipal {
 				loop = controller.action(userInputInteger);
 			}
 			catch (NumberFormatException nbFormatEx) {
-				LoggerManager.logInLogFile(nbFormatEx);
+				LoggerManager.getViewLoggerFile().error(nbFormatEx.getMessage());
 			}
 			catch (OutOfRangeUserInputException outOfRangeUserInputEx) {
-				LoggerManager.logInLogFile(outOfRangeUserInputEx);
+				LoggerManager.getViewLoggerFile().error(outOfRangeUserInputEx.getMessage());
 			}
 			catch (InvalidComputerIdException invCompIdEx) {
-				LoggerManager.logInLogFile(invCompIdEx);
+				LoggerManager.getViewLoggerFile().error(invCompIdEx.getMessage());
 			}
 			catch (InputMismatchException inputMismatchEx) {
-				LoggerManager.logInLogFile(inputMismatchEx);
+				LoggerManager.getViewLoggerFile().error(inputMismatchEx.getMessage());
 			}
 		}
 		

@@ -3,45 +3,38 @@ package com.excilys.cdb.controller.servlets;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.Comparator;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.excilys.cdb.DTOs.DTOComputerAdd;
-import com.excilys.cdb.DTOs.DTOComputerDashboard;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Page;
-import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
-import com.excilys.cdb.services.Model;
 
-
-@WebServlet("/DashboardServlet")
+@Controller
+@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private final Model model = Model.getInstance();
-	private final ComputerService computerService = model.getComputerService();
+	@Autowired
+	private ComputerService computerService;
 	
 	private static final int COMPUTERS_PER_PAGE_DEFAULT_VALUE = 10;
 	private static final int FIRST_PAGE = 1;
 	
 
-   
-    public DashboardServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-    
-    
-	
+    @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Page<Computer> pageComputer = null;
 		String searchInput = request.getParameter("search");
@@ -56,7 +49,7 @@ public class DashboardServlet extends HttpServlet {
 		
 	}
 
-	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String buttonClicked = request.getParameter("orderByButton");
 		
@@ -87,6 +80,25 @@ public class DashboardServlet extends HttpServlet {
 			this.computerService.callListComputerDeletion(listComputerId);
 			doGet(request, response);
 		}
+	}
+	
+	
+
+	/*
+	 *   ##########################
+	 *   ###					###
+	 *   ### 	ServletConfig   ###
+	 *   ###					###
+	 *   ##########################
+	 */
+	
+	@Override
+	public void init( ServletConfig servletConfig ) throws ServletException {
+		SpringBeanAutowiringSupport
+		.processInjectionBasedOnServletContext(
+				this, servletConfig.getServletContext() );
+		
+		super.init( servletConfig );
 	}
 	
 	

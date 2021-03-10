@@ -2,26 +2,31 @@ package com.excilys.cdb.main;
 
 
 import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.Logger;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.excilys.cdb.config.SpringConfig;
 import com.excilys.cdb.views.ViewPrincipal;
-import com.excilys.cdb.controller.CliController;
-import com.excilys.cdb.services.Model;
+
+import ch.qos.logback.classic.Logger;
 
 public class Main {
 	
 	private static final Logger logger 
     = (Logger) LoggerFactory.getLogger(Main.class);
+	
 	public static void main(String[] args) {
-		final Model model = new Model();
-		final ViewPrincipal view = new ViewPrincipal(model);
-		final CliController controller = new CliController(model, view);
 		
-		view.setController(controller);
+		AnnotationConfigApplicationContext context =
+			new AnnotationConfigApplicationContext( SpringConfig.class );
+		
+		final ViewPrincipal viewPrincipal = context.getBean( ViewPrincipal.class );
+		
 		
 	    // logger.info("Example log from {}", Main.class.getSimpleName());
 		
-		view.displayCli();
+		viewPrincipal.displayCli();
+		
+		context.close();
 	}
 
 }

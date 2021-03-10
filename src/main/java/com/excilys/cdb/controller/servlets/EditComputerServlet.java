@@ -3,11 +3,17 @@ package com.excilys.cdb.controller.servlets;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.DTOs.DTOCompany;
 import com.excilys.cdb.DTOs.DTOComputerEdit;
@@ -16,26 +22,23 @@ import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.services.ComputerService;
 import com.excilys.cdb.services.CompanyService;
-import com.excilys.cdb.services.Model;
+import com.excilys.cdb.services.ComputerService;
 
-
-@WebServlet("/EditComputerServlet")
+@Controller
+@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class EditComputerServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
-	private final Model model = Model.getInstance();
-	private final ComputerService computerService = model.getComputerService();
-	private final CompanyService companyService = model.getCompanyService();
 	
-    public EditComputerServlet() {
-        super();
-    }
+	@Autowired
+	private ComputerService computerService;
+	@Autowired
+	private CompanyService companyService;
+	
 
     
-    
-    
+    @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// this will be better handled after VALIDATION BACK 
 		Computer computerToEdit = null;
@@ -65,21 +68,33 @@ public class EditComputerServlet extends HttpServlet {
 
 	
 	
-	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DTOComputerEdit dtoComputerEdit = this.getDTOComputerEditFromRequest(request);
 		Computer computerEdited = ComputerDTOMapper.convertToComputer(dtoComputerEdit);
-		System.out.println("id = " + computerEdited.getId());
-		System.out.println("name = " + computerEdited.getName());
-		System.out.println("introduced = " + computerEdited.getIntroduced());
-		System.out.println("discontinued = " + computerEdited.getDiscontinued());
-		System.out.println("companyId = " + computerEdited.getCompany().getId());
-		System.out.println("companyName = " + computerEdited.getCompany().getName());
 		computerService.callComputerEdition(computerEdited);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/jspViews/editComputer.jsp").forward(request, response);	
 	}
 	
 	
+	
+	
+	/*
+	 *   ##########################
+	 *   ###					###
+	 *   ### 	ServletConfig   ###
+	 *   ###					###
+	 *   ##########################
+	 */
+	
+	@Override
+	public void init( ServletConfig servletConfig ) throws ServletException {
+		SpringBeanAutowiringSupport
+		.processInjectionBasedOnServletContext(
+				this, servletConfig.getServletContext() );
+		
+		super.init( servletConfig );
+	}
 	
 	
 	

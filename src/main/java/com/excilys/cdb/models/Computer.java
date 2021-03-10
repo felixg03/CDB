@@ -2,8 +2,6 @@ package com.excilys.cdb.models;
 
 import java.time.LocalDate;
 
-import com.excilys.cdb.models.Company.CompanyBuilder;
-
 public class Computer {
 	
 	

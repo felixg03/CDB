@@ -5,15 +5,15 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.models.Computer;
 
 
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * !!!!						!!!!
- * !!!!    VIEW BROKEN		!!!!
- * !!!!						!!!!
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- */
+@Component
+@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class ViewComputer {
 	
 	private Scanner scanner = new Scanner(System.in);

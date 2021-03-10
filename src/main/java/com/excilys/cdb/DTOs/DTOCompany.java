@@ -1,7 +1,5 @@
 package com.excilys.cdb.DTOs;
 
-import java.time.LocalDate;
-
 public class DTOCompany {
 	public String id;
 	public String name;

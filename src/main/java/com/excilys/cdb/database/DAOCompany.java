@@ -7,15 +7,21 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.cdb.models.Company;
-import com.excilys.cdb.models.Company.CompanyBuilder;;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
 
-// Follows singleton pattern
+import com.excilys.cdb.models.Company;
+import com.excilys.cdb.models.Company.CompanyBuilder;
+import com.zaxxer.hikari.HikariDataSource;;
+
+@Repository
+@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public final class DAOCompany {
 	
-	// GENERAL ATTRIBUTES
-	private static DAOCompany instance;
-	private DBConnection databaseConnection = DBConnection.getInstance(); 
+	@Autowired
+	private HikariDataSource hikariDataSource;
 	
 	// STRING QUERIES
 	private static final String QUERY_LIST_10_COMPANIES = 
@@ -29,13 +35,6 @@ public final class DAOCompany {
 	"DELETE FROM company WHERE id = ?";
 	
 	
-	// GETTERS AND SETTERS
- 	public static DAOCompany getInstance() {
-		if (instance == null) {
-			instance = new DAOCompany();
-		}
-		return instance;
-	}
 	
 	
 	// METHODS
@@ -43,7 +42,7 @@ public final class DAOCompany {
 		
 		List<Company> listCompanies = new ArrayList<Company>();
 		
-		try (Connection connection = databaseConnection.openAndGetAConnection();
+		try (Connection connection = hikariDataSource.getConnection();
 			 PreparedStatement preparedStatement = connection.prepareStatement( QUERY_LIST_10_COMPANIES ) ) {
 			
 			preparedStatement.setInt( 1, offset );
@@ -66,7 +65,7 @@ public final class DAOCompany {
 		
 		List<Company> listCompanies = new ArrayList<>();
 		
-		try ( Connection connection = databaseConnection.openAndGetAConnection(); 
+		try ( Connection connection = hikariDataSource.getConnection(); 
 			  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_LIST_COMPANIES ) ) {
 			
 			try ( ResultSet resultSet = preparedStatement.executeQuery() ) {
@@ -90,11 +89,11 @@ public final class DAOCompany {
 		
 		try {
 			
-			connection = databaseConnection.openAndGetAConnection();
+			connection = hikariDataSource.getConnection();
 			
 			deleteComputersOfACompany = connection.prepareStatement( QUERY_DELETE_COMPUTERS_OF_A_COMPANY );
 			deleteCompany = connection.prepareStatement( QUERY_DELETE_COMPANY );
-			connection.setAutoCommit(false);
+			connection.setAutoCommit( false );
 			
 			deleteComputersOfACompany.setLong( 1, companyId );
 			deleteComputersOfACompany.executeUpdate();

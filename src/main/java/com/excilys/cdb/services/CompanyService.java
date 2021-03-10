@@ -1,26 +1,23 @@
 package com.excilys.cdb.services;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.cdb.DTOs.DTOCompany;
 import com.excilys.cdb.database.DAOCompany;
 import com.excilys.cdb.models.Company;
 
-// Singleton pattern
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+
+
+@Service
+@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public final class CompanyService {
 	
-	private static CompanyService instance;
-	private DAOCompany daoCompany = DAOCompany.getInstance();
-	
-	public static CompanyService getInstance() {
-		if (instance == null) {
-			instance = new CompanyService();
-		}
-		return instance;
-	}
+	@Autowired
+	private DAOCompany daoCompany;
 	
 	public List<Company> getListCompanies(int offset) {
 		return daoCompany.requestListCompanies(offset);

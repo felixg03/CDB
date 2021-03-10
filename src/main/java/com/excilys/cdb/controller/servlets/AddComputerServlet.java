@@ -3,11 +3,17 @@ package com.excilys.cdb.controller.servlets;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.DTOs.DTOCompany;
 import com.excilys.cdb.DTOs.DTOComputerAdd;
@@ -19,22 +25,22 @@ import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
-import com.excilys.cdb.services.Model;
 
-@WebServlet("/AddComputerServlet")
+
+
+@Controller
+@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-     
-	private final Model model = Model.getInstance();
-	private final CompanyService companyService = model.getCompanyService();
-	private final ComputerService computerService = model.getComputerService();
+   
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private ComputerService computerService;
 
-    public AddComputerServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+    
 
-
+    @Override
 	protected void doGet(HttpServletRequest request
 					   , HttpServletResponse response) 
 							   throws ServletException, IOException {
@@ -42,7 +48,7 @@ public class AddComputerServlet extends HttpServlet {
 		handleRequest(request, response);
 	}
 
-	
+	@Override
 	protected void doPost(HttpServletRequest request
 			 			, HttpServletResponse response) 
 			 					throws ServletException, IOException {
@@ -68,12 +74,29 @@ public class AddComputerServlet extends HttpServlet {
 	}
 	
 	
+	/*
+	 *   ##########################
+	 *   ###					###
+	 *   ### 	ServletConfig   ###
+	 *   ###					###
+	 *   ##########################
+	 */
+	
+	@Override
+	public void init( ServletConfig servletConfig ) throws ServletException {
+		SpringBeanAutowiringSupport
+		.processInjectionBasedOnServletContext(
+				this, servletConfig.getServletContext() );
+		
+		super.init( servletConfig );
+	}
 	
 	
 	
 	
-	private void handleRequest(HttpServletRequest request
-							 , HttpServletResponse response) 
+	
+	private void handleRequest( HttpServletRequest request
+							  , HttpServletResponse response ) 
 									 throws ServletException, IOException {
 		
 		List<Company> listCompany = this
@@ -83,13 +106,13 @@ public class AddComputerServlet extends HttpServlet {
 										 .convertListCompanyToListDTOCompany(
 												 listCompany
 										 );
-		request.setAttribute("listDTOCompany", listDTOCompany);
+		request.setAttribute( "listDTOCompany", listDTOCompany );
 		
 		this.getServletContext()
 		    .getRequestDispatcher(
 		    		"/WEB-INF/jspViews/addComputer.jsp"
 		    )
-		    .forward(request, response);
+		    .forward( request, response );
 	}
 	
 	

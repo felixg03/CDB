@@ -2,27 +2,31 @@ package com.excilys.cdb.controller;
 
 import java.util.InputMismatchException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.services.Model;
+import com.excilys.cdb.services.CompanyService;
+import com.excilys.cdb.services.ComputerService;
 import com.excilys.cdb.views.ViewCompany;
 import com.excilys.cdb.views.ViewComputer;
-import com.excilys.cdb.views.ViewPrincipal;
 
+@Controller
+@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class CliController {
 	
-	private Model model;
-	private ViewPrincipal viewPrincipal;
+	@Autowired
 	private ViewComputer viewComputer;
+	@Autowired
 	private ViewCompany viewCompany;
 	
-	public CliController(Model model, ViewPrincipal viewPrincipal) {
-		super();
-		this.model = model;
-		this.viewPrincipal = viewPrincipal;
-		this.viewComputer = this.viewPrincipal.getViewComputer();
-		this.viewCompany = this.viewPrincipal.getViewCompany();
-	}
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private ComputerService computerService;
 	
 	public boolean action(int input) throws NumberFormatException
 										  , InvalidComputerIdException
@@ -35,8 +39,7 @@ public class CliController {
 		case 1: do {
 					next = viewComputer
 						  .displayListComputers(
-								  model
-								  .getComputerService()
+								   computerService
 								  .getListComputers(offset)
 					);
 					
@@ -52,8 +55,7 @@ public class CliController {
 		case 2: do {
 					next = viewCompany
 						  .displayListCompanies(
-								model
-							    .getCompanyService()
+								 companyService
 								.getListCompanies(offset)
 						   );
 					
@@ -71,8 +73,7 @@ public class CliController {
 					
 					viewComputer						// throws InvalidComputerIdException
 					.displayOneComputerDetails(
-							model
-							.getComputerService()
+							 computerService
 							.getOneComputer(computerIdToShowDetails)
 					);
 				}
@@ -92,7 +93,7 @@ public class CliController {
 		case 4: try {
 					Computer computerToCreate = viewComputer
 							   .getComputerToCreate();
-					model.getComputerService()
+					 computerService
 					.callComputerCreation(computerToCreate);
 					
 					viewComputer.displayResultComputerCreation();
@@ -132,7 +133,7 @@ public class CliController {
 		case 6: long computerIdToDelete = viewComputer
 										 .getComputerId( input );
 				
-				model.getComputerService()
+				computerService
 					 .getResultComputerDeletion( computerIdToDelete );
 				
 				viewComputer.displayResultComputerDeletion();
@@ -141,7 +142,7 @@ public class CliController {
 		
 			
 		// DELETE COMPANY
-		case 7: model.getCompanyService().callCompanyDeletion( viewCompany.getCompanyId() );
+		case 7: companyService.callCompanyDeletion( viewCompany.getCompanyId() );
 				break;
 			
 		// EXIT APPLICATION
