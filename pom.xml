@@ -27,7 +27,7 @@
         <h2.version>1.4.200</h2.version>
         <httpunit.version>1.7.3</httpunit.version>
         <HikariCP.version>3.4.5</HikariCP.version>
-        <spring.version>4.3.11.RELEASE</spring.version>
+        <spring.version>5.3.4</spring.version>
         
       </properties>
      

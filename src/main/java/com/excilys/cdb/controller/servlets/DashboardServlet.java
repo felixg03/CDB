@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
@@ -22,7 +22,7 @@ import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Page;
 import com.excilys.cdb.services.ComputerService;
 
-@Controller
+@Component
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -34,7 +34,9 @@ public class DashboardServlet extends HttpServlet {
 	private static final int FIRST_PAGE = 1;
 	
 
-    @Override
+	
+	
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Page<Computer> pageComputer = null;
 		String searchInput = request.getParameter("search");

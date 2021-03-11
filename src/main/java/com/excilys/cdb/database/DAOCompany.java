@@ -12,6 +12,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
+import com.excilys.cdb.loggers.LoggerManager;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Company.CompanyBuilder;
 import com.zaxxer.hikari.HikariDataSource;;
@@ -20,19 +21,31 @@ import com.zaxxer.hikari.HikariDataSource;;
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public final class DAOCompany {
 	
-	@Autowired
 	private HikariDataSource hikariDataSource;
 	
+	
+	
+	@Autowired
+	public DAOCompany(HikariDataSource hikariDataSource) {
+		super();
+		this.hikariDataSource = hikariDataSource;
+	}
+
+
 	// STRING QUERIES
 	private static final String QUERY_LIST_10_COMPANIES = 
     "SELECT id, name FROM company ORDER BY id LIMIT 10 OFFSET ?"; 
 	private static final String QUERY_LIST_COMPANIES =
 	"SELECT id, name FROM company ORDER BY id";
+	private static final String QUERY_GET_COMPANY_ID =
+	"SELECT id FROM company WHERE id = ?";
 	
 	private static final String QUERY_DELETE_COMPUTERS_OF_A_COMPANY =
 	"DELETE FROM computer WHERE company_id = ?";
 	private static final String QUERY_DELETE_COMPANY =
 	"DELETE FROM company WHERE id = ?";
+	
+	
 	
 	
 	
@@ -123,6 +136,26 @@ public final class DAOCompany {
 				sqlEx.printStackTrace();
 			}
 		}
+	}
+	
+	public boolean requestCheckCompanyId( long companyId ) {
+		boolean companyIdIsPresent = false;
+		try ( Connection connection = hikariDataSource.getConnection();
+			  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_GET_COMPANY_ID ) ) {
+			
+			preparedStatement.setLong( 1, companyId );
+			ResultSet resultSet = preparedStatement.executeQuery(); 
+			LoggerManager.getViewLoggerConsole().debug( this.getClass().getSimpleName() + " - requestCheckCompanyId(" + companyId + ") -->" + "resultSet.getLong(1) = " + resultSet.getLong(1) );
+			
+			if ( resultSet.next() && resultSet.getLong(1) == companyId ) {
+				companyIdIsPresent = true;
+			}
+		}
+		catch (SQLException sqlEx) {
+			sqlEx.printStackTrace();
+		}
+		
+		return companyIdIsPresent;
 	}
 	
 	

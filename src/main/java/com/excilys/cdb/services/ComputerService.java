@@ -18,8 +18,15 @@ import com.excilys.cdb.models.Page;
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class ComputerService {
 	
-	@Autowired
 	private DAOComputer daoComputer;
+	
+	@Autowired
+	public ComputerService(DAOComputer daoComputer) {
+		super();
+		this.daoComputer = daoComputer;
+	}
+
+	
 	
 	
 	// For old CLIView

@@ -1,17 +1,17 @@
 package com.excilys.cdb.DTOs.mappers;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.excilys.cdb.DTOs.DTOComputerAdd;
 import com.excilys.cdb.DTOs.DTOComputerDashboard;
 import com.excilys.cdb.DTOs.DTOComputerEdit;
 import com.excilys.cdb.models.Company;
-import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Company.CompanyBuilder;
+import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Computer.ComputerBuilder;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ComputerDTOMapper {
 	
@@ -46,20 +46,35 @@ public class ComputerDTOMapper {
 	}
 	
 	public static Computer convertToComputer(DTOComputerAdd dtoComputerAddEdit) {
+		
+		Computer computer;
+		
 		String name = dtoComputerAddEdit.name;
 		LocalDate introduced = parseStringToLocalDate( dtoComputerAddEdit
 													  .introduced );
 		LocalDate discontinued = parseStringToLocalDate( dtoComputerAddEdit
 				 									    .discontinued );
-		long companyId = parseStringToLong( dtoComputerAddEdit.companyId );
-		Company company = new CompanyBuilder().setId( companyId )
-											  .build();
+		String companyIdString = dtoComputerAddEdit.companyId;
 		
-		return new ComputerBuilder().setName( name )
-									.setIntroduced( introduced )
-									.setDiscontinued( discontinued )
-									.setCompany( company )
-									.build();
+		
+		if (companyIdString != null) {
+			
+			Company company = new CompanyBuilder().setId( Long.valueOf( companyIdString ) )
+					  							  .build();
+			computer =  new ComputerBuilder().setName( name )
+											 .setIntroduced( introduced )
+											 .setDiscontinued( discontinued )
+											 .setCompany( company )
+											 .build();
+		}
+		else {
+			computer = new ComputerBuilder().setName( name )
+											.setIntroduced( introduced )
+											.setDiscontinued( discontinued )
+											.build();
+		}
+		
+		return computer;
 	}
 	
 	public static List<DTOComputerAdd> convertToListDTOComputerAdd( List<Computer> listComputer ) {
@@ -294,15 +309,6 @@ public class ComputerDTOMapper {
 		}
 		else {
 			return localDate.toString();
-		}
-	}
-	
-	private static long parseStringToLong(String StringOfALong) {
-		if (StringOfALong == "" || StringOfALong == null) {
-			return 0;
-		}
-		else {
-			return Long.valueOf(StringOfALong);
 		}
 	}
 }

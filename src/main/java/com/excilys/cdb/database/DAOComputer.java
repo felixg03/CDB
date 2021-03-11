@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import com.excilys.cdb.loggers.LoggerManager;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Company.CompanyBuilder;
 import com.excilys.cdb.models.Computer;
@@ -28,9 +29,19 @@ import com.zaxxer.hikari.HikariDataSource;
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public final class DAOComputer {
 	
-	@Autowired
+
 	private HikariDataSource hikariDataSource;
 	
+	
+	
+	@Autowired
+	public DAOComputer(HikariDataSource hikariDataSource) {
+		super();
+		this.hikariDataSource = hikariDataSource;
+	}
+	
+	
+
 	// STRING QUERIES
 	private final static String QUERY_LIST_10_COMPUTERS = 
 	"SELECT id, name, introduced, discontinued, company_id FROM computer ORDER BY id LIMIT 10 OFFSET ?";
@@ -143,7 +154,7 @@ public final class DAOComputer {
 		
 		if ( page != null ) {	
 			try ( Connection connection = hikariDataSource.getConnection();
-				 PreparedStatement preparedStatement = connection.prepareStatement(QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPUTER_NAME) ) {
+				 PreparedStatement preparedStatement = connection.prepareStatement( QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPUTER_NAME ) ) {
 
 				preparedStatement.setInt( 1, page.getSize() );
 				preparedStatement.setInt( 2, ( page.getNumber() - 1 ) * page.getSize() );
@@ -407,6 +418,7 @@ public final class DAOComputer {
 	}
 	
 	private PreparedStatement setAndReturnPreparedStatementForComputerCreation(Computer computer, PreparedStatement preparedStatement) throws SQLException {
+		LoggerManager.getViewLoggerConsole().debug( "computerAdded: " + computer.toString() );
 		preparedStatement = this.setPreparedStatementParameter(computer.getName()
 															 , Types.VARCHAR
 															 , 1
@@ -420,7 +432,8 @@ public final class DAOComputer {
 															 , 3
 															 , preparedStatement);
 		
-		preparedStatement.setLong(4, computer.getCompany().getId());
+		preparedStatement = this.setCompanyIdInPreparedStatement(computer.getCompany()
+															   , preparedStatement);
 		
 		return preparedStatement;
 	}
@@ -433,17 +446,39 @@ public final class DAOComputer {
 														   , PreparedStatement preparedStatement)  
 																   throws SQLException {
 		if (parameter == null) {
+			LoggerManager.getViewLoggerConsole().debug( "Setting preparedStatement parameter: " + parameter );
 			preparedStatement.setNull(position, objectType);
 		}
 		else {
 			if (objectType == Types.VARCHAR) {
+				LoggerManager.getViewLoggerConsole().debug( "Setting preparedStatement parameter: " + parameter );
 				preparedStatement.setString(position, (String) parameter);
 			}
 			else if (objectType == Types.DATE) {
+				LoggerManager.getViewLoggerConsole().debug( "Setting preparedStatement parameter: " + parameter );
 				preparedStatement.setDate(position, Date.valueOf((LocalDate) parameter));
+			}
+			else if (objectType == Types.BIGINT) {
+				preparedStatement.setLong(position, (Long) parameter);
 			}
 		}
 		
+		return preparedStatement;
+	}
+	
+	private PreparedStatement setCompanyIdInPreparedStatement(Company company, PreparedStatement preparedStatement) throws SQLException {
+		if ( company == null ) {
+			preparedStatement = this.setPreparedStatementParameter(null
+																 , Types.BIGINT
+																 , 4
+																 , preparedStatement);
+		}
+		else {
+			preparedStatement = this.setPreparedStatementParameter(company.getId()
+																 , Types.BIGINT
+																 , 4
+																 , preparedStatement);
+		}
 		return preparedStatement;
 	}
 	

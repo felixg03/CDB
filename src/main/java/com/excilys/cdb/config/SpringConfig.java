@@ -29,7 +29,9 @@ public class SpringConfig extends AbstractContextLoaderInitializer {
 	}
 	
 	@Bean
-	public HikariDataSource hikariDataSource() {
+	public HikariDataSource getHikariDataSource() {
 		return new HikariDataSource( new HikariConfig( "/hikariConfig.properties" ) );
 	}
+	
+	
 }

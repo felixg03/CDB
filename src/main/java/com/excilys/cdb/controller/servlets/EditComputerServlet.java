@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.DTOs.DTOCompany;
@@ -25,7 +25,7 @@ import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
 
-@Controller
+@Component
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class EditComputerServlet extends HttpServlet {
 	
@@ -36,9 +36,9 @@ public class EditComputerServlet extends HttpServlet {
 	@Autowired
 	private CompanyService companyService;
 	
+	
 
-    
-    @Override
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// this will be better handled after VALIDATION BACK 
 		Computer computerToEdit = null;

@@ -17,13 +17,22 @@ import com.excilys.cdb.loggers.LoggerManager;
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class ViewPrincipal {
 	
-	@Autowired
 	private CliController controller;
 	private Scanner scanner = new Scanner(System.in);
 	private final int LOWER_BOUND_INPUT = 1;
 	private final int UPPER_BOUND_INPUT = 7;
 
 	
+	
+	@Autowired
+	public ViewPrincipal(CliController controller) {
+		super();
+		this.controller = controller;
+	}
+
+
+
+
 	public void displayCli() {
 		System.out.println("Hi");
 		boolean loop = true;

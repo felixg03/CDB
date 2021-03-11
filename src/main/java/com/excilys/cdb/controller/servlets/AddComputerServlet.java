@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.DTOs.DTOCompany;
@@ -26,114 +26,80 @@ import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
 
-
-
-@Controller
+@Component
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-   
+
 	@Autowired
 	private CompanyService companyService;
 	@Autowired
 	private ComputerService computerService;
+	@Autowired
+	private AddComputerValidator addComputerValidator;
+	
 
-    
 
-    @Override
-	protected void doGet(HttpServletRequest request
-					   , HttpServletResponse response) 
-							   throws ServletException, IOException {
-		
+
+	@Override
+	public void init(ServletConfig servletConfig) throws ServletException {
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, servletConfig.getServletContext());
+
+		super.init(servletConfig);
+	}
+
+	
+	
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		handleRequest(request, response);
 	}
 
+	
+	
 	@Override
-	protected void doPost(HttpServletRequest request
-			 			, HttpServletResponse response) 
-			 					throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		try {
-		DTOComputerAdd dtoComputer = getDTOComputerAdd(request);
-		
-		AddComputerValidator addComputerValidator = new AddComputerValidator();
-		addComputerValidator.validate(dtoComputer);
-		
-		Computer computerToAdd = ComputerDTOMapper
-									  .convertToComputer(
-											  dtoComputer);
-		
-		computerService.callComputerCreation(computerToAdd);
-		}
-		catch (InvalidUserInputException invalidUserInputEx) {
-			request.setAttribute("inputException"
-								, invalidUserInputEx
-								 .getMessage()
-					);
+			DTOComputerAdd dtoComputer = getDTOComputerAdd(request);
+			this.addComputerValidator.validate(dtoComputer);
+
+			Computer computerToAdd = ComputerDTOMapper.convertToComputer(dtoComputer);
+
+			computerService.callComputerCreation(computerToAdd);
+		} catch (InvalidUserInputException invalidUserInputEx) {
+			request.setAttribute("inputException", invalidUserInputEx.getMessage());
 		}
 		handleRequest(request, response);
 	}
+
 	
-	
-	/*
-	 *   ##########################
-	 *   ###					###
-	 *   ### 	ServletConfig   ###
-	 *   ###					###
-	 *   ##########################
-	 */
-	
-	@Override
-	public void init( ServletConfig servletConfig ) throws ServletException {
-		SpringBeanAutowiringSupport
-		.processInjectionBasedOnServletContext(
-				this, servletConfig.getServletContext() );
-		
-		super.init( servletConfig );
+
+	private void handleRequest(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		List<Company> listCompany = this.companyService.getListCompanies();
+		List<DTOCompany> listDTOCompany = CompanyDTOMapper.convertListCompanyToListDTOCompany(listCompany);
+		request.setAttribute("listDTOCompany", listDTOCompany);
+
+		this.getServletContext().getRequestDispatcher("/WEB-INF/jspViews/addComputer.jsp").forward(request, response);
 	}
-	
-	
-	
-	
-	
-	private void handleRequest( HttpServletRequest request
-							  , HttpServletResponse response ) 
-									 throws ServletException, IOException {
-		
-		List<Company> listCompany = this
-				  				   .companyService
-				  				   .getListCompanies();
-		List<DTOCompany> listDTOCompany = CompanyDTOMapper
-										 .convertListCompanyToListDTOCompany(
-												 listCompany
-										 );
-		request.setAttribute( "listDTOCompany", listDTOCompany );
-		
-		this.getServletContext()
-		    .getRequestDispatcher(
-		    		"/WEB-INF/jspViews/addComputer.jsp"
-		    )
-		    .forward( request, response );
-	}
-	
-	
-	
-	
-	
-	
-	
+
 	private DTOComputerAdd getDTOComputerAdd(HttpServletRequest request) {
 		String name = request.getParameter("computerName");
 		String introducedString = request.getParameter("introduced");
 		String discontinuedString = request.getParameter("discontinued");
 		String companyIdString = request.getParameter("companyId");
-		
+
 		DTOComputerAdd dtoComputerAdd = new DTOComputerAdd();
-		
+
 		dtoComputerAdd.name = name;
 		dtoComputerAdd.introduced = introducedString;
 		dtoComputerAdd.discontinued = discontinuedString;
 		dtoComputerAdd.companyId = companyIdString;
-		
+
 		return dtoComputerAdd;
 	}
 
