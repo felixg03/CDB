@@ -13,8 +13,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.excilys.cdb.DAOs.rowMappers.ComputerRowMapper;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.loggers.LoggerManager;
 import com.excilys.cdb.models.Company;
@@ -24,7 +26,6 @@ import com.excilys.cdb.models.Computer.ComputerBuilder;
 import com.excilys.cdb.models.Page;
 import com.zaxxer.hikari.HikariDataSource;
 
-import ch.qos.logback.classic.Logger;
 
 
 @Repository
@@ -117,11 +118,10 @@ public final class DAOComputer {
 		
 		List<Computer> listComputers = new ArrayList<Computer>();
 		
-		try (Connection connection = hikariDataSource.getConnection();
-			 PreparedStatement preparedStatement = connection.prepareStatement(QUERY_LIST_COMPUTERS);
-			 ResultSet resultSet = preparedStatement.executeQuery()) {
+		try ( Connection connection = hikariDataSource.getConnection() ) {
 			
-			listComputers = this.getListComputerFromResultSet(resultSet);
+			JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
+			listComputers = jdbcTemplate.query( QUERY_LIST_COMPUTERS, new ComputerRowMapper() );
 		} 
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
@@ -135,15 +135,14 @@ public final class DAOComputer {
 	public Page<Computer> requestPageComputer( Page<Computer> page ) {
 		
 		if ( page != null ) {	
-			try ( Connection connection = hikariDataSource.getConnection();
-				  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_PAGE_COMPUTERS ) ) {
-
-				preparedStatement.setInt( 1, page.getSize() );
-				preparedStatement.setInt( 2, ( page.getNumber() - 1 ) * page.getSize() );
-				
-				try ( ResultSet resultSet = preparedStatement.executeQuery() ) {
-					page.setContent( getListComputerFromResultSet( resultSet ) );
-				}
+			try ( Connection connection = hikariDataSource.getConnection() ) {
+				JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
+				page.setContent( jdbcTemplate.query( QUERY_PAGE_COMPUTERS
+												   , new ComputerRowMapper()
+												   , page.getSize()
+												   , (page.getNumber() - 1) * page.getSize() 
+											  	   ) 
+							   );
 			}
 			catch ( SQLException sqlException ) {
 				sqlException.printStackTrace();

@@ -80,7 +80,7 @@ public final class DAOCompany {
 		
 		List<Company> listCompanies = new ArrayList<>();
 		
-		try ( Connection connection = hikariDataSource.getConnection()) {
+		try ( Connection connection = hikariDataSource.getConnection() ) {
 			
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(hikariDataSource);
 			listCompanies = jdbcTemplate.query( QUERY_LIST_COMPANIES, new CompanyRowMapper() );
