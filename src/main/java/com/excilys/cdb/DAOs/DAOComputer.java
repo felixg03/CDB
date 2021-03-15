@@ -1,4 +1,4 @@
-package com.excilys.cdb.database;
+package com.excilys.cdb.DAOs;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -23,6 +23,8 @@ import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Computer.ComputerBuilder;
 import com.excilys.cdb.models.Page;
 import com.zaxxer.hikari.HikariDataSource;
+
+import ch.qos.logback.classic.Logger;
 
 
 @Repository
@@ -284,14 +286,13 @@ public final class DAOComputer {
 	
 	
 	public void requestComputerEdition ( Computer computerEdited ) {
-		try ( Connection connection = hikariDataSource.getConnection(); 
-			  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_COMPUTER_EDITION ) ) {
+		try ( Connection connection = hikariDataSource.getConnection()) {
 			
-			preparedStatement.setString( 1, computerEdited.getName() );
-			preparedStatement.setDate( 2, this.castToDate( computerEdited.getIntroduced() ) );
-			preparedStatement.setDate( 3, this.castToDate( computerEdited.getDiscontinued() ) );
-			preparedStatement.setLong( 4, computerEdited.getCompany().getId() );
+			PreparedStatement preparedStatement = connection.prepareStatement( QUERY_COMPUTER_EDITION );
+			
+			preparedStatement = this.setAndReturnPreparedStatementForComputerCreation( computerEdited, preparedStatement );
 			preparedStatement.setLong( 5, computerEdited.getId() );
+			LoggerManager.getViewLoggerConsole().debug( "DAOComputer --> requestComputerEdition() --> preparedStatement = " + preparedStatement );
 			preparedStatement.executeUpdate();
 		}
 		catch (SQLException sqlEx) {
@@ -408,17 +409,7 @@ public final class DAOComputer {
 		}
 	}
 	
-	private Date castToDate(LocalDate localDate) {
-		if (localDate != null) {
-			return Date.valueOf(localDate);
-		}
-		else {
-			return null;
-		}
-	}
-	
 	private PreparedStatement setAndReturnPreparedStatementForComputerCreation(Computer computer, PreparedStatement preparedStatement) throws SQLException {
-		LoggerManager.getViewLoggerConsole().debug( "computerAdded: " + computer.toString() );
 		preparedStatement = this.setPreparedStatementParameter(computer.getName()
 															 , Types.VARCHAR
 															 , 1
@@ -433,6 +424,7 @@ public final class DAOComputer {
 															 , preparedStatement);
 		
 		preparedStatement = this.setCompanyIdInPreparedStatement(computer.getCompany()
+															   , 4
 															   , preparedStatement);
 		
 		return preparedStatement;
@@ -446,16 +438,13 @@ public final class DAOComputer {
 														   , PreparedStatement preparedStatement)  
 																   throws SQLException {
 		if (parameter == null) {
-			LoggerManager.getViewLoggerConsole().debug( "Setting preparedStatement parameter: " + parameter );
 			preparedStatement.setNull(position, objectType);
 		}
 		else {
 			if (objectType == Types.VARCHAR) {
-				LoggerManager.getViewLoggerConsole().debug( "Setting preparedStatement parameter: " + parameter );
 				preparedStatement.setString(position, (String) parameter);
 			}
 			else if (objectType == Types.DATE) {
-				LoggerManager.getViewLoggerConsole().debug( "Setting preparedStatement parameter: " + parameter );
 				preparedStatement.setDate(position, Date.valueOf((LocalDate) parameter));
 			}
 			else if (objectType == Types.BIGINT) {
@@ -466,17 +455,17 @@ public final class DAOComputer {
 		return preparedStatement;
 	}
 	
-	private PreparedStatement setCompanyIdInPreparedStatement(Company company, PreparedStatement preparedStatement) throws SQLException {
+	private PreparedStatement setCompanyIdInPreparedStatement(Company company, int position, PreparedStatement preparedStatement) throws SQLException {
 		if ( company == null ) {
 			preparedStatement = this.setPreparedStatementParameter(null
 																 , Types.BIGINT
-																 , 4
+																 , position
 																 , preparedStatement);
 		}
 		else {
 			preparedStatement = this.setPreparedStatementParameter(company.getId()
 																 , Types.BIGINT
-																 , 4
+																 , position
 																 , preparedStatement);
 		}
 		return preparedStatement;

@@ -16,14 +16,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.DTOs.DTOCompany;
+import com.excilys.cdb.DTOs.DTOComputerAdd;
 import com.excilys.cdb.DTOs.DTOComputerEdit;
 import com.excilys.cdb.DTOs.mappers.CompanyDTOMapper;
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
+import com.excilys.cdb.controller.servlets.validators.AddOrEditComputerValidator;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import com.excilys.cdb.customExceptions.InvalidUserInputException;
+import com.excilys.cdb.loggers.LoggerManager;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
+import com.mysql.cj.log.Log;
 
 @Component
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
@@ -35,6 +40,8 @@ public class EditComputerServlet extends HttpServlet {
 	private ComputerService computerService;
 	@Autowired
 	private CompanyService companyService;
+	@Autowired
+	private AddOrEditComputerValidator addOrEditComputerValidator;
 	
 	
 
@@ -45,14 +52,15 @@ public class EditComputerServlet extends HttpServlet {
 		try {
 			 computerToEdit= this.computerService.getOneComputer(
 					 					this.parseToLong(request.getParameter("id")));
+			 LoggerManager.getViewLoggerConsole().debug( "EditComputerServlet --> doGet() --> computerToEdit.getId() = " + computerToEdit.getId() );
 		}
 		catch(InvalidComputerIdException invalidComputerIdEx) {
 			invalidComputerIdEx.printStackTrace();
 		}
-		DTOComputerEdit dtoComputerEdit = ComputerDTOMapper.convertToDTOComputerEdit(computerToEdit);
+		DTOComputerEdit dtoComputerEdit = ComputerDTOMapper.convertToDTOComputerEdit( computerToEdit );
 				
-
-				
+		LoggerManager.getViewLoggerConsole().debug( "EditComputerServlet --> doGet() --> dtoComputerEdit.id = " + dtoComputerEdit.id );
+		
 		List<Company> listCompany = this.companyService
 										.getListCompanies();
 		List<DTOCompany> listDTOCompany = CompanyDTOMapper
@@ -70,10 +78,18 @@ public class EditComputerServlet extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		DTOComputerEdit dtoComputerEdit = this.getDTOComputerEditFromRequest(request);
-		Computer computerEdited = ComputerDTOMapper.convertToComputer(dtoComputerEdit);
-		computerService.callComputerEdition(computerEdited);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/jspViews/editComputer.jsp").forward(request, response);	
+		try {
+			DTOComputerEdit dtoComputerEdit = this.getDTOComputerEditFromRequest(request);
+			this.addOrEditComputerValidator.validate(dtoComputerEdit);
+			Computer computerEdited = ComputerDTOMapper.convertToComputer( dtoComputerEdit );
+			
+			LoggerManager.getViewLoggerConsole().debug( "EditCompuerServlet --> doPost()--> computerEdited = " + computerEdited.toString() );
+			computerService.callComputerEdition(computerEdited);
+			this.getServletContext().getRequestDispatcher("/WEB-INF/jspViews/editComputer.jsp").forward(request, response);	
+		} 
+		catch ( InvalidUserInputException invalidUserInputEx ) {
+			request.setAttribute("inputException", invalidUserInputEx.getMessage());
+		}
 	}
 	
 	
@@ -115,21 +131,14 @@ public class EditComputerServlet extends HttpServlet {
 	}
 	
 	private DTOComputerEdit getDTOComputerEditFromRequest(HttpServletRequest request) {
-		String id = request.getParameter("id");
-		String name = request.getParameter("computerName");
-		String introduced = request.getParameter("introduced");
-		String discontinued = request.getParameter("discontinued");
-		String companyId = request.getParameter("companyId");
-		String companyName = request.getParameter("companyName");
-		
 		DTOComputerEdit dtoComputerEdit = new DTOComputerEdit();
 		
-		dtoComputerEdit.id = id;
-		dtoComputerEdit.name = name;
-		dtoComputerEdit.introduced = introduced;
-		dtoComputerEdit.discontinued = discontinued;
-		dtoComputerEdit.companyId = companyId;
-		dtoComputerEdit.companyName = companyName;
+		dtoComputerEdit.id = request.getParameter("id");
+		dtoComputerEdit.name = request.getParameter("computerName");
+		dtoComputerEdit.introduced = request.getParameter("introduced");
+		dtoComputerEdit.discontinued = request.getParameter("discontinued");
+		dtoComputerEdit.companyId = request.getParameter("companyId");
+		dtoComputerEdit.companyName = request.getParameter("companyName");
 		
 		return dtoComputerEdit;
 	}

@@ -50,7 +50,7 @@
                                     	<option value="${ dtoCompany.id }"><c:out value=" ${ dtoCompany.name }" /></option>
                                     </c:forEach>
                                     
-                                    <option value="0">--</option>
+                                    <option value="">--</option>
                                     
                                 </select>
                             </div>            
@@ -65,5 +65,7 @@
             </div>
         </div>
     </section>
+    
+    <c:out value="${ inputException }" />
 </body>
 </html>

@@ -45,16 +45,16 @@ public class ComputerDTOMapper {
 		return dtoComputerAdd;
 	}
 	
-	public static Computer convertToComputer(DTOComputerAdd dtoComputerAddEdit) {
+	public static Computer convertToComputer(DTOComputerAdd dtoComputerAdd) {
 		
-		Computer computer;
+		Computer computer = null;
 		
-		String name = dtoComputerAddEdit.name;
-		LocalDate introduced = parseStringToLocalDate( dtoComputerAddEdit
+		String name = dtoComputerAdd.name;
+		LocalDate introduced = parseStringToLocalDate( dtoComputerAdd
 													  .introduced );
-		LocalDate discontinued = parseStringToLocalDate( dtoComputerAddEdit
+		LocalDate discontinued = parseStringToLocalDate( dtoComputerAdd
 				 									    .discontinued );
-		String companyIdString = dtoComputerAddEdit.companyId;
+		String companyIdString = dtoComputerAdd.companyId;
 		
 		
 		if (companyIdString != null) {
@@ -182,21 +182,16 @@ public class ComputerDTOMapper {
 	
 	
 	public static DTOComputerEdit convertToDTOComputerEdit( Computer computer ) {
-		String id = String.valueOf( computer.getId() );
-		String name = computer.getName();
-		String introduced = parseLocalDateToString( computer
-											       .getIntroduced() );
-		String discontinued = parseLocalDateToString( computer
-				 							         .getDiscontinued() );
-		String companyId = String.valueOf( computer.getCompany().getId() );
 		
 		DTOComputerEdit dtoComputerEdit = new DTOComputerEdit();
 		
-		dtoComputerEdit.id = id;
-		dtoComputerEdit.name = name;
-		dtoComputerEdit.introduced = introduced;
-		dtoComputerEdit.discontinued = discontinued;
-		dtoComputerEdit.companyId = companyId;
+		dtoComputerEdit.id = String.valueOf( computer.getId() );
+		dtoComputerEdit.name = computer.getName();
+		dtoComputerEdit.introduced = parseLocalDateToString( computer
+			       											.getIntroduced() );
+		dtoComputerEdit.discontinued = parseLocalDateToString( computer
+		         											  .getDiscontinued() );
+		putCompanyIdIntoDTOComputerEdit( dtoComputerEdit, computer );
 		
 		return dtoComputerEdit;
 	}
@@ -204,23 +199,36 @@ public class ComputerDTOMapper {
 	
 	public static Computer convertToComputer( DTOComputerEdit dtoComputerEdit ) {
 		
+		Computer computer = null;
+		
 		long id = Long.valueOf( dtoComputerEdit.id );
 		String name = dtoComputerEdit.name;
 		LocalDate introduced = parseStringToLocalDate( dtoComputerEdit
 													  .introduced );
 		LocalDate discontinued = parseStringToLocalDate( dtoComputerEdit
 				 									    .discontinued );
-		long companyId = Long.valueOf( dtoComputerEdit.companyId );
+		String companyIdString = dtoComputerEdit.companyId;
 		
-		Company company = new CompanyBuilder().setId( companyId )
-											  .build();
+		if ( companyIdString != null && companyIdString != "" ) {
+			
+			Company company = new CompanyBuilder().setId( Long.valueOf( companyIdString ) )
+					  							  .build();
+			computer =  new ComputerBuilder().setId(id)
+											 .setName( name )
+											 .setIntroduced( introduced )
+											 .setDiscontinued( discontinued )
+											 .setCompany( company )
+											 .build();
+		}
+		else {
+			computer = new ComputerBuilder().setId(id)
+											.setName( name )
+											.setIntroduced( introduced )
+											.setDiscontinued( discontinued )
+											.build();
+		}
 		
-		return new ComputerBuilder().setId( id )
-									.setName( name )
-									.setIntroduced( introduced )
-									.setDiscontinued( discontinued )
-									.setCompany( company )
-									.build();
+		return computer;
 	}
 	
 	
@@ -309,6 +317,15 @@ public class ComputerDTOMapper {
 		}
 		else {
 			return localDate.toString();
+		}
+	}
+	
+	private static void putCompanyIdIntoDTOComputerEdit( DTOComputerEdit dtoComputerEdit, Computer computer ) {
+		if ( computer.getCompany() == null ) {
+			dtoComputerEdit.companyId = null;
+		}
+		else {
+			dtoComputerEdit.companyId = String.valueOf( computer.getCompany().getId() );
 		}
 	}
 }

@@ -10,12 +10,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.DTOs.DTOComputerAdd;
+import com.excilys.cdb.DTOs.DTOComputerEdit;
 import com.excilys.cdb.customExceptions.InvalidUserInputException;
+import com.excilys.cdb.loggers.LoggerManager;
 import com.excilys.cdb.services.CompanyService;
 
 @Component
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
-public class AddComputerValidator {
+public class AddOrEditComputerValidator {
 
 	private CompanyService companyService;
 	private String nameRegex = "^[a-zA-Z].*"; // Name has to start by a UpperCase or LowerCase letter.
@@ -27,7 +29,7 @@ public class AddComputerValidator {
 	
 	
 	@Autowired
-	public AddComputerValidator(CompanyService companyService) {
+	public AddOrEditComputerValidator(CompanyService companyService) {
 		super();
 		this.companyService = companyService;
 	}
@@ -61,7 +63,8 @@ public class AddComputerValidator {
 
 	public void validateCompanyId( String companyIdString ) throws InvalidUserInputException {
 		
-		if ( companyIdString != null ) {
+		if ( companyIdString != null && companyIdString != "" ) {
+			LoggerManager.getViewLoggerConsole().debug( "validateCompanyId() --> companyIdString = " + companyIdString );
 			long companyId = Long.valueOf( companyIdString );
 			
 			if ( !companyService.checkCompanyId( companyId ) ) {
@@ -72,12 +75,19 @@ public class AddComputerValidator {
 
 	public void validate( DTOComputerAdd dtoComputerAddComputer ) throws InvalidUserInputException {
 		try {
-			if ( dtoComputerAddComputer == null ) {
-				throw new NullPointerException();
-			}
 			validateComputerName( dtoComputerAddComputer.name );
 			validateComputerDates( dtoComputerAddComputer.introduced, dtoComputerAddComputer.discontinued );
 			validateCompanyId( dtoComputerAddComputer.companyId );
+		} catch ( NullPointerException npe ) {
+			npe.printStackTrace();
+		}
+	}
+	
+	public void validate( DTOComputerEdit dtoComputerEdit ) throws InvalidUserInputException {
+		try {
+			validateComputerName( dtoComputerEdit.name );
+			validateComputerDates( dtoComputerEdit.introduced, dtoComputerEdit.discontinued );
+			validateCompanyId( dtoComputerEdit.companyId );
 		} catch ( NullPointerException npe ) {
 			npe.printStackTrace();
 		}

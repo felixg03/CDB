@@ -19,7 +19,7 @@ import com.excilys.cdb.DTOs.DTOCompany;
 import com.excilys.cdb.DTOs.DTOComputerAdd;
 import com.excilys.cdb.DTOs.mappers.CompanyDTOMapper;
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
-import com.excilys.cdb.controller.servlets.validators.AddComputerValidator;
+import com.excilys.cdb.controller.servlets.validators.AddOrEditComputerValidator;
 import com.excilys.cdb.customExceptions.InvalidUserInputException;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
@@ -36,7 +36,7 @@ public class AddComputerServlet extends HttpServlet {
 	@Autowired
 	private ComputerService computerService;
 	@Autowired
-	private AddComputerValidator addComputerValidator;
+	private AddOrEditComputerValidator addOrEditComputerValidator;
 	
 
 
@@ -63,10 +63,10 @@ public class AddComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			DTOComputerAdd dtoComputer = getDTOComputerAdd(request);
-			this.addComputerValidator.validate(dtoComputer);
+			DTOComputerAdd dtoComputerAdd = getDTOComputerAdd(request);
+			this.addOrEditComputerValidator.validate(dtoComputerAdd);
 
-			Computer computerToAdd = ComputerDTOMapper.convertToComputer(dtoComputer);
+			Computer computerToAdd = ComputerDTOMapper.convertToComputer(dtoComputerAdd);
 
 			computerService.callComputerCreation(computerToAdd);
 		} catch (InvalidUserInputException invalidUserInputEx) {

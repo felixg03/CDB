@@ -1,21 +1,21 @@
-package com.excilys.cdb.database;
+package com.excilys.cdb.DAOs;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.loggers.LoggerManager;
+import com.excilys.cdb.DAOs.rowMappers.CompanyRowMapper;
 import com.excilys.cdb.models.Company;
-import com.excilys.cdb.models.Company.CompanyBuilder;
-import com.zaxxer.hikari.HikariDataSource;;
+import com.zaxxer.hikari.HikariDataSource;
 
 @Repository
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
@@ -51,6 +51,8 @@ public final class DAOCompany {
 	
 	
 	// METHODS
+	
+	// Old method of CLI View
 	public List<Company> requestListCompanies(int offset) {
 		
 		List<Company> listCompanies = new ArrayList<Company>();
@@ -78,12 +80,10 @@ public final class DAOCompany {
 		
 		List<Company> listCompanies = new ArrayList<>();
 		
-		try ( Connection connection = hikariDataSource.getConnection(); 
-			  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_LIST_COMPANIES ) ) {
+		try ( Connection connection = hikariDataSource.getConnection()) {
 			
-			try ( ResultSet resultSet = preparedStatement.executeQuery() ) {
-				listCompanies = this.getListCompaniesFromResultSet( resultSet );
-			}
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(hikariDataSource);
+			listCompanies = jdbcTemplate.query( QUERY_LIST_COMPANIES, new CompanyRowMapper() );
 			
 		}
 		catch ( SQLException sqlException ) {
@@ -145,7 +145,6 @@ public final class DAOCompany {
 			
 			preparedStatement.setLong( 1, companyId );
 			ResultSet resultSet = preparedStatement.executeQuery(); 
-			LoggerManager.getViewLoggerConsole().debug( this.getClass().getSimpleName() + " - requestCheckCompanyId(" + companyId + ") -->" + "resultSet.getLong(1) = " + resultSet.getLong(1) );
 			
 			if ( resultSet.next() && resultSet.getLong(1) == companyId ) {
 				companyIdIsPresent = true;
@@ -163,15 +162,9 @@ public final class DAOCompany {
 	private List<Company> getListCompaniesFromResultSet ( ResultSet resultSet ) throws SQLException {
 		
 		List<Company> listCompaniesToReturn = new ArrayList<>();
-		
+		CompanyRowMapper companyRowMapper = new CompanyRowMapper();
 		while ( resultSet.next() ) {
-			 long id = resultSet.getLong(1);
-			 String name = resultSet.getString(2);
-			 
-			 Company company = new CompanyBuilder().setId(id)
-					 							   .setName(name)
-					 							   .build();
-			 listCompaniesToReturn.add( company );
+			 listCompaniesToReturn.add( companyRowMapper.mapRow( resultSet, resultSet.getRow() ) ) ;
 		}
 		
 		return listCompaniesToReturn;
