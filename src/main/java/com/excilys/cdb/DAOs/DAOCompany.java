@@ -77,20 +77,8 @@ public final class DAOCompany {
 	
 	
 	public List<Company> requestListCompanies() {
-		
-		List<Company> listCompanies = new ArrayList<>();
-		
-		try ( Connection connection = hikariDataSource.getConnection() ) {
-			
-			JdbcTemplate jdbcTemplate = new JdbcTemplate(hikariDataSource);
-			listCompanies = jdbcTemplate.query( QUERY_LIST_COMPANIES, new CompanyRowMapper() );
-			
-		}
-		catch ( SQLException sqlException ) {
-			sqlException.printStackTrace();
-		}
-		
-		return listCompanies;
+		JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
+		return jdbcTemplate.query( QUERY_LIST_COMPANIES, new CompanyRowMapper() );
 	}
 	
 	

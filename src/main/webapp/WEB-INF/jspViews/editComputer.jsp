@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Computer Database</title>
+	<title>CDB - Edit Computer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<!-- Bootstrap -->
@@ -44,13 +44,18 @@
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyId">
                                     
-                                    <option value="${ dtoComputerEdit.companyId }"><c:out value="${ dtoComputerEdit.companyName }"/></option>
+                                    <c:choose>
+	                                    <c:when test="${not empty dtoComputerEdit.companyName}">
+	                                    	<option value="${dtoComputerEdit.companyId}"><c:out value="${dtoComputerEdit.companyName}"/></option>
+	                                    </c:when>
+	                                    <c:otherwise>
+	                                    	<option value="">--</option>
+	                                    </c:otherwise>
+	                                </c:choose>
                                     
-                                    <c:forEach items="${ listDTOCompany }" var="dtoCompany">
-                                    	<option value="${ dtoCompany.id }"><c:out value=" ${ dtoCompany.name }" /></option>
+                                    <c:forEach items="${listDTOCompany}" var="dtoCompany">
+                                    	<option value="${dtoCompany.id}"><c:out value=" ${dtoCompany.name}" /></option>
                                     </c:forEach>
-                                    
-                                    <option value="">--</option>
                                     
                                 </select>
                             </div>            

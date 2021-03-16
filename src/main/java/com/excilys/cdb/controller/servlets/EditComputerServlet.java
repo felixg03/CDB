@@ -16,19 +16,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.DTOs.DTOCompany;
-import com.excilys.cdb.DTOs.DTOComputerAdd;
 import com.excilys.cdb.DTOs.DTOComputerEdit;
 import com.excilys.cdb.DTOs.mappers.CompanyDTOMapper;
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
 import com.excilys.cdb.controller.servlets.validators.AddOrEditComputerValidator;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.customExceptions.InvalidUserInputException;
-import com.excilys.cdb.loggers.LoggerManager;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
-import com.mysql.cj.log.Log;
 
 @Component
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
@@ -52,15 +49,11 @@ public class EditComputerServlet extends HttpServlet {
 		try {
 			 computerToEdit= this.computerService.getOneComputer(
 					 					this.parseToLong(request.getParameter("id")));
-			 LoggerManager.getViewLoggerConsole().debug( "EditComputerServlet --> doGet() --> computerToEdit.getId() = " + computerToEdit.getId() );
 		}
 		catch(InvalidComputerIdException invalidComputerIdEx) {
 			invalidComputerIdEx.printStackTrace();
 		}
 		DTOComputerEdit dtoComputerEdit = ComputerDTOMapper.convertToDTOComputerEdit( computerToEdit );
-				
-		LoggerManager.getViewLoggerConsole().debug( "EditComputerServlet --> doGet() --> dtoComputerEdit.id = " + dtoComputerEdit.id );
-		
 		List<Company> listCompany = this.companyService
 										.getListCompanies();
 		List<DTOCompany> listDTOCompany = CompanyDTOMapper
@@ -83,13 +76,12 @@ public class EditComputerServlet extends HttpServlet {
 			this.addOrEditComputerValidator.validate(dtoComputerEdit);
 			Computer computerEdited = ComputerDTOMapper.convertToComputer( dtoComputerEdit );
 			
-			LoggerManager.getViewLoggerConsole().debug( "EditCompuerServlet --> doPost()--> computerEdited = " + computerEdited.toString() );
 			computerService.callComputerEdition(computerEdited);
-			this.getServletContext().getRequestDispatcher("/WEB-INF/jspViews/editComputer.jsp").forward(request, response);	
 		} 
 		catch ( InvalidUserInputException invalidUserInputEx ) {
-			request.setAttribute("inputException", invalidUserInputEx.getMessage());
+			request.setAttribute("inputException", "Operation failed: " + invalidUserInputEx.getMessage());
 		}
+		this.getServletContext().getRequestDispatcher("/WEB-INF/jspViews/editComputer.jsp").forward(request, response);	
 	}
 	
 	

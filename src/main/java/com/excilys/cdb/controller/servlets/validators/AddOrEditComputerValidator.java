@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import com.excilys.cdb.DTOs.DTOComputerAdd;
 import com.excilys.cdb.DTOs.DTOComputerEdit;
 import com.excilys.cdb.customExceptions.InvalidUserInputException;
-import com.excilys.cdb.loggers.LoggerManager;
 import com.excilys.cdb.services.CompanyService;
 
 @Component
@@ -64,7 +63,6 @@ public class AddOrEditComputerValidator {
 	public void validateCompanyId( String companyIdString ) throws InvalidUserInputException {
 		
 		if ( companyIdString != null && companyIdString != "" ) {
-			LoggerManager.getViewLoggerConsole().debug( "validateCompanyId() --> companyIdString = " + companyIdString );
 			long companyId = Long.valueOf( companyIdString );
 			
 			if ( !companyService.checkCompanyId( companyId ) ) {

@@ -191,6 +191,7 @@ public class ComputerDTOMapper {
 			       											.getIntroduced() );
 		dtoComputerEdit.discontinued = parseLocalDateToString( computer
 		         											  .getDiscontinued() );
+		setCompanyStringsInDTO( dtoComputerEdit, computer );
 		putCompanyIdIntoDTOComputerEdit( dtoComputerEdit, computer );
 		
 		return dtoComputerEdit;
@@ -326,6 +327,16 @@ public class ComputerDTOMapper {
 		}
 		else {
 			dtoComputerEdit.companyId = String.valueOf( computer.getCompany().getId() );
+		}
+	}
+	
+	
+	
+	private static void setCompanyStringsInDTO( DTOComputerEdit dtoComputerEdit, Computer computer ) {
+		Company company = computer.getCompany();
+		if ( company != null ) {
+			dtoComputerEdit.companyId = String.valueOf( company.getId() );
+			dtoComputerEdit.companyName = company.getName();
 		}
 	}
 }

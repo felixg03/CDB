@@ -59,16 +59,16 @@ public class ViewPrincipal {
 				loop = controller.action(userInputInteger);
 			}
 			catch (NumberFormatException nbFormatEx) {
-				LoggerManager.getViewLoggerFile().error(nbFormatEx.getMessage());
+				LoggerManager.getLoggerFile().error(nbFormatEx.getMessage());
 			}
 			catch (OutOfRangeUserInputException outOfRangeUserInputEx) {
-				LoggerManager.getViewLoggerFile().error(outOfRangeUserInputEx.getMessage());
+				LoggerManager.getLoggerFile().error(outOfRangeUserInputEx.getMessage());
 			}
 			catch (InvalidComputerIdException invCompIdEx) {
-				LoggerManager.getViewLoggerFile().error(invCompIdEx.getMessage());
+				LoggerManager.getLoggerFile().error(invCompIdEx.getMessage());
 			}
 			catch (InputMismatchException inputMismatchEx) {
-				LoggerManager.getViewLoggerFile().error(inputMismatchEx.getMessage());
+				LoggerManager.getLoggerFile().error(inputMismatchEx.getMessage());
 			}
 		}
 		
