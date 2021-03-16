@@ -235,9 +235,9 @@ public final class DAOComputer {
 	
 	
 	
-	public int requestNumberOfComputer() {
+	public long requestNumberOfComputer() {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
-		return jdbcTemplate.queryForObject( QUERY_GET_NUMBER_OF_COMPUTERS, Integer.class );
+		return jdbcTemplate.queryForObject( QUERY_GET_NUMBER_OF_COMPUTERS, Long.class );
 	}
 	
 	

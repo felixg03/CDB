@@ -45,6 +45,6 @@ public final class CompanyService {
 	
 	
 	public boolean checkCompanyId( long companyId ) {
-		return daoCompany.requestCheckCompanyId( companyId );
+		return daoCompany.isCompanyIdInDatabase( companyId );
 	}
 }

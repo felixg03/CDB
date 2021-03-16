@@ -12,6 +12,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.DAOs.rowMappers.CompanyRowMapper;
 import com.excilys.cdb.models.Company;
@@ -37,22 +38,64 @@ public final class DAOCompany {
     "SELECT id, name FROM company ORDER BY id LIMIT 10 OFFSET ?"; 
 	private static final String QUERY_LIST_COMPANIES =
 	"SELECT id, name FROM company ORDER BY id";
-	private static final String QUERY_GET_COMPANY_ID =
-	"SELECT id FROM company WHERE id = ?";
 	
+	private static final String QUERY_CHECK_IF_COMPUTER_ID_EXISTS = 
+	"SELECT EXISTS(SELECT 1 FROM company WHERE company.id = ?)";
 	private static final String QUERY_DELETE_COMPUTERS_OF_A_COMPANY =
-	"DELETE FROM computer WHERE company_id = ?";
+	"DELETE FROM computer WHERE computer.company_id = ?";
 	private static final String QUERY_DELETE_COMPANY =
-	"DELETE FROM company WHERE id = ?";
+	"DELETE FROM company WHERE company.id = ?";
 	
 	
 	
+	public List<Company> requestListCompanies() {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
+		return jdbcTemplate.query( QUERY_LIST_COMPANIES, new CompanyRowMapper() );
+	}
 	
 	
 	
-	// METHODS
+	@Transactional
+	public void requestCompanyDeletion( long companyId ) {
+		if ( this.isCompanyIdInDatabase( companyId ) ) {
+			JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
+			jdbcTemplate.update( QUERY_DELETE_COMPUTERS_OF_A_COMPANY, companyId );
+			jdbcTemplate.update( QUERY_DELETE_COMPANY, companyId );
+		}
+	}
 	
-	// Old method of CLI View
+	
+		
+	
+	// TOOLS
+	private List<Company> getListCompaniesFromResultSet ( ResultSet resultSet ) throws SQLException {
+		
+		List<Company> listCompaniesToReturn = new ArrayList<>();
+		CompanyRowMapper companyRowMapper = new CompanyRowMapper();
+		while ( resultSet.next() ) {
+			 listCompaniesToReturn.add( companyRowMapper.mapRow( resultSet, resultSet.getRow() ) ) ;
+		}
+		
+		return listCompaniesToReturn;
+	}
+	
+	
+	
+	public boolean isCompanyIdInDatabase( long companyId ) {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
+		return jdbcTemplate.queryForObject( QUERY_CHECK_IF_COMPUTER_ID_EXISTS, Boolean.class, companyId );
+	}
+	
+	
+	
+	/*
+	 * 		+---------------------------+
+	 * 		|							|
+	 * 		|	OLD CLI VIEW METHODS	|
+	 * 		|							|
+	 * 		+---------------------------+
+	 */
+	
 	public List<Company> requestListCompanies(int offset) {
 		
 		List<Company> listCompanies = new ArrayList<Company>();
@@ -73,88 +116,4 @@ public final class DAOCompany {
 		return listCompanies;
 	}
 	
-	
-	
-	
-	public List<Company> requestListCompanies() {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
-		return jdbcTemplate.query( QUERY_LIST_COMPANIES, new CompanyRowMapper() );
-	}
-	
-	
-	public void requestCompanyDeletion( long companyId ) {
-		
-		Connection connection = null;
-		PreparedStatement deleteComputersOfACompany = null;
-		PreparedStatement deleteCompany = null;
-		
-		try {
-			
-			connection = hikariDataSource.getConnection();
-			
-			deleteComputersOfACompany = connection.prepareStatement( QUERY_DELETE_COMPUTERS_OF_A_COMPANY );
-			deleteCompany = connection.prepareStatement( QUERY_DELETE_COMPANY );
-			connection.setAutoCommit( false );
-			
-			deleteComputersOfACompany.setLong( 1, companyId );
-			deleteComputersOfACompany.executeUpdate();
-			
-			deleteCompany.setLong( 1, companyId );
-			deleteCompany.executeUpdate();
-			
-			connection.commit();
-		}
-		catch ( SQLException sqlEx ) {
-			sqlEx.printStackTrace();
-			try {
-				connection.rollback();
-			}
-			catch ( SQLException sqlException ) {
-				sqlException.printStackTrace();
-			}
-			
-		}
-		finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (SQLException sqlEx) {
-				// TODO Auto-generated catch block
-				sqlEx.printStackTrace();
-			}
-		}
-	}
-	
-	public boolean requestCheckCompanyId( long companyId ) {
-		boolean companyIdIsPresent = false;
-		try ( Connection connection = hikariDataSource.getConnection();
-			  PreparedStatement preparedStatement = connection.prepareStatement( QUERY_GET_COMPANY_ID ) ) {
-			
-			preparedStatement.setLong( 1, companyId );
-			ResultSet resultSet = preparedStatement.executeQuery(); 
-			
-			if ( resultSet.next() && resultSet.getLong(1) == companyId ) {
-				companyIdIsPresent = true;
-			}
-		}
-		catch (SQLException sqlEx) {
-			sqlEx.printStackTrace();
-		}
-		
-		return companyIdIsPresent;
-	}
-	
-	
-	// TOOLS
-	private List<Company> getListCompaniesFromResultSet ( ResultSet resultSet ) throws SQLException {
-		
-		List<Company> listCompaniesToReturn = new ArrayList<>();
-		CompanyRowMapper companyRowMapper = new CompanyRowMapper();
-		while ( resultSet.next() ) {
-			 listCompaniesToReturn.add( companyRowMapper.mapRow( resultSet, resultSet.getRow() ) ) ;
-		}
-		
-		return listCompaniesToReturn;
-	}
 }

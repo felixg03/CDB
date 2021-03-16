@@ -20,7 +20,7 @@ public class ViewPrincipal {
 	private CliController controller;
 	private Scanner scanner = new Scanner(System.in);
 	private final int LOWER_BOUND_INPUT = 1;
-	private final int UPPER_BOUND_INPUT = 7;
+	private final int UPPER_BOUND_INPUT = 8;
 
 	
 	
@@ -59,16 +59,16 @@ public class ViewPrincipal {
 				loop = controller.action(userInputInteger);
 			}
 			catch (NumberFormatException nbFormatEx) {
-				LoggerManager.getLoggerFile().error(nbFormatEx.getMessage());
+				LoggerManager.getLoggerFile().error(nbFormatEx.toString());
 			}
 			catch (OutOfRangeUserInputException outOfRangeUserInputEx) {
-				LoggerManager.getLoggerFile().error(outOfRangeUserInputEx.getMessage());
+				LoggerManager.getLoggerFile().error(outOfRangeUserInputEx.toString());
 			}
 			catch (InvalidComputerIdException invCompIdEx) {
-				LoggerManager.getLoggerFile().error(invCompIdEx.getMessage());
+				LoggerManager.getLoggerFile().error(invCompIdEx.toString());
 			}
 			catch (InputMismatchException inputMismatchEx) {
-				LoggerManager.getLoggerFile().error(inputMismatchEx.getMessage());
+				LoggerManager.getLoggerFile().error(inputMismatchEx.toString());
 			}
 		}
 		
