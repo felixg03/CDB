@@ -19,7 +19,7 @@ import com.excilys.cdb.DTOs.DTOCompany;
 import com.excilys.cdb.DTOs.DTOComputerAdd;
 import com.excilys.cdb.DTOs.mappers.CompanyDTOMapper;
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
-import com.excilys.cdb.controller.servlets.validators.AddOrEditComputerValidator;
+import com.excilys.cdb.controller.webSpringMvc.validators.AddOrEditComputerValidator;
 import com.excilys.cdb.customExceptions.InvalidUserInputException;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;

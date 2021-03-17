@@ -21,7 +21,7 @@
         <logback-classic.version>1.2.3</logback-classic.version>
         <logback-core.version>1.2.3</logback-core.version>
         <slf4j-api.version>1.7.30</slf4j-api.version>
-        <servlet-api.version>2.5</servlet-api.version>
+        <servlet-api.version>4.0.1</servlet-api.version>
         <jstl.version>1.2</jstl.version>
         <junit-jupiter-api.version>5.8.0-M1</junit-jupiter-api.version>
         <h2.version>1.4.200</h2.version>
@@ -80,7 +80,7 @@
     
 	    <dependency>
 	      <groupId>javax.servlet</groupId>
-	      <artifactId>servlet-api</artifactId>
+	      <artifactId>javax.servlet-api</artifactId>
 	      <version>${servlet-api.version}</version>
 	    </dependency>  
 	    
@@ -145,6 +145,13 @@
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-jdbc</artifactId>
+		    <version>${spring.version}</version>
+		</dependency>
+        
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-webmvc</artifactId>
 		    <version>${spring.version}</version>
 		</dependency>
         

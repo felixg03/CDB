@@ -32,11 +32,11 @@
                         <input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
                     </form>
                     
-                    <form id="orderByForm" action="#" method="POST" class="form-inline" >
-                    	<input type="submit" name="orderByButton" value="Order By Computer Name" class="btn btn-primary"/>
-                    	<input type="submit" name="orderByButton" value="Order By Computer Introduced Date" class="btn btn-primary"/>
-                    	<input type="submit" name="orderByButton" value="Order By Computer Discontinued Date" class="btn btn-primary"/>
-                    	<input type="submit" name="orderByButton" value="Order By Company Name" class="btn btn-primary"/>
+                    <form id="orderByForm" action="#" method="GET" class="form-inline" >
+                    	<input type="submit" name="orderByInput" value="Order By Computer Name" class="btn btn-primary"/>
+                    	<input type="submit" name="orderByInput" value="Order By Computer Introduced Date" class="btn btn-primary"/>
+                    	<input type="submit" name="orderByInput" value="Order By Computer Discontinued Date" class="btn btn-primary"/>
+                    	<input type="submit" name="orderByInput" value="Order By Company Name" class="btn btn-primary"/>
                     </form>
                     
                     

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
+import com.excilys.cdb.loggers.LoggerManager;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Page;
 import com.excilys.cdb.services.ComputerService;
@@ -38,6 +39,7 @@ public class DashboardServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		LoggerManager.getLoggerConsole().debug("Entered doGet()");
 		Page<Computer> pageComputer = null;
 		String searchInput = request.getParameter("search");
 		if (searchInput != null) {

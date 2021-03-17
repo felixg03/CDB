@@ -65,7 +65,7 @@ public final class DAOComputer {
   + "computer LEFT JOIN company ON company.id = computer.company_id ORDER BY computer.discontinued LIMIT ? OFFSET ?";
 	private final static String QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPANY_NAME =
 	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name FROM "
-  + "computer LEFT JOIN company ON company.id = computer.company_id ORDER BY computer.company_id LIMIT ? OFFSET ?";
+  + "computer LEFT JOIN company ON company.id = computer.company_id ORDER BY company.name LIMIT ? OFFSET ?";
 	private final static String QUERY_LIST_COMPUTER_SEARCH =
 	"SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id, company.name FROM "
   + "computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ?";

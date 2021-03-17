@@ -1,4 +1,4 @@
-package com.excilys.cdb.controller.servlets.validators;
+package com.excilys.cdb.controller.webSpringMvc.validators;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

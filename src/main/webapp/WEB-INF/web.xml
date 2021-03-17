@@ -10,7 +10,7 @@
   	<welcome-file>index.html</welcome-file>
   </welcome-file-list>
   
-  <servlet>
+  <!-- <servlet>
     <servlet-name>AddComputerServlet</servlet-name>
     <servlet-class>com.excilys.cdb.controller.servlets.AddComputerServlet</servlet-class>
   </servlet>
@@ -37,7 +37,7 @@
   <servlet-mapping>
     <servlet-name>EditComputerServlet</servlet-name>
     <url-pattern>/editComputer</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping> -->
   
     
    <jsp-config>
