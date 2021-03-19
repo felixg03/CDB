@@ -1,11 +1,9 @@
 package com.excilys.cdb.config;
 
 
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -20,12 +18,10 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableWebMvc
 @Configuration
 @ComponentScan( basePackages = 
-				{ "com.excilys.cdb.DAOs", "com.excilys.cdb.services", 
-				  "com.excilys.cdb.controller", "com.excilys.cdb.views", 
-				  "com.excilys.cdb.config",
-				  "com.excilys.cdb.controller.springMvcControllers",
-				  "com.excilys.cdb.springMvcControllers.requestVariablesContainers"} )
-
+				{ "com.excilys.cdb.controller", "com.excilys.cdb.controller.springMvcControllers"
+				, "com.excilys.cdb.controller.springMvcControllers.variables"
+				, "com.excilys.cdb.controller.springMvcControllers.validators", "com.excilys.cdb.DAOImpl"
+				, "com.excilys.cdb.services", "com.excilys.cdb.views" } )
 public class WebConfig implements WebMvcConfigurer { // extends AbstractContextLoaderInitializer {
 	
 //	@Override
@@ -56,9 +52,7 @@ public class WebConfig implements WebMvcConfigurer { // extends AbstractContextL
 	}
 	
 	@Bean
-	@Scope( value = ConfigurableBeanFactory.SCOPE_PROTOTYPE )
 	public ModelAndView getModelAndView() {
 		return new ModelAndView();
 	}
-	
 }

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.excilys.cdb.DAOs.DAOComputer;
+import com.excilys.cdb.DAOImpl.DAOComputer;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Page;

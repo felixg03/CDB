@@ -1,12 +1,10 @@
-package com.excilys.cdb.controller.webSpringMvc.validators;
+package com.excilys.cdb.controller.springMvcControllers.validators;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.DTOs.DTOComputerAdd;
@@ -15,7 +13,6 @@ import com.excilys.cdb.customExceptions.InvalidUserInputException;
 import com.excilys.cdb.services.CompanyService;
 
 @Component
-@Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class AddOrEditComputerValidator {
 
 	private CompanyService companyService;

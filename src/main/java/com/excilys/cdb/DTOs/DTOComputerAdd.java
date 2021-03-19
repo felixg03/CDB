@@ -19,4 +19,9 @@ public final class DTOComputerAdd {
 	public String getCompanyId() {
 		return companyId;
 	}
+	
+	@Override
+	public String toString() {
+		return new String(name + " | " + introduced + " | " + discontinued + " | " + companyId);
+	}
 }

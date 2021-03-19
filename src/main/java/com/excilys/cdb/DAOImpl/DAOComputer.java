@@ -1,4 +1,4 @@
-package com.excilys.cdb.DAOs;
+package com.excilys.cdb.DAOImpl;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -18,7 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.DAOs.rowMappers.ComputerRowMapper;
+import com.excilys.cdb.DAOImpl.rowMappers.ComputerRowMapper;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.loggers.LoggerManager;
 import com.excilys.cdb.models.Company;

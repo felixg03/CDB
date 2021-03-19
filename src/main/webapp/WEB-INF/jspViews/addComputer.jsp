@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
 <html>
 <head>
 	<title>CDB - Add a Computer</title>
@@ -23,23 +25,25 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" required>
+                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" required="required" />
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date">
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" />
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" />
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
-                                <select class="form-control" id="company" name="company">
-                                <option value="">--</option>
+                                <select class="form-control" id="companyId" name="companyId">
+                                <option value="" >--</option>
                                     <c:forEach items="${ listDTOCompany }" var="dtoCompany">
                                     	<option value="${ dtoCompany.id }"><c:out value=" ${ dtoCompany.name }" /></option>
                                     </c:forEach>
+                                    
+                                    <%-- <form:options items="listDTOCompany" /> --%>
                                 </select>
                             </div>               
                         </fieldset>

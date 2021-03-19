@@ -20,7 +20,14 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: <c:out value="${ dtoComputerEdit.id }" />
+                    	<c:choose>
+                    		<c:when test="${ not empty invalidComputerIdException }">
+                    			<c:out value="ERROR: invalid computer"/>
+                    		</c:when>
+                    		<c:otherwise>
+                    			<c:out value="id: ${ dtoComputerEdit.id }"/>
+                    		</c:otherwise>
+                    	</c:choose>
                     </div>
                     <h1>Edit Computer</h1>
 					<h4><i>Change any field you like</i></h4>

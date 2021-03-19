@@ -57,7 +57,7 @@ public class ComputerDTOMapper {
 		String companyIdString = dtoComputerAdd.companyId;
 		
 		
-		if (companyIdString != null) {
+		if (companyIdString != null && companyIdString != "") {
 			
 			Company company = new CompanyBuilder().setId( Long.valueOf( companyIdString ) )
 					  							  .build();

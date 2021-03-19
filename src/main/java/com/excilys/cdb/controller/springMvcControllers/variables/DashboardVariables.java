@@ -1,24 +1,24 @@
-package com.excilys.cdb.controller.springMvcControllers.requestVariablesContainers;
+package com.excilys.cdb.controller.springMvcControllers.variables;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.excilys.cdb.models.Computer;
+import com.excilys.cdb.models.Page;
+
 @Component
-@Scope( value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS )
-//@RequestScope // Shortcut to the line above
-public class DashboardRequestVariablesContainer {
+@RequestScope
+//@Scope( value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS )
+public class DashboardVariables {
 	
-	@Autowired
-	private ModelAndView modelAndView;
+	private ModelAndView modelAndView = new ModelAndView();
 	
 	private int pageNumber = 1;
 	private int nbOfComputer = 10;
 	private String search = "";
 	
+	private Page<Computer> pageComputer = new Page<>(nbOfComputer, pageNumber);
 	
 	
 	public ModelAndView getModelAndView() {
@@ -52,6 +52,16 @@ public class DashboardRequestVariablesContainer {
 	public void setSearch(String search) {
 		this.search = search;
 	}
+
+
+
+	public Page<Computer> getPageComputer() {
+		return pageComputer;
+	}
+	public void setPageComputer(Page<Computer> pageComputer) {
+		this.pageComputer = pageComputer;
+	}
+	
 	
 	
 }
