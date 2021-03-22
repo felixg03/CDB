@@ -29,7 +29,7 @@
         <HikariCP.version>3.4.5</HikariCP.version>
         <spring.version>5.3.5</spring.version>
         <spring-data-jpa.version>2.4.6</spring-data-jpa.version>
-        <hibernate.version>6.0.0.Alpha7</hibernate.version>
+        <hibernate.version>5.4.30.Final</hibernate.version>
         
       </properties>
      
@@ -157,13 +157,26 @@
 		    <version>${spring.version}</version>
 		</dependency>
 		
-	   <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-orm</artifactId>
+		    <version>${spring.version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>${hibernate.version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
 		<dependency>
 		    <groupId>org.springframework.data</groupId>
 		    <artifactId>spring-data-jpa</artifactId>
 		    <version>${spring-data-jpa.version}</version>
 		</dependency>
-
 
 	  </dependencies>
       

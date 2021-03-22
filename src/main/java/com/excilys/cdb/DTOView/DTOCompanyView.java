@@ -1,6 +1,7 @@
-package com.excilys.cdb.DTOs;
+package com.excilys.cdb.DTOView;
 
-public class DTOCompany {
+public final class DTOCompanyView {
+	
 	public String id;
 	public String name;
 	

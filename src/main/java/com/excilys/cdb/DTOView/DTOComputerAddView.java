@@ -1,17 +1,12 @@
-package com.excilys.cdb.DTOs;
+package com.excilys.cdb.DTOView;
 
-public class DTOComputerEdit {
+public final class DTOComputerAddView {
 	
-	public String id;
 	public String name;
 	public String introduced;
 	public String discontinued;
 	public String companyId;
-	public String companyName;
 	
-	public String getId() {
-		return id;
-	}
 	public String getName() {
 		return name;
 	}
@@ -24,7 +19,9 @@ public class DTOComputerEdit {
 	public String getCompanyId() {
 		return companyId;
 	}
-	public String getCompanyName() {
-		return companyName;
+	
+	@Override
+	public String toString() {
+		return new String(name + " | " + introduced + " | " + discontinued + " | " + companyId);
 	}
 }

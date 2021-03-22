@@ -2,7 +2,7 @@ package com.excilys.cdb.services;
 
 import java.util.List;
 
-import com.excilys.cdb.DAOImpl.DAOCompany;
+import com.excilys.cdb.DAOs.DAOCompany;
 import com.excilys.cdb.models.Company;
 
 

@@ -1,16 +1,16 @@
-package com.excilys.cdb.DTOs.mappers;
+package com.excilys.cdb.mappers.DTOViewMappers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.cdb.DTOs.DTOCompany;
+import com.excilys.cdb.DTOView.DTOCompanyView;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Company.CompanyBuilder;;
 
-public class CompanyDTOMapper {
+public class CompanyDTOViewMapper {
 	
 	
-	public static Company convertDTOCompanyToCompany(DTOCompany dtoCompany) {
+	public static Company convertDTOCompanyToCompany(DTOCompanyView dtoCompany) {
 		return new CompanyBuilder().setId(Long.valueOf(
 											dtoCompany.id))
 								   .setName(dtoCompany.name)
@@ -18,10 +18,10 @@ public class CompanyDTOMapper {
 	}
 	
 	
-	public static List<Company> convertListDTOCompanyToListCompany(List<DTOCompany> listDTOCompany) {
+	public static List<Company> convertListDTOCompanyToListCompany(List<DTOCompanyView> listDTOCompany) {
 		List<Company> listCompanyToReturn = new ArrayList<>();
 		
-		for (DTOCompany dtoCompany : listDTOCompany) {
+		for (DTOCompanyView dtoCompany : listDTOCompany) {
 			listCompanyToReturn.add(convertDTOCompanyToCompany(dtoCompany));
 		}
 		return listCompanyToReturn;
@@ -30,16 +30,16 @@ public class CompanyDTOMapper {
 	
 	
 	
-	public static DTOCompany convertCompanyToDTOCompany(Company company) {
-		DTOCompany dtoCompany = new DTOCompany();
+	public static DTOCompanyView convertCompanyToDTOCompany(Company company) {
+		DTOCompanyView dtoCompany = new DTOCompanyView();
 		dtoCompany.id = String.valueOf(company.getId());
 		dtoCompany.name = company.getName();
 		return dtoCompany;
 	}
 	
 	
-	public static List<DTOCompany> convertListCompanyToListDTOCompany(List<Company> listCompany) {
-		List<DTOCompany> listDTOCompanyToReturn = new ArrayList<>();
+	public static List<DTOCompanyView> convertListCompanyToListDTOCompany(List<Company> listCompany) {
+		List<DTOCompanyView> listDTOCompanyToReturn = new ArrayList<>();
 		
 		for (Company company : listCompany) {
 			listDTOCompanyToReturn.add(convertCompanyToDTOCompany(company));

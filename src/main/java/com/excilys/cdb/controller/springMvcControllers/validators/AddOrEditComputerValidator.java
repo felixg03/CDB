@@ -7,8 +7,8 @@ import java.time.format.DateTimeParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.DTOs.DTOComputerAdd;
-import com.excilys.cdb.DTOs.DTOComputerEdit;
+import com.excilys.cdb.DTOView.DTOComputerAddView;
+import com.excilys.cdb.DTOView.DTOComputerEditView;
 import com.excilys.cdb.customExceptions.InvalidUserInputException;
 import com.excilys.cdb.services.CompanyService;
 
@@ -68,7 +68,7 @@ public class AddOrEditComputerValidator {
 		}
 	}
 
-	public void validate( DTOComputerAdd dtoComputerAddComputer ) throws InvalidUserInputException {
+	public void validate( DTOComputerAddView dtoComputerAddComputer ) throws InvalidUserInputException {
 		try {
 			validateComputerName( dtoComputerAddComputer.name );
 			validateComputerDates( dtoComputerAddComputer.introduced, dtoComputerAddComputer.discontinued );
@@ -78,7 +78,7 @@ public class AddOrEditComputerValidator {
 		}
 	}
 	
-	public void validate( DTOComputerEdit dtoComputerEdit ) throws InvalidUserInputException {
+	public void validate( DTOComputerEditView dtoComputerEdit ) throws InvalidUserInputException {
 		try {
 			validateComputerName( dtoComputerEdit.name );
 			validateComputerDates( dtoComputerEdit.introduced, dtoComputerEdit.discontinued );

@@ -1,4 +1,4 @@
-package com.excilys.cdb.DAOImpl.rowMappers;
+package com.excilys.cdb.mappers.DAORowMappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package com.excilys.cdb.DAOImpl;
+package com.excilys.cdb.DAOs;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.DAOImpl.rowMappers.CompanyRowMapper;
+import com.excilys.cdb.mappers.DAORowMappers.CompanyRowMapper;
 import com.excilys.cdb.models.Company;
 import com.zaxxer.hikari.HikariDataSource;
 

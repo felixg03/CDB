@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.cdb.DTOs.DTOCompany;
-import com.excilys.cdb.DTOs.DTOComputerAdd;
-import com.excilys.cdb.DTOs.DTOComputerEdit;
-import com.excilys.cdb.DTOs.mappers.CompanyDTOMapper;
-import com.excilys.cdb.DTOs.mappers.ComputerDTOMapper;
+import com.excilys.cdb.DTOView.DTOCompanyView;
+import com.excilys.cdb.DTOView.DTOComputerAddView;
+import com.excilys.cdb.DTOView.DTOComputerEditView;
 import com.excilys.cdb.controller.springMvcControllers.validators.AddOrEditComputerValidator;
 import com.excilys.cdb.controller.springMvcControllers.variables.DashboardVariables;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.customExceptions.InvalidUserInputException;
 import com.excilys.cdb.loggers.LoggerManager;
+import com.excilys.cdb.mappers.DTOViewMappers.CompanyDTOViewMapper;
+import com.excilys.cdb.mappers.DTOViewMappers.ComputerDTOViewMapper;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Page;
@@ -183,7 +183,7 @@ public class ControllerSpringMvc {
 	private void putGeneralParametersInModel() {
 		Map<String, Object> model = this.modelAndView.getModel();
 		model.put( "nbTotalOfComputer", computerService.getNumberOfComputer() );
-		model.put( "listDTOComputerDashboard", ComputerDTOMapper
+		model.put( "listDTOComputerDashboard", ComputerDTOViewMapper
 											  .convertToListDTOComputerDashboard( 
 													  dashboardVariables.getPageComputer()
 													  					.getContent() 
@@ -214,11 +214,11 @@ public class ControllerSpringMvc {
 	@ResponseBody
 	public ModelAndView postAddComputer( String computerName, String introduced, String discontinued, String companyId ) {
 		try {
-			DTOComputerAdd dtoComputerAdd = new DTOComputerAdd();
+			DTOComputerAddView dtoComputerAdd = new DTOComputerAddView();
 			dtoComputerAdd = this.putFieldsIntoDTOComputerAdd(dtoComputerAdd, computerName, introduced, discontinued, companyId);
 			this.addOrEditComputerValidator.validate(dtoComputerAdd);
 			LoggerManager.getLoggerConsole().debug("ControllerMvc -> postAddComputer -> dtoComputerAdd = " + dtoComputerAdd);
-			Computer computerToAdd = ComputerDTOMapper.convertToComputer(dtoComputerAdd);
+			Computer computerToAdd = ComputerDTOViewMapper.convertToComputer(dtoComputerAdd);
 
 			computerService.callComputerCreation(computerToAdd);
 			
@@ -234,11 +234,11 @@ public class ControllerSpringMvc {
 	private void putListCompaniesInModel() {
 		Map<String, Object> model = this.modelAndView.getModel();
 		List<Company> listCompany = this.companyService.getListCompanies();
-		List<DTOCompany> listDTOCompany = CompanyDTOMapper.convertListCompanyToListDTOCompany(listCompany);
+		List<DTOCompanyView> listDTOCompany = CompanyDTOViewMapper.convertListCompanyToListDTOCompany(listCompany);
 		model.put("listDTOCompany", listDTOCompany);
 	}
 	
-	private DTOComputerAdd putFieldsIntoDTOComputerAdd( DTOComputerAdd dtoComputerAdd, String computerName, String introduced, String discontinued, String companyId ) {
+	private DTOComputerAddView putFieldsIntoDTOComputerAdd( DTOComputerAddView dtoComputerAdd, String computerName, String introduced, String discontinued, String companyId ) {
 		dtoComputerAdd.name = computerName;
 		dtoComputerAdd.introduced = introduced;
 		dtoComputerAdd.discontinued = discontinued;
@@ -261,10 +261,10 @@ public class ControllerSpringMvc {
 	public ModelAndView getEditComputer( String id ) {
 		try {
 			Computer computer = this.computerService.getOneComputer( this.parseToLong( id ) );
-			DTOComputerEdit dtoComputerEdit = ComputerDTOMapper.convertToDTOComputerEdit( computer );
+			DTOComputerEditView dtoComputerEdit = ComputerDTOViewMapper.convertToDTOComputerEdit( computer );
 			List<Company> listCompany = this.companyService
 											.getListCompanies();
-			List<DTOCompany> listDTOCompany = CompanyDTOMapper
+			List<DTOCompanyView> listDTOCompany = CompanyDTOViewMapper
 							 				 .convertListCompanyToListDTOCompany(
 							 							    listCompany
 							 				 );
@@ -286,7 +286,7 @@ public class ControllerSpringMvc {
 	@PostMapping( value = "/editComputer" )
 	public ModelAndView postEditComputer( String id, String computerName, String introduced, String discontinued, String companyId, String companyName ) {
 		try {
-			DTOComputerEdit dtoComputerEdit = new DTOComputerEdit();
+			DTOComputerEditView dtoComputerEdit = new DTOComputerEditView();
 			dtoComputerEdit = this.putFieldsIntoDTOComputerEdit( dtoComputerEdit
 																			   , id
 																			   , computerName
@@ -295,7 +295,7 @@ public class ControllerSpringMvc {
 																			   , companyId
 																			   , companyName);
 			this.addOrEditComputerValidator.validate(dtoComputerEdit);
-			Computer computerEdited = ComputerDTOMapper.convertToComputer( dtoComputerEdit );
+			Computer computerEdited = ComputerDTOViewMapper.convertToComputer( dtoComputerEdit );
 			
 			computerService.callComputerEdition(computerEdited);
 		} 
@@ -319,7 +319,7 @@ public class ControllerSpringMvc {
 	
 	
 	
-	private DTOComputerEdit putFieldsIntoDTOComputerEdit( DTOComputerEdit dtoComputerEdit
+	private DTOComputerEditView putFieldsIntoDTOComputerEdit( DTOComputerEditView dtoComputerEdit
 													    , String id
 													    , String computerName
 													    , String introduced

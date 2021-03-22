@@ -1,4 +1,4 @@
-package com.excilys.cdb.DTOs;
+package com.excilys.cdb.DTOView;
 
 public class DTOComputerDashboard {
 	public String id;

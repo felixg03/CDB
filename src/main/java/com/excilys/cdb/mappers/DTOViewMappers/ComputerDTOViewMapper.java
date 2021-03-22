@@ -1,19 +1,19 @@
-package com.excilys.cdb.DTOs.mappers;
+package com.excilys.cdb.mappers.DTOViewMappers;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.cdb.DTOs.DTOComputerAdd;
-import com.excilys.cdb.DTOs.DTOComputerDashboard;
-import com.excilys.cdb.DTOs.DTOComputerEdit;
+import com.excilys.cdb.DTOView.DTOComputerAddView;
+import com.excilys.cdb.DTOView.DTOComputerDashboard;
+import com.excilys.cdb.DTOView.DTOComputerEditView;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Company.CompanyBuilder;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Computer.ComputerBuilder;
 
-public class ComputerDTOMapper {
+public class ComputerDTOViewMapper {
 	
 	private static DateTimeFormatter dateTimeFormatter = 
 	DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
@@ -23,11 +23,11 @@ public class ComputerDTOMapper {
 	/*
 	 * ##########################
 	 * ###					  ###
-	 * ###   DTOComputerAdd   ###
+	 * ###   DTOComputerAddView   ###
 	 * ###					  ###
 	 * ##########################
 	 */
-	public static DTOComputerAdd convertToDTOComputerAddComputer( Computer computer ) {
+	public static DTOComputerAddView convertToDTOComputerAddComputer( Computer computer ) {
 		String name = computer.getName();
 		String introduced = parseLocalDateToString( computer
 											       .getIntroduced() );
@@ -35,7 +35,7 @@ public class ComputerDTOMapper {
 				 							         .getDiscontinued() );
 		String companyId = String.valueOf( computer.getCompany().getId() );
 		
-		DTOComputerAdd dtoComputerAdd = new DTOComputerAdd();
+		DTOComputerAddView dtoComputerAdd = new DTOComputerAddView();
 		
 		dtoComputerAdd.name = name;
 		dtoComputerAdd.introduced = introduced;
@@ -45,7 +45,7 @@ public class ComputerDTOMapper {
 		return dtoComputerAdd;
 	}
 	
-	public static Computer convertToComputer(DTOComputerAdd dtoComputerAdd) {
+	public static Computer convertToComputer(DTOComputerAddView dtoComputerAdd) {
 		
 		Computer computer = null;
 		
@@ -77,8 +77,8 @@ public class ComputerDTOMapper {
 		return computer;
 	}
 	
-	public static List<DTOComputerAdd> convertToListDTOComputerAdd( List<Computer> listComputer ) {
-		List<DTOComputerAdd> listDTOComputerAddComputer = new ArrayList<>();
+	public static List<DTOComputerAddView> convertToListDTOComputerAdd( List<Computer> listComputer ) {
+		List<DTOComputerAddView> listDTOComputerAddComputer = new ArrayList<>();
 		for ( Computer computer : listComputer ) {
 			listDTOComputerAddComputer.add( convertToDTOComputerAddComputer( computer ) );
 		}
@@ -86,9 +86,9 @@ public class ComputerDTOMapper {
 	}
 	
 	/*
-	public static List<Computer> convertToListComputer(List<DTOComputerAdd> listDTOComputerAdd) {
+	public static List<Computer> convertToListComputer(List<DTOComputerAddView> listDTOComputerAdd) {
 		List<Computer> listComputer = new ArrayList<>();
-		for(DTOComputerAdd dtoComputerAdd : listDTOComputerAdd) {
+		for(DTOComputerAddView dtoComputerAdd : listDTOComputerAdd) {
 			listComputer.add(convertToComputer(dtoComputerAdd));
 		}
 		return listComputer;
@@ -174,16 +174,16 @@ public class ComputerDTOMapper {
 	/*
 	 * ##################################
 	 * ###						      ###
-	 * ###		 DTOComputerEdit	  ###
+	 * ###		 DTOComputerEditView	  ###
 	 * ###							  ###
 	 * ################################## 	  
 	 * 
 	 */
 	
 	
-	public static DTOComputerEdit convertToDTOComputerEdit( Computer computer ) {
+	public static DTOComputerEditView convertToDTOComputerEdit( Computer computer ) {
 		
-		DTOComputerEdit dtoComputerEdit = new DTOComputerEdit();
+		DTOComputerEditView dtoComputerEdit = new DTOComputerEditView();
 		
 		dtoComputerEdit.id = String.valueOf( computer.getId() );
 		dtoComputerEdit.name = computer.getName();
@@ -198,7 +198,7 @@ public class ComputerDTOMapper {
 	}
 	
 	
-	public static Computer convertToComputer( DTOComputerEdit dtoComputerEdit ) {
+	public static Computer convertToComputer( DTOComputerEditView dtoComputerEdit ) {
 		
 		Computer computer = null;
 		
@@ -234,8 +234,8 @@ public class ComputerDTOMapper {
 	
 	
 
-	public static List<DTOComputerEdit> convertToListDTOComputerEdit( List<Computer> listComputer ) {
-		List<DTOComputerEdit> listDTOComputerEdit = new ArrayList<>();
+	public static List<DTOComputerEditView> convertToListDTOComputerEdit( List<Computer> listComputer ) {
+		List<DTOComputerEditView> listDTOComputerEdit = new ArrayList<>();
 		for ( Computer computer : listComputer ) {
 			listDTOComputerEdit.add( convertToDTOComputerEdit( computer ) );
 		}
@@ -243,9 +243,9 @@ public class ComputerDTOMapper {
 	}
 	
 	/*
-	public static List<Computer> convertToListComputer(List<DTOComputerEdit> listDTOComputerEdit) {
+	public static List<Computer> convertToListComputer(List<DTOComputerEditView> listDTOComputerEdit) {
 		List<Computer> listComputer = new ArrayList<>();
-		for(DTOComputerEdit dtoComputerEdit : listDTOComputerEdit) {
+		for(DTOComputerEditView dtoComputerEdit : listDTOComputerEdit) {
 			listComputer.add(convertToComputer(dtoComputerEdit));
 		}
 		return listComputer;
@@ -260,9 +260,9 @@ public class ComputerDTOMapper {
 		
 		switch (stringObjectClassName) {
 		
-		case ( "DTOComputerAdd" ):
+		case ( "DTOComputerAddView" ):
 			for ( Object dtoObject : listDTOObjects ) {
-				listComputer.add( convertToComputer( (DTOComputerAdd) dtoObject ) );
+				listComputer.add( convertToComputer( (DTOComputerAddView) dtoObject ) );
 			}
 		
 			break;
@@ -276,9 +276,9 @@ public class ComputerDTOMapper {
 			break;
 			
 			
-		case ( "DTOComputerEdit" ):
+		case ( "DTOComputerEditView" ):
 			for ( Object dtoObject : listDTOObjects ) {
-				listComputer.add( convertToComputer( (DTOComputerEdit) dtoObject ) );
+				listComputer.add( convertToComputer( (DTOComputerEditView) dtoObject ) );
 			}
 		
 			break;
@@ -321,7 +321,7 @@ public class ComputerDTOMapper {
 		}
 	}
 	
-	private static void putCompanyIdIntoDTOComputerEdit( DTOComputerEdit dtoComputerEdit, Computer computer ) {
+	private static void putCompanyIdIntoDTOComputerEdit( DTOComputerEditView dtoComputerEdit, Computer computer ) {
 		if ( computer.getCompany() == null ) {
 			dtoComputerEdit.companyId = null;
 		}
@@ -332,7 +332,7 @@ public class ComputerDTOMapper {
 	
 	
 	
-	private static void setCompanyStringsInDTO( DTOComputerEdit dtoComputerEdit, Computer computer ) {
+	private static void setCompanyStringsInDTO( DTOComputerEditView dtoComputerEdit, Computer computer ) {
 		Company company = computer.getCompany();
 		if ( company != null ) {
 			dtoComputerEdit.companyId = String.valueOf( company.getId() );
