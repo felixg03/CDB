@@ -29,7 +29,7 @@ import com.excilys.cdb.mappers.DTOViewMappers.CompanyDTOViewMapper;
 import com.excilys.cdb.mappers.DTOViewMappers.ComputerDTOViewMapper;
 import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.models.Page;
+import com.excilys.cdb.models.CustomPage;
 import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
 
@@ -84,7 +84,7 @@ public class ControllerSpringMvc {
 			if ( orderByInput.equals( "Order By Computer Name" ) ) {
 				dashboardVariables.setPageComputer( computerService
 												   .getPageComputerOrderedByComputerName (
-													  new Page<Computer>(dashboardVariables.getNbOfComputer()
+													  new CustomPage<Computer>(dashboardVariables.getNbOfComputer()
 															 		   , dashboardVariables.getPageNumber()
 															 		   )
 													   )
@@ -93,7 +93,7 @@ public class ControllerSpringMvc {
 			else if (orderByInput.equals("Order By Computer Introduced Date")) {
 				dashboardVariables.setPageComputer( computerService
 												   .getPageComputerOrderedByIntroducedDate (
-													  new Page<Computer>(dashboardVariables.getNbOfComputer()
+													  new CustomPage<Computer>(dashboardVariables.getNbOfComputer()
 																	   , dashboardVariables.getPageNumber()
 																	    )
 														)
@@ -102,7 +102,7 @@ public class ControllerSpringMvc {
 			else if (orderByInput.equals("Order By Computer Discontinued Date")) {
 				dashboardVariables.setPageComputer( computerService
 												   .getPageComputerOrderedByDiscontinuedDate (
-													  new Page<Computer>(dashboardVariables.getNbOfComputer()
+													  new CustomPage<Computer>(dashboardVariables.getNbOfComputer()
 															 		   , dashboardVariables.getPageNumber()
 															 		   )
 													  )
@@ -111,7 +111,7 @@ public class ControllerSpringMvc {
 			else if (orderByInput.equals("Order By Company Name")) {
 				dashboardVariables.setPageComputer( computerService
 												   .getPageComputerOrderedByCompanyName (
-													  new Page<Computer>(dashboardVariables.getNbOfComputer()
+													  new CustomPage<Computer>(dashboardVariables.getNbOfComputer()
 															 		   , dashboardVariables.getPageNumber()
 															 		   )
 													  )
@@ -121,7 +121,7 @@ public class ControllerSpringMvc {
 		else {
 			dashboardVariables.setPageComputer( computerService
 											   .getPageComputer (
-													  new Page<Computer>(dashboardVariables.getNbOfComputer()
+													  new CustomPage<Computer>(dashboardVariables.getNbOfComputer()
 															 		   , dashboardVariables.getPageNumber()
 															 		   )
 													  )

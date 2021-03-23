@@ -3,14 +3,14 @@ package com.excilys.cdb.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Page<E> {
+public class CustomPage<E> {
 	private int size;
 	private int number;
 	private List<E> content;
-	private Page<E> nextPage;
-	private Page<E> previousPage;
+	private CustomPage<E> nextPage;
+	private CustomPage<E> previousPage;
 
-	public Page(int size, int number) {
+	public CustomPage(int size, int number) {
 		content = new ArrayList<>();
 		this.size = size;
 		this.number = number;
@@ -32,11 +32,11 @@ public class Page<E> {
 		return content;
 	}
 
-	public Page<E> getPreviousPage() {
-		Page<E> previousPage = this;
+	public CustomPage<E> getPreviousPage() {
+		CustomPage<E> previousPage = this;
 		if (this.previousPage == null) {
 			if (this.number > 0) {
-				previousPage = new Page<E>(this.size, this.number - 1);
+				previousPage = new CustomPage<E>(this.size, this.number - 1);
 			}
 		} 
 		else {
@@ -45,10 +45,10 @@ public class Page<E> {
 		return previousPage;
 	}
 
-	public Page<E> getNextPage() {
-		Page<E> nextPage;
+	public CustomPage<E> getNextPage() {
+		CustomPage<E> nextPage;
 		if (this.nextPage == null) {
-				nextPage = new Page<E>(this.size, this.number + 1);
+				nextPage = new CustomPage<E>(this.size, this.number + 1);
 		} 
 		else {
 			nextPage = this.nextPage;
@@ -56,11 +56,12 @@ public class Page<E> {
 		return nextPage;
 	}
 	
-	public void setNextPage(Page<E> nextPage) {
+	public void setNextPage(CustomPage<E> nextPage) {
 		this.nextPage = nextPage;
 	}
 
-	public void setPreviousPage(Page<E> previousPage) {
+	public void setPreviousPage(CustomPage<E> previousPage) {
 		this.previousPage = previousPage;
 	}
+
 }

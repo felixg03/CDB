@@ -17,18 +17,23 @@ public class DTOComputerDB {
 	@Id
 	@GeneratedValue( strategy = GenerationType.SEQUENCE )
 	@Column( updatable = false, nullable = false )
-	public long id;
+	public Long id;
+	
+	@Column( nullable = false )
 	public String name;
+	
+	@Column( nullable = true )
 	public LocalDate introduced;
+	
+	@Column( nullable = true )
 	public LocalDate discontinued;
 	
-	@ManyToOne
-	@Column( name = "company_id" )
-	public long companyId;
+	@Column( name = "company_id", nullable = true )
+	public Long companyId;
 	
 	
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	public String getName() {
@@ -40,7 +45,7 @@ public class DTOComputerDB {
 	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
-	public long getCompanyId() {
+	public Long getCompanyId() {
 		return companyId;
 	}
 	

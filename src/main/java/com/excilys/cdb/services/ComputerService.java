@@ -5,12 +5,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.DAOs.DAOComputer;
+import com.excilys.cdb.DTODatabase.DTOComputerDB;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.models.Page;
+import com.excilys.cdb.models.CustomPage;
+import com.excilys.cdb.repositoryInterfaces.ComputerRepository;
+import com.excilys.cdb.mappers.DTODatabaseMappers.ComputerDTODatabaseMapper;
 
 
 
@@ -19,11 +24,13 @@ import com.excilys.cdb.models.Page;
 public class ComputerService {
 	
 	private DAOComputer daoComputer;
+	private ComputerRepository computerRepository;
 	
 	@Autowired
-	public ComputerService(DAOComputer daoComputer) {
+	public ComputerService(DAOComputer daoComputer, ComputerRepository computerRepository) {
 		super();
 		this.daoComputer = daoComputer;
+		this.computerRepository = computerRepository;
 	}
 
 	
@@ -38,27 +45,30 @@ public class ComputerService {
 		return daoComputer.requestListComputer();
 	}
 	
-	public Page<Computer> getPageComputer(Page<Computer> pageComputer) {
-		return daoComputer.requestPageComputer(pageComputer);
+	public CustomPage<Computer> getPageComputer(CustomPage<Computer> pageComputer) {
+//		return daoComputer.requestPageComputer(pageComputer);
+		Page<DTOComputerDB> pageDTOComputerDB = computerRepository.findAll( PageRequest.of( pageComputer.getNumber() - 1, pageComputer.getSize() ) );
+		pageComputer.setContent( ComputerDTODatabaseMapper.convertToListComputer( pageDTOComputerDB.getContent() ) );
+		return pageComputer;
 	}
 	
-	public Page<Computer> getPageComputerSearched(String searchInput) {
+	public CustomPage<Computer> getPageComputerSearched(String searchInput) {
 		return daoComputer.requestPageComputerSearched(searchInput);
 	}
 	
-	public Page<Computer> getPageComputerOrderedByComputerName(Page<Computer> pageComputer) {
+	public CustomPage<Computer> getPageComputerOrderedByComputerName(CustomPage<Computer> pageComputer) {
 		return daoComputer.requestPageComputerOrderedByComputerName(pageComputer);
 	}
 	
-	public Page<Computer> getPageComputerOrderedByIntroducedDate(Page<Computer> pageComputer) {
+	public CustomPage<Computer> getPageComputerOrderedByIntroducedDate(CustomPage<Computer> pageComputer) {
 		return daoComputer.requestPageComputerOrderedByIntroducedDate(pageComputer);
 	}
 	
-	public Page<Computer> getPageComputerOrderedByDiscontinuedDate(Page<Computer> pageComputer) {
+	public CustomPage<Computer> getPageComputerOrderedByDiscontinuedDate(CustomPage<Computer> pageComputer) {
 		return daoComputer.requestPageComputerOrderedByDiscontinuedDate(pageComputer);
 	}
 	
-	public Page<Computer> getPageComputerOrderedByCompanyName(Page<Computer> pageComputer) {
+	public CustomPage<Computer> getPageComputerOrderedByCompanyName(CustomPage<Computer> pageComputer) {
 		return daoComputer.requestPageComputerOrderedByCompanyName(pageComputer);
 	}
 	

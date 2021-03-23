@@ -5,7 +5,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.models.Computer;
-import com.excilys.cdb.models.Page;
+import com.excilys.cdb.models.CustomPage;
 
 @Component
 @RequestScope
@@ -18,7 +18,7 @@ public class DashboardVariables {
 	private int nbOfComputer = 10;
 	private String search = "";
 	
-	private Page<Computer> pageComputer = new Page<>(nbOfComputer, pageNumber);
+	private CustomPage<Computer> pageComputer = new CustomPage<>(nbOfComputer, pageNumber);
 	
 	
 	public ModelAndView getModelAndView() {
@@ -55,10 +55,10 @@ public class DashboardVariables {
 
 
 
-	public Page<Computer> getPageComputer() {
+	public CustomPage<Computer> getPageComputer() {
 		return pageComputer;
 	}
-	public void setPageComputer(Page<Computer> pageComputer) {
+	public void setPageComputer(CustomPage<Computer> pageComputer) {
 		this.pageComputer = pageComputer;
 	}
 	

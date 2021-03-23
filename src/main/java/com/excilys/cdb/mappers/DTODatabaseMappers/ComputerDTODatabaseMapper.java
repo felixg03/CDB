@@ -8,6 +8,7 @@ import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Company.CompanyBuilder;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Computer.ComputerBuilder;
+import com.excilys.cdb.models.CustomPage;
 
 public class ComputerDTODatabaseMapper {
 	
@@ -29,6 +30,16 @@ public class ComputerDTODatabaseMapper {
 		return listComputer;
 	}
 	
+//	public static CustomPage<Computer> convertToPageComputer( CustomPage<DTOComputerDB> pageDTOComputerDB ) {
+//		CustomPage<Computer> pageComputer = new CustomPage<>( pageDTOComputerDB.getSize(), pageDTOComputerDB.getNumber() );
+//		pageComputer.setContent( convertToListComputer( pageDTOComputerDB.getContent() ) );
+//		return pageComputer;
+//	}
+	
+	
+	
+	
+	
 	
 	
 	public static DTOComputerDB convertToDTOComputerDB( Computer computer ) {
@@ -43,7 +54,7 @@ public class ComputerDTODatabaseMapper {
 			dtoComputerDB.companyId = company.getId();
 		}
 		else {
-			dtoComputerDB.companyId = 0;
+			dtoComputerDB.companyId = null;
 		}
 		
 		return dtoComputerDB;
@@ -54,4 +65,10 @@ public class ComputerDTODatabaseMapper {
 		listComputer.forEach( computer -> listDTOComputerDB.add( convertToDTOComputerDB( computer ) ) );
 		return listDTOComputerDB;
 	}
+	
+//	public static CustomPage<DTOComputerDB> convertToPageDTOComputerDB( CustomPage<Computer> pageComputer ) {
+//		CustomPage<DTOComputerDB> pageDTOComputerDB = new CustomPage<>( pageComputer.getSize(), pageComputer.getNumber() );
+//		pageDTOComputerDB.setContent( convertToListDTOComputerDB( pageComputer.getContent() ) );
+//		return pageDTOComputerDB;
+//	}
 }

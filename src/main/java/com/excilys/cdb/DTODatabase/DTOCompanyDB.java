@@ -1,5 +1,6 @@
 package com.excilys.cdb.DTODatabase;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -9,10 +10,15 @@ import javax.persistence.Table;
 public class DTOCompanyDB {
 	
 	@Id
-	public long id;
+	@Column( updatable = false, nullable = false )
+	public Long id;
+	
+	@Column( nullable = true )
 	public String name;
 	
-	public long getId() {
+	
+	
+	public Long getId() {
 		return id;
 	}
 	public String getName() {

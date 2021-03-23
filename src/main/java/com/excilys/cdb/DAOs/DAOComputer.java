@@ -25,14 +25,14 @@ import com.excilys.cdb.models.Company;
 import com.excilys.cdb.models.Company.CompanyBuilder;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Computer.ComputerBuilder;
-import com.excilys.cdb.models.Page;
+import com.excilys.cdb.models.CustomPage;
 import com.zaxxer.hikari.HikariDataSource;
 
 
 
 @Repository
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
-public final class DAOComputer {
+public class DAOComputer {
 	
 
 	private HikariDataSource hikariDataSource;
@@ -95,7 +95,7 @@ public final class DAOComputer {
 	
 	
 	
-	public Page<Computer> requestPageComputer( Page<Computer> page ) {
+	public CustomPage<Computer> requestPageComputer( CustomPage<Computer> page ) {
 		if ( page != null ) {	
 			JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
 			page.setContent( jdbcTemplate.query( QUERY_PAGE_COMPUTERS
@@ -108,7 +108,7 @@ public final class DAOComputer {
 		return page;
 	}
 	
-	public Page<Computer> requestPageComputerOrderedByComputerName ( Page<Computer> page ) {
+	public CustomPage<Computer> requestPageComputerOrderedByComputerName ( CustomPage<Computer> page ) {
 		if ( page != null ) {	
 			JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
 			page.setContent( jdbcTemplate.query( QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPUTER_NAME
@@ -121,7 +121,7 @@ public final class DAOComputer {
 		return page;
 	}
 	
-	public Page<Computer> requestPageComputerOrderedByIntroducedDate ( Page<Computer> page ) {
+	public CustomPage<Computer> requestPageComputerOrderedByIntroducedDate ( CustomPage<Computer> page ) {
 		if ( page != null ) {	
 			JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
 			page.setContent( jdbcTemplate.query( QUERY_PAGE_COMPUTERS_ORDERED_BY_INTRODUCED_DATE
@@ -134,7 +134,7 @@ public final class DAOComputer {
 		return page;
 	}
 	
-	public Page<Computer> requestPageComputerOrderedByDiscontinuedDate ( Page<Computer> page ) {
+	public CustomPage<Computer> requestPageComputerOrderedByDiscontinuedDate ( CustomPage<Computer> page ) {
 		if ( page != null ) {	
 			JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
 			page.setContent( jdbcTemplate.query( QUERY_PAGE_COMPUTERS_ORDERED_BY_DISCONTINUED_DATE
@@ -147,7 +147,7 @@ public final class DAOComputer {
 		return page;
 	}
 	
-	public Page<Computer> requestPageComputerOrderedByCompanyName ( Page<Computer> page ) {
+	public CustomPage<Computer> requestPageComputerOrderedByCompanyName ( CustomPage<Computer> page ) {
 		if ( page != null ) {	
 			JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
 			page.setContent( jdbcTemplate.query( QUERY_PAGE_COMPUTERS_ORDERED_BY_COMPANY_NAME
@@ -161,14 +161,14 @@ public final class DAOComputer {
 	}
 	
 	
-	public Page<Computer> requestPageComputerSearched ( String searchInput ) {
+	public CustomPage<Computer> requestPageComputerSearched ( String searchInput ) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate( hikariDataSource );
 		List<Computer> listComputer = jdbcTemplate.query( QUERY_LIST_COMPUTER_SEARCH
 													    , new ComputerRowMapper()
 													    , "%" + searchInput + "%" 
 													    );
 		int pageNumber = 1;
-		Page<Computer> page = new Page<>( listComputer.size(), pageNumber );
+		CustomPage<Computer> page = new CustomPage<>( listComputer.size(), pageNumber );
 		page.setContent( listComputer );
 		return page;
 	}

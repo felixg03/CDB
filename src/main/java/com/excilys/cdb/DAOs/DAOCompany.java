@@ -20,7 +20,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Repository
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
-public final class DAOCompany {
+public class DAOCompany {
 	
 	private HikariDataSource hikariDataSource;
 	
