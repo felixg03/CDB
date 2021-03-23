@@ -4,10 +4,6 @@ package com.excilys.cdb.config;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +14,8 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -39,10 +37,10 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class WebConfig implements WebMvcConfigurer { // extends AbstractContextLoaderInitializer {
 	
-//	@Override
+
 //	protected WebApplicationContext createRootApplicationContext() {
 //		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-//		rootContext.register(SpringConfig.class);
+//		rootContext.register(WebConfig.class);
 //		return rootContext;
 //	}
 	

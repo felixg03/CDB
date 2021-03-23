@@ -38,22 +38,32 @@ public class ComputerService {
 	
 	// For old CLIView
 	public List<Computer> getListComputers(int offset) {
-		return daoComputer.requestListComputer(offset);
+		int pageNumber = offset / 10;
+		int nbOfComputer = 10;
+		Page<DTOComputerDB> pageDTOComputerDB = computerRepository.findAll( PageRequest.of( pageNumber, nbOfComputer ) );
+		return ComputerDTODatabaseMapper.convertToListComputer( pageDTOComputerDB.getContent() );
+//		return daoComputer.requestListComputer(offset);
 	}
 	
 	public List<Computer> getListComputers() {
-		return daoComputer.requestListComputer();
+		return ComputerDTODatabaseMapper.convertToListComputer( computerRepository.findAll() );
+//		return daoComputer.requestListComputer();
 	}
 	
 	public CustomPage<Computer> getPageComputer(CustomPage<Computer> pageComputer) {
-//		return daoComputer.requestPageComputer(pageComputer);
-		Page<DTOComputerDB> pageDTOComputerDB = computerRepository.findAll( PageRequest.of( pageComputer.getNumber() - 1, pageComputer.getSize() ) );
+		int pageNumber = pageComputer.getNumber() - 1;
+		int nbOfComputer = pageComputer.getSize();
+		Page<DTOComputerDB> pageDTOComputerDB = computerRepository.findAll( PageRequest.of( pageNumber, nbOfComputer ) );
 		pageComputer.setContent( ComputerDTODatabaseMapper.convertToListComputer( pageDTOComputerDB.getContent() ) );
 		return pageComputer;
 	}
 	
 	public CustomPage<Computer> getPageComputerSearched(String searchInput) {
-		return daoComputer.requestPageComputerSearched(searchInput);
+		List<DTOComputerDB> listDTOComputerDB = computerRepository.findByNameContaining( searchInput );
+		CustomPage<Computer> pageComputerSearched = new CustomPage<Computer>(listDTOComputerDB.size(), 1);
+		pageComputerSearched.setContent( ComputerDTODatabaseMapper.convertToListComputer( listDTOComputerDB ) );
+		return pageComputerSearched;
+//		return daoComputer.requestPageComputerSearched(searchInput);
 	}
 	
 	public CustomPage<Computer> getPageComputerOrderedByComputerName(CustomPage<Computer> pageComputer) {
