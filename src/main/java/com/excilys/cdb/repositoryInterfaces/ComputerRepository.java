@@ -16,4 +16,6 @@ public interface ComputerRepository extends JpaRepository<DTOComputerDB, Long> {
 	Page<DTOComputerDB> findByOrderByIntroducedAsc( Pageable pageable );
 	Page<DTOComputerDB> findByOrderByDiscontinuedAsc( Pageable pageable );
 	Page<DTOComputerDB> findByOrderByDtoCompanyDB_NameAsc( Pageable pageable );
+	
+	List<DTOComputerDB> removeByDtoCompanyDB_Id( Long companyId );
 }

@@ -30,9 +30,8 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableWebMvc
 @Configuration
 @ComponentScan( basePackages = 
-				{ "com.excilys.cdb.controller", "com.excilys.cdb.DAOs"
-				, "com.excilys.cdb.services", "com.excilys.cdb.views"
-				, "com.excilys.cdb.repositoryInterfaces" } )
+				{ "com.excilys.cdb.controller", "com.excilys.cdb.services"
+				, "com.excilys.cdb.views", "com.excilys.cdb.repositoryInterfaces" } )
 @EnableJpaRepositories( basePackages = "com.excilys.cdb.repositoryInterfaces" )
 
 public class WebConfig implements WebMvcConfigurer { // extends AbstractContextLoaderInitializer {
