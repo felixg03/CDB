@@ -56,10 +56,10 @@ public class ComputerDTOViewMapper {
 				 									    .discontinued );
 		String companyIdString = dtoComputerAdd.companyId;
 		
-		
+		Company company = null;
 		if (companyIdString != null && companyIdString != "") {
 			
-			Company company = new CompanyBuilder().setId( Long.valueOf( companyIdString ) )
+			company = new CompanyBuilder().setId( Long.valueOf( companyIdString ) )
 					  							  .build();
 			computer =  new ComputerBuilder().setName( name )
 											 .setIntroduced( introduced )
@@ -68,6 +68,7 @@ public class ComputerDTOViewMapper {
 											 .build();
 		}
 		else {
+			company = new CompanyBuilder().build();
 			computer = new ComputerBuilder().setName( name )
 											.setIntroduced( introduced )
 											.setDiscontinued( discontinued )
@@ -111,7 +112,7 @@ public class ComputerDTOViewMapper {
 											       .getIntroduced() );
 		String discontinued = parseLocalDateToString( computer
 				 							         .getDiscontinued() );
-		String companyName = computer.getCompany().getName();
+		String companyName = retrieveCompanyName( computer );
 		
 		
 		DTOComputerDashboard dtoComputerDashboard = new DTOComputerDashboard();
@@ -158,15 +159,16 @@ public class ComputerDTOViewMapper {
 		return listDTOComputerDashboard;
 	}
 	
-	/*
-	public static List<Computer> convertToListComputer(List<DTOComputerDashboard> listDTOComputerDashboard) {
-		List<Computer> listComputer = new ArrayList<>();
-		for(DTOComputerDashboard dtoComputerDashboard : listDTOComputerDashboard) {
-			listComputer.add(convertToComputer(dtoComputerDashboard));
+	
+	
+	private static String retrieveCompanyName( Computer computer ) {
+		if ( computer.getCompany() == null ) {
+			return null;
 		}
-		return listComputer;
+		else {
+			return computer.getCompany().getName();
+		}
 	}
-	*/
 	
 	
 	

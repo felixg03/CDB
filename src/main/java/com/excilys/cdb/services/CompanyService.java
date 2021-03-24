@@ -18,7 +18,6 @@ public final class CompanyService {
 
 	private DAOCompany daoCompany;
 	
-	
 	@Autowired
 	public CompanyService(DAOCompany daoCompany) {
 		super();

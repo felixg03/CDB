@@ -22,4 +22,5 @@ public class DTOComputerDashboard {
 	public String getCompanyName() {
 		return this.companyName;
 	}
+	
 }

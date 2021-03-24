@@ -94,7 +94,7 @@ public class CliController {
 		case 4:
 			try {
 				Computer computerToCreate = viewComputer.getComputerToCreate();
-				computerService.callComputerCreation(computerToCreate);
+				computerService.createComputer(computerToCreate);
 
 				viewComputer.displayResultComputerCreation();
 			} catch (InputMismatchException inputMismatchEx) {
@@ -126,7 +126,7 @@ public class CliController {
 		case 6:
 			long computerIdToDelete = viewComputer.getComputerId(input);
 
-			computerService.getResultComputerDeletion(computerIdToDelete);
+			computerService.deleteComputer(computerIdToDelete);
 
 			viewComputer.displayResultComputerDeletion();
 

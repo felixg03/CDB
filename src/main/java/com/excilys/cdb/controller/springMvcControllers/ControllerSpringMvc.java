@@ -137,9 +137,16 @@ public class ControllerSpringMvc {
 	@PostMapping( value = "/dashboard" )
 	@ResponseBody
 	public ModelAndView postDashboard( @RequestParam String selection ) {
-		List<String> listStringComputerId = Arrays.asList( selection.split(",") );
-		List<Long> listComputerId = listStringComputerId.stream().map(Long::valueOf).collect(Collectors.toList());
-		this.computerService.callListComputerDeletion(listComputerId);
+		List<String> listStringComputerId = Arrays.asList( selection.split( "," ) );
+		List<Long> listComputerId = listStringComputerId.stream().map( Long::valueOf ).collect( Collectors.toList() );
+		
+		try {
+			this.computerService.deleteSeveralComputers( listComputerId );
+		} 
+		catch ( InvalidComputerIdException invalidComputerIdEx ) {
+			this.modelAndView.getModel().put( "inputException", invalidComputerIdEx.getMessage() );
+		}
+		
 		this.putGeneralParametersInModel();
 		return this.modelAndView;
 	}
@@ -215,12 +222,20 @@ public class ControllerSpringMvc {
 	public ModelAndView postAddComputer( String computerName, String introduced, String discontinued, String companyId ) {
 		try {
 			DTOComputerAddView dtoComputerAdd = new DTOComputerAddView();
-			dtoComputerAdd = this.putFieldsIntoDTOComputerAdd(dtoComputerAdd, computerName, introduced, discontinued, companyId);
-			this.addOrEditComputerValidator.validate(dtoComputerAdd);
-			LoggerManager.getLoggerConsole().debug("ControllerMvc -> postAddComputer -> dtoComputerAdd = " + dtoComputerAdd);
-			Computer computerToAdd = ComputerDTOViewMapper.convertToComputer(dtoComputerAdd);
-
-			computerService.callComputerCreation(computerToAdd);
+			dtoComputerAdd = this.putFieldsIntoDTOComputerAdd( dtoComputerAdd, computerName, introduced, discontinued, companyId );
+			this.addOrEditComputerValidator.validate( dtoComputerAdd );
+			
+			
+			LoggerManager.getLoggerConsole().info( "\nControllerMvc -> postAddComputer() -> dtoComputerAdd = " + dtoComputerAdd + "\n" );
+			
+			
+			Computer computerToAdd = ComputerDTOViewMapper.convertToComputer( dtoComputerAdd );
+			
+			
+			LoggerManager.getLoggerConsole().info( "\nControllerMvc -> postAddComputer() -> computerToAdd = " + computerToAdd + "\n" );
+			
+			
+			computerService.createComputer( computerToAdd );
 			
 		} catch (InvalidUserInputException invalidUserInputEx) {
 			this.modelAndView.getModel().put("inputException", invalidUserInputEx.getMessage());
@@ -297,7 +312,7 @@ public class ControllerSpringMvc {
 			this.addOrEditComputerValidator.validate(dtoComputerEdit);
 			Computer computerEdited = ComputerDTOViewMapper.convertToComputer( dtoComputerEdit );
 			
-			computerService.callComputerEdition(computerEdited);
+			computerService.editComputer(computerEdited);
 		} 
 		catch ( InvalidUserInputException invalidUserInputEx ) {
 			this.modelAndView.getModel().put("inputException", "Operation failed: " + invalidUserInputEx.getMessage());

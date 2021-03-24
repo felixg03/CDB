@@ -1,6 +1,7 @@
 package com.excilys.cdb.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -9,13 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.excilys.cdb.DAOs.DAOComputer;
 import com.excilys.cdb.DTODatabase.DTOComputerDB;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import com.excilys.cdb.mappers.DTODatabaseMappers.ComputerDTODatabaseMapper;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.CustomPage;
 import com.excilys.cdb.repositoryInterfaces.ComputerRepository;
-import com.excilys.cdb.mappers.DTODatabaseMappers.ComputerDTODatabaseMapper;
 
 
 
@@ -23,13 +23,11 @@ import com.excilys.cdb.mappers.DTODatabaseMappers.ComputerDTODatabaseMapper;
 @Scope( value = ConfigurableBeanFactory.SCOPE_SINGLETON )
 public class ComputerService {
 	
-	private DAOComputer daoComputer;
 	private ComputerRepository computerRepository;
 	
 	@Autowired
-	public ComputerService(DAOComputer daoComputer, ComputerRepository computerRepository) {
+	public ComputerService(ComputerRepository computerRepository) {
 		super();
-		this.daoComputer = daoComputer;
 		this.computerRepository = computerRepository;
 	}
 
@@ -42,12 +40,10 @@ public class ComputerService {
 		int nbOfComputer = 10;
 		Page<DTOComputerDB> pageDTOComputerDB = computerRepository.findAll( PageRequest.of( pageNumber, nbOfComputer ) );
 		return ComputerDTODatabaseMapper.convertToListComputer( pageDTOComputerDB.getContent() );
-//		return daoComputer.requestListComputer(offset);
 	}
 	
 	public List<Computer> getListComputers() {
 		return ComputerDTODatabaseMapper.convertToListComputer( computerRepository.findAll() );
-//		return daoComputer.requestListComputer();
 	}
 	
 	public CustomPage<Computer> getPageComputer(CustomPage<Computer> pageComputer) {
@@ -63,46 +59,62 @@ public class ComputerService {
 		CustomPage<Computer> pageComputerSearched = new CustomPage<Computer>(listDTOComputerDB.size(), 1);
 		pageComputerSearched.setContent( ComputerDTODatabaseMapper.convertToListComputer( listDTOComputerDB ) );
 		return pageComputerSearched;
-//		return daoComputer.requestPageComputerSearched(searchInput);
 	}
 	
 	public CustomPage<Computer> getPageComputerOrderedByComputerName(CustomPage<Computer> pageComputer) {
-		return daoComputer.requestPageComputerOrderedByComputerName(pageComputer);
+		Page<DTOComputerDB> pageDTO = computerRepository.findByOrderByNameAsc( PageRequest.of( pageComputer.getNumber(), pageComputer.getSize() ) );
+		List<Computer> listComputerOrdered = ComputerDTODatabaseMapper.convertToListComputer( pageDTO.getContent() );
+		pageComputer.setContent( listComputerOrdered );
+		return pageComputer;
 	}
 	
-	public CustomPage<Computer> getPageComputerOrderedByIntroducedDate(CustomPage<Computer> pageComputer) {
-		return daoComputer.requestPageComputerOrderedByIntroducedDate(pageComputer);
+	public CustomPage<Computer> getPageComputerOrderedByIntroducedDate( CustomPage<Computer> pageComputer ) {
+		Page<DTOComputerDB> pageDTO = computerRepository.findByOrderByIntroducedAsc( PageRequest.of( pageComputer.getNumber(), pageComputer.getSize() ) );
+		List<Computer> listComputerOrdered = ComputerDTODatabaseMapper.convertToListComputer( pageDTO.getContent() );
+		pageComputer.setContent( listComputerOrdered );
+		return pageComputer;
 	}
 	
-	public CustomPage<Computer> getPageComputerOrderedByDiscontinuedDate(CustomPage<Computer> pageComputer) {
-		return daoComputer.requestPageComputerOrderedByDiscontinuedDate(pageComputer);
+	public CustomPage<Computer> getPageComputerOrderedByDiscontinuedDate( CustomPage<Computer> pageComputer ) {
+		Page<DTOComputerDB> pageDTO = computerRepository.findByOrderByDiscontinuedAsc( PageRequest.of( pageComputer.getNumber(), pageComputer.getSize() ) );
+		List<Computer> listComputerOrdered = ComputerDTODatabaseMapper.convertToListComputer( pageDTO.getContent() );
+		pageComputer.setContent( listComputerOrdered );
+		return pageComputer;
 	}
 	
-	public CustomPage<Computer> getPageComputerOrderedByCompanyName(CustomPage<Computer> pageComputer) {
-		return daoComputer.requestPageComputerOrderedByCompanyName(pageComputer);
+	public CustomPage<Computer> getPageComputerOrderedByCompanyName( CustomPage<Computer> pageComputer ) {
+		Page<DTOComputerDB> pageDTO = computerRepository.findByOrderByDtoCompanyDB_NameAsc( PageRequest.of( pageComputer.getNumber(), pageComputer.getSize() ) );
+		List<Computer> listComputerOrdered = ComputerDTODatabaseMapper.convertToListComputer( pageDTO.getContent() );
+		pageComputer.setContent( listComputerOrdered );
+		return pageComputer;
 	}
 	
-	public Computer getOneComputer(long computerId) throws InvalidComputerIdException {
-		return daoComputer.requestOneComputer(computerId);
+	public Computer getOneComputer( long computerId ) throws InvalidComputerIdException {
+		Optional<DTOComputerDB> optionalComputer = computerRepository.findById( computerId );
+		return ComputerDTODatabaseMapper.convertToComputer( optionalComputer.get() );
 	}
 	
-	public void callComputerCreation(Computer computerToCreate) {
-		daoComputer.requestComputerCreation(computerToCreate);
+	public void createComputer( Computer computerToCreate ) {
+		DTOComputerDB dtoComputerDB = ComputerDTODatabaseMapper.convertToDTOComputerDB( computerToCreate );
+		computerRepository.save( dtoComputerDB );
 	}
 	
-	public void callComputerEdition(Computer computerEdited) {
-		daoComputer.requestComputerEdition(computerEdited);
+	public void editComputer( Computer computerEdited ) {
+		DTOComputerDB dtoComputerDB = ComputerDTODatabaseMapper.convertToDTOComputerDB( computerEdited );
+		computerRepository.save( dtoComputerDB );
 	}
 	
-	public void getResultComputerDeletion(long computerId) throws InvalidComputerIdException {
-		daoComputer.requestComputerDeletion(computerId);
+	public void deleteComputer( Long computerId ) throws InvalidComputerIdException {
+		computerRepository.deleteById( computerId );
 	}
 	
-	public void callListComputerDeletion(List<Long> listComputerId) {
-		daoComputer.requestListComputerDeletion(listComputerId);
+	public void deleteSeveralComputers( List<Long> listComputerId ) throws InvalidComputerIdException {
+		for( Long id : listComputerId ) {
+			this.deleteComputer( id );
+		}
 	}
 	
 	public long getNumberOfComputer() {
-		return daoComputer.requestNumberOfComputer();
+		return computerRepository.count();
 	}
 }

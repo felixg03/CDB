@@ -3,24 +3,22 @@ package com.excilys.cdb.mappers.DTODatabaseMappers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.cdb.DTODatabase.DTOCompanyDB;
 import com.excilys.cdb.DTODatabase.DTOComputerDB;
 import com.excilys.cdb.models.Company;
-import com.excilys.cdb.models.Company.CompanyBuilder;
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.Computer.ComputerBuilder;
-import com.excilys.cdb.models.CustomPage;
 
 public class ComputerDTODatabaseMapper {
 	
 	public static Computer convertToComputer( DTOComputerDB dtoComputerDB ) {
 		
-		Company company = new CompanyBuilder().setId( dtoComputerDB.id ).build();
 		
 		return new ComputerBuilder().setId( dtoComputerDB.id )
 									.setName( dtoComputerDB.name )
 									.setIntroduced( dtoComputerDB.introduced )
 									.setDiscontinued( dtoComputerDB.discontinued )
-									.setCompany( company )
+									.setCompany( getCompanyFromDTOComputerDB( dtoComputerDB ) )
 									.build();
 	}
 	
@@ -30,14 +28,16 @@ public class ComputerDTODatabaseMapper {
 		return listComputer;
 	}
 	
-//	public static CustomPage<Computer> convertToPageComputer( CustomPage<DTOComputerDB> pageDTOComputerDB ) {
-//		CustomPage<Computer> pageComputer = new CustomPage<>( pageDTOComputerDB.getSize(), pageDTOComputerDB.getNumber() );
-//		pageComputer.setContent( convertToListComputer( pageDTOComputerDB.getContent() ) );
-//		return pageComputer;
-//	}
 	
 	
-	
+	private static Company getCompanyFromDTOComputerDB( DTOComputerDB dtoComputerDB ) {
+		if ( dtoComputerDB.dtoCompanyDB == null ) {
+			return null;
+		}
+		else {
+			return CompanyDTODatabaseMapper.convertToCompany( dtoComputerDB.dtoCompanyDB );
+		}
+	}
 	
 	
 	
@@ -48,14 +48,7 @@ public class ComputerDTODatabaseMapper {
 		dtoComputerDB.name = computer.getName();
 		dtoComputerDB.introduced = computer.getIntroduced();
 		dtoComputerDB.discontinued = computer.getDiscontinued();
-		Company company = computer.getCompany();
-		
-		if ( company != null ) {
-			dtoComputerDB.companyId = company.getId();
-		}
-		else {
-			dtoComputerDB.companyId = null;
-		}
+		dtoComputerDB.dtoCompanyDB = CompanyDTODatabaseMapper.convertToDTOCompanyDB( computer.getCompany() );
 		
 		return dtoComputerDB;
 	}
@@ -66,9 +59,4 @@ public class ComputerDTODatabaseMapper {
 		return listDTOComputerDB;
 	}
 	
-//	public static CustomPage<DTOComputerDB> convertToPageDTOComputerDB( CustomPage<Computer> pageComputer ) {
-//		CustomPage<DTOComputerDB> pageDTOComputerDB = new CustomPage<>( pageComputer.getSize(), pageComputer.getNumber() );
-//		pageDTOComputerDB.setContent( convertToListDTOComputerDB( pageComputer.getContent() ) );
-//		return pageDTOComputerDB;
-//	}
 }

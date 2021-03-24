@@ -22,9 +22,14 @@ public class CompanyDTODatabaseMapper {
 	}
 	
 	public static DTOCompanyDB convertToDTOCompanyDB( Company company ) {
-		DTOCompanyDB dtoCompanyDB = new DTOCompanyDB();
-		dtoCompanyDB.id = company.getId();
-		dtoCompanyDB.name = company.getName();
+		DTOCompanyDB dtoCompanyDB = null;
+		
+		if ( company != null) {
+			dtoCompanyDB = new DTOCompanyDB();
+			dtoCompanyDB.id = company.getId();
+			dtoCompanyDB.name = company.getName();
+		}
+		
 		return dtoCompanyDB;
 	}
 	

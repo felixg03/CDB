@@ -2,10 +2,10 @@ package com.excilys.cdb.DTOView;
 
 public final class DTOComputerAddView {
 	
-	public String name;
-	public String introduced;
-	public String discontinued;
-	public String companyId;
+	public String name = null;
+	public String introduced = null;
+	public String discontinued = null;
+	public String companyId = null;
 	
 	public String getName() {
 		return name;
@@ -22,6 +22,6 @@ public final class DTOComputerAddView {
 	
 	@Override
 	public String toString() {
-		return new String(name + " | " + introduced + " | " + discontinued + " | " + companyId);
+		return name + " | " + introduced + " | " + discontinued + " | " + companyId;
 	}
 }
