@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.DTOs.DTODatabase.DTOComputerDB;
 import com.excilys.cdb.customExceptions.InvalidComputerIdException;
+import com.excilys.cdb.customExceptions.InvalidUserInputException;
 import com.excilys.cdb.enums.OrderByAttribute;
 import com.excilys.cdb.loggers.LoggerManager;
 import com.excilys.cdb.mappers.DTODatabaseMappers.ComputerDTODatabaseMapper;
@@ -126,6 +127,7 @@ public class ComputerService {
 	
 	
 	
+	
 	public void createComputer( Computer computerToCreate ) {
 		DTOComputerDB dtoComputerDB = ComputerDTODatabaseMapper.convertToDTOComputerDB( computerToCreate );
 		computerRepository.save( dtoComputerDB );
@@ -134,7 +136,7 @@ public class ComputerService {
 	
 	
 	
-	public void editComputer( Computer computerEdited ) {
+	public void updateComputer( Computer computerEdited ) {
 		DTOComputerDB dtoComputerDB = ComputerDTODatabaseMapper.convertToDTOComputerDB( computerEdited );
 		computerRepository.save( dtoComputerDB );
 	}
@@ -142,21 +144,23 @@ public class ComputerService {
 	
 	
 	
-	public void deleteComputer( Long computerId ) throws InvalidComputerIdException {
+	public void deleteComputer( Long computerId ) {
 		computerRepository.deleteById( computerId );
 	}
 	
 	
 	
 	
-	public void deleteSeveralComputers( List<Long> listComputerId ) throws InvalidComputerIdException {
+	public void deleteSeveralComputers( List<Long> listComputerId ) {
 		for( Long id : listComputerId ) {
 			this.deleteComputer( id );
 		}
 	}
 	
 	
-	
+	public boolean checkComputerExistance( Long id ) {
+		return computerRepository.existsById( id );
+	}
 	
 	public long getNumberOfComputer() {
 		return computerRepository.count();
