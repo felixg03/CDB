@@ -83,6 +83,10 @@ public class Computer {
 	private LocalDate discontinued;
 	private Company company;
 	
+	
+	private Computer() {}
+	
+	
 	// GETTERS AND SETTERS
 	public Long getId() {
 		return id;

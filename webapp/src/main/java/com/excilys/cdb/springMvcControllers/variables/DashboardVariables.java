@@ -6,6 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.models.Computer;
 import com.excilys.cdb.models.CustomPage;
+import com.excilys.cdb.models.CustomPage.CustomPageBuilder;
 
 @Component
 @RequestScope
@@ -18,7 +19,10 @@ public class DashboardVariables {
 	private int nbOfComputer = 10;
 	private String search = "";
 	
-	private CustomPage<Computer> pageComputer = new CustomPage<>(nbOfComputer, pageNumber);
+	private CustomPage<Computer> pageComputer = new CustomPageBuilder<Computer>().setSize( nbOfComputer )
+																				 .setNumber( pageNumber )
+																				 .setSearch( search )
+																				 .build();
 	
 	
 	public ModelAndView getModelAndView() {

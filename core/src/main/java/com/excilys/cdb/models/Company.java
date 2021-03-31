@@ -46,6 +46,10 @@ public class Company {
 	 * ####								####
 	 * #####################################
 	 */
+	
+
+	private Company() {}
+	
 	private Long id;
 	private String name;
 	
@@ -63,7 +67,6 @@ public class Company {
 		this.name = name;
 	}
 
-	public Company() {}
 
 	@Override
 	public String toString() {
